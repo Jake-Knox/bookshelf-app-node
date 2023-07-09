@@ -17,7 +17,13 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/templates/login.html'));
 });
 
+app.get('/bookshelf', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/templates/bookshelf.html'));
+});
 
+app.get('/crud', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/templates/crud.html'));
+});
 
 
 const port = process.env.PORT || 3000;

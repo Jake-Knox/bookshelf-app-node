@@ -42,3 +42,12 @@ body {
     border-radius: 4px;
     cursor: pointer;
   }
+
+  .nav {
+    position: sticky;
+    top: 0;
+    background-color: #f1f1f1;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+  }
