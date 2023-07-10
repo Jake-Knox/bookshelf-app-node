@@ -5,6 +5,10 @@ var path = require('path');
 const app = express();
 const server = http.createServer(app);
 
+// const { start } = require('repl');
+app.use(express.static(path.join(__dirname, 'public')));
+
+
 // Database setup
 const { MongoClient, ServerApiVersion, Collection } = require('mongodb');
 const { mongodbURI } = require('./config.js');
@@ -22,64 +26,70 @@ const client = new MongoClient(mongodbURI, {
   }
 });
 
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+// Connect to the MongoDB server
+client.connect()
+  .then(() => {
+    console.log('Connected to MongoDB');
+
+    // Set up route handlers
+    app.get('/books', (req, res) => {
+      console.log("get books request");
+      const db = client.db('bookshelf-db');
+      const collection = db.collection('books');
+      collection.find().toArray((err, books) => {
+        if (err) {
+          console.error('Error retrieving books:', err);
+          res.sendStatus(500);
+        } else {
+          res.json(books);
+        }
+      });
+    });
+
+    // start server
+    const port = process.env.PORT || 3000;
+    server.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
+   });
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB:', err);
+  });
+~
+
+// async function run() {
+//   try {
+//     // Connect the client to the server	(optional starting in v4.7)
+//     await client.connect();
+//     // Send a ping to confirm a successful connection
+//     await client.db("admin").command({ ping: 1 });
+//     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   
-    // // Provide the name of the database and collection you want to use.
-    // // If the database and/or collection do not exist, the driver and Atlas
-    // // will create them automatically when you first write data.
-    // const dbName = "bookshelf-db";
-    // const collectionName = "books";
+//     app.get('/books', (req, res) => {
 
-    // // Create references to the database and collection in order to run
-    // // operations on them.
-    // const database = client.db(dbName);
-    // const collection = database.collection(collectionName);
-
-    // // *** INSERT DOCUMENTS ***
-    // const books = 
-    // [
-    //   {
-    //     isbn: "978-0-141-19967-2",
-    //     title: "Sense and Sensibility",
-    //     author: "Jane Austen",    
-    //   },
-    //   {
-    //     isbn: "978-0-141-19907-8",
-    //     title: "Pride and Prejudice",
-    //     author: "Jane Austen",    
-    //   },
-    //   {
-    //     isbn: "978-0-141-19952-8",
-    //     title: "Emma",
-    //     author: "Jane Austen",    
-    //   },
-    // ];
-
-    // try{
-    //   const insertManyResult = await collection.insertMany(books);
-    //   console.log(`${insertManyResult.insertedCount} documents successfully inserted.\n`);
-    // } catch (err) {
-    //     console.error(`Something went wrong trying to insert the new documents: ${err}\n`);
-    // }
+//       const collection = db.collection('books');
+//       collection.find().toArray((err, books) => {
+//       if (err) {
+//         console.error('Error retrieving books:', err);
+//         res.sendStatus(500);
+//       } else {
+//         res.json(books);
+//       }
+//       });
+//     });
 
 
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-run().catch(console.dir);
-
-
-// const { start } = require('repl');
-app.use(express.static(path.join(__dirname, 'public')));
-
+//     // start server
+//     const port = process.env.PORT || 3000;
+//     server.listen(port, () => {
+//     console.log(`Server listening on port ${port}`);
+// });
+//   } finally {
+//     // Ensures that the client will close when you finish/error
+//     await client.close();
+//   }
+// }
+// run().catch(console.dir);
 
 // Routes
 // start point
@@ -99,9 +109,3 @@ app.get('/crud', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/templates/crud.html'));
 });
 
-
-// start server
-const port = process.env.PORT || 3000;
-server.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});

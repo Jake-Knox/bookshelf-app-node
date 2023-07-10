@@ -51,3 +51,31 @@ body {
     display: flex;
     justify-content: space-around;
   }
+
+  .bookList {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .bookList li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: beige;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .bookList li:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Optional: Add additional styles for book titles, images, etc. */
+  
+  .bookList li .title {
+    font-weight: bold;
+  }
+  
+  .bookList li img {
+    max-width: 100%;
+    height: auto;
+  }
