@@ -1,9 +1,12 @@
 const express = require('express');
 const http = require('http');
 var path = require('path');
+const bodyParser = require('body-parser');
 
 const app = express();
 const server = http.createServer(app);
+app.use(bodyParser.json()); // Parse JSON bodies
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // const { start } = require('repl');
 app.use(express.static(path.join(__dirname, 'public')));
@@ -12,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Database setup
 const { MongoClient, ServerApiVersion, Collection } = require('mongodb');
 const { mongodbURI } = require('./config.js');
-console.log(mongodbURI);
+// console.log(mongodbURI);
 // needs a url in format...
 // const uri = "mongodb+srv://admin:<password>@bookshelf-db.lbirmpy.mongodb.net/?retryWrites=true&w=majority";
 
@@ -30,11 +33,11 @@ const client = new MongoClient(mongodbURI, {
 client.connect()
   .then(() => {
     console.log('Connected to MongoDB');
+    const db = client.db('bookshelf-db');
 
     // Set up database route handlers
     app.get('/books', (req, res) => {
       console.log("get books request");
-      const db = client.db('bookshelf-db');
       const collection = db.collection('books');
       collection.find().toArray((err, books) => {
         if (err) {
@@ -46,6 +49,43 @@ client.connect()
       });
     });
 
+    // register new user - using UN + PW + boiler plate data
+    app.post('/register', (req, res) => {
+      const { username, password } = req.body;
+    
+      // Create a new user object
+      const user = {
+        "username": username,
+        "password": password,
+        "following": [],
+        "followers": [],
+        "books": [],
+        "shelves": [
+          {
+            "name": "To be read",
+            "books": [],
+          },
+          {
+            "name": "Hidden",
+            "books": [],
+          }
+        ]
+      };
+    
+      // Insert the new user into the users collection
+      db.collection('users').insertOne(user, (err, result) => {
+        if (err) {
+          console.error('Error adding user:', err);
+          res.sendStatus(500);
+        } else {
+          console.log('New user added:', result.insertedId);
+          res.sendStatus(201);
+        }
+      });
+    });
+
+
+    // check that this works
     app.delete('/books/:isbn', (req, res) => {
       const isbn = req.params.isbn;
       const db = client.db('bookshelf-db');
@@ -120,6 +160,8 @@ app.get('/loginPage', (req, res) => {
 });
 
 app.get('/bookshelf', (req, res) => {
+  // const user = req.params.user;
+  // res.
   res.sendFile(path.join(__dirname, 'public/templates/bookshelf.html'));
 });
 

@@ -1,6 +1,40 @@
 
 console.log("login");
 
+const registerButton = document.getElementById("registerButton");
+registerButton.addEventListener("click", () => {
+  console.log("register click")
+
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  addUser(username, password);
+});
+
+const addUser = async (username, password) => {
+  try {
+    const response = await fetch('/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (response.ok) {
+      console.log('User added successfully');
+    } else {
+      console.error('Failed to add user:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error adding user:', error);
+  }
+};
+
+
+
+
+
 // Step 1: Define the authentication endpoint on the server-side
 
 // Step 2: Add event listener to the login button
