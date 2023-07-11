@@ -5,8 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(response => response.json())
       .then(data => {
         const bookList = document.getElementById('bookList');
-        const newestBooks = data.slice(0, 3); // Get the newest 5 books
+        const newestBooks = data.slice(0, 5); // Get the newest 5 books
 
+        // insert html from books retrieved
         newestBooks.forEach(book => {
           const listItem = document.createElement('li');
           let bookData = (`${book.isbn} ${book.author} ${book.title}`);

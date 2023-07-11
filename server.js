@@ -31,7 +31,7 @@ client.connect()
   .then(() => {
     console.log('Connected to MongoDB');
 
-    // Set up route handlers
+    // Set up database route handlers
     app.get('/books', (req, res) => {
       console.log("get books request");
       const db = client.db('bookshelf-db');
@@ -45,6 +45,24 @@ client.connect()
         }
       });
     });
+
+    app.delete('/books/:isbn', (req, res) => {
+      const isbn = req.params.isbn;
+      const db = client.db('bookshelf-db');
+      const collection = db.collection('books');      
+      // Delete the book entry based on the ISBN
+      collection.deleteOne({ isbn: isbn }, (err, result) => {
+        if (err) {
+          console.error('Error deleting book:', err);
+          res.sendStatus(500);
+        } else {
+          console.log('Book deleted successfully');
+          res.sendStatus(200);
+        }
+      });
+    });
+
+
 
     // start server
     const port = process.env.PORT || 3000;

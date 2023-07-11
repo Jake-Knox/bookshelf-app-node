@@ -79,3 +79,44 @@ body {
     max-width: 100%;
     height: auto;
   }
+
+  #crudDiv {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: beige;
+  }
+  
+  h2 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .btn {
+    padding: 8px 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .btn:hover {
+    background-color: #45a049;
+  }
+  
+  .book-details {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
