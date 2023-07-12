@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 var path = require('path');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
 
 const app = express();
 const server = http.createServer(app);
@@ -50,13 +51,48 @@ client.connect()
     });
 
     // register new user - using UN + PW + boiler plate data
+    app.post('/login', (req, res) => {
+      const { username, password } = req.body;
+      // Find the user with the given username in the users collection
+      db.collection('users').findOne({ username }, (err, user) => {
+        if (err) {
+          console.error('Error finding user:', err);
+          res.sendStatus(500);
+        } else if (!user) {
+          res.status(401).json({ message: 'User not found' });
+        } else {
+          // Compare the provided password with the hashed password stored in the user object
+          bcrypt.compare(password, user.password, (err, result) => {
+            if (err) {
+              console.error('Error comparing passwords:', err);
+              res.sendStatus(500);
+            } else if (result) {
+              // Passwords match, authentication successful
+              res.status(200).json({ message: 'Authentication successful' });
+            } else {
+              // Passwords do not match, authentication failed
+              res.status(401).json({ message: 'Invalid username or password' });
+            }
+          });
+        }
+      });    
+    });
+   
+
+    // register new user - using UN + PW + boiler plate data
     app.post('/register', (req, res) => {
       const { username, password } = req.body;
-    
+
+      // Hash the password using bcrypt
+      bcrypt.hash(password, 10, (err, hashedPassword) => {
+      if (err) {
+      console.error('Error hashing password:', err);
+      res.sendStatus(500);
+      } else {
       // Create a new user object
       const user = {
         "username": username,
-        "password": password,
+        "password": hashedPassword,
         "following": [],
         "followers": [],
         "books": [],
@@ -71,7 +107,6 @@ client.connect()
           }
         ]
       };
-    
       // Insert the new user into the users collection
       db.collection('users').insertOne(user, (err, result) => {
         if (err) {
@@ -81,6 +116,8 @@ client.connect()
           console.log('New user added:', result.insertedId);
           res.sendStatus(201);
         }
+      });
+      }     
       });
     });
 
@@ -113,7 +150,8 @@ client.connect()
   .catch((err) => {
     console.error('Error connecting to MongoDB:', err);
   });
-~
+  
+
 
 // async function run() {
 //   try {
