@@ -39,14 +39,14 @@ app.use(session({
 }));
 
 // Middleware to check if user is authenticated
-const isAuthenticated = (req, res, next) => {
-  if (req.session.isLoggedIn) {
-    console.log("logged in true")
-    next();
-  } else {
-    res.status(401).json({ message: 'Unauthorized' });
-  }
-};
+// const isAuthenticated = (req, res, next) => {
+//   if (req.session.isLoggedIn) {
+//     console.log("logged in true")
+//     next();
+//   } else {
+//     res.status(401).json({ message: 'Unauthorized' });
+//   }
+// };
 
 
 // Connect to the MongoDB server
@@ -89,11 +89,11 @@ client.connect()
               res.sendStatus(500);
             } else if (result) {
               // Passwords match, authentication successful
-              res.status(200).json({ message: 'Authentication successful' });
               req.session.isLoggedIn = true;
               req.session.username = username;
               console.log('isLoggedIn:', req.session.isLoggedIn);
-              console.log('username:', req.session.username);              // res.redirect('/profile');             
+              console.log('username:', req.session.username);              // res.redirect('/profile');     
+              res.status(200).json({ message: 'Authentication successful' });        
             } else {
               // Passwords do not match, authentication failed
               res.status(401).json({ message: 'Invalid username or password' });
@@ -108,11 +108,11 @@ client.connect()
       console.log("get my books request")
       let username = req.session.username
 
-      console.log('isLoggedIn:', req.session.isLoggedIn);
-      console.log('username:', req.session.username);
+      // console.log('isLoggedIn:', req.session.isLoggedIn);
+      // console.log('username:', req.session.username);
 
       if(req.session.isLoggedIn) {
-        console.log("user logged in")
+        console.log("user is logged in")
 
         // find the username in the books collection
         // send the shelf (and book) data back to the user
@@ -121,12 +121,12 @@ client.connect()
             console.error('Error finding user:', err);
             res.sendStatus(500);
           } else if (!user) {
+            console.log("user not found");
             res.status(401).json({ message: 'User not found' });
           } else {
               // User found, send data
-              // res.status(200).json({ message: 'Authentication successful' });                
-              console.log(user);
-              res.json(user);
+              console.log("data found");
+              res.status(200).json({ data: user });
           }
         }); 
       }

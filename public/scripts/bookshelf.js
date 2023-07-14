@@ -23,22 +23,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const getBooks = async () => {
 
-    checkSession();
-
-  //   try {
-  //       const response = await fetch('/getmybooks', {
-  //         method: 'POST',
-  //       })
-  //       .then(response => response.json())
-  //       .then(data => { 
-            
-  //           console.log(data)
-
-            
-  //       });        
-  //     } catch (error) {
-  //       console.error('Error:', error);
-  //     }
+    if(checkSession())
+    {
+      const response = await fetch('/getmybooks', {
+        method: 'POST'
+      });
+      if (response.ok) {
+        // Logout successful
+        console.log("logged in at getmybooks response");
+        console.log(response.data);
+      }
+      else{
+          console.log("something off in getmybooks");
+          console.log(response);
+      }
+    }
+    else{
+      console.log("not logged in")
+      // do something here
+      // redirect or something
+    }    
+    
   }
 
   const checkSession = async () => {
@@ -51,8 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (response.ok) {
       // Logout successful
       console.log("logged in");
+      return true;
     }
     else{
         console.log(response);
+        return false;
     }
   }
