@@ -23,9 +23,11 @@ const loginUser = async (username, password) => {
       body: JSON.stringify({ username, password }),
     });
 
-    if (response.ok) {
-      console.log('Login successful');
+    if (response.ok) {  
+
       loginComplete();
+      
+      
     } else {
       console.error('Failed to log in:', response.statusText);
     }
@@ -36,7 +38,30 @@ const loginUser = async (username, password) => {
 
 const loginComplete = () => {
   // cookies or similar to track user
-  
+  console.log('Login successful');
+
+  console.log('session check');
+  fetch('/checkSession', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response data
+      if (data.loggedIn) {
+        // User is logged in
+        console.log('User is logged in');
+      } else {
+        // User is not logged in
+        console.log('User is not logged in');
+      }
+    })
+    .catch(error => {
+      // Handle any errors
+      console.error('Error checking session:', error);
+    });
 }
 
 

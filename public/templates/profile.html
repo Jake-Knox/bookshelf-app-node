@@ -1,0 +1,16 @@
+<!-- profile.ejs template -->
+<h1>Welcome, <%= user.username %>!</h1>
+
+<h2>Your Shelves:</h2>
+<ul>
+  <% user.shelves.forEach((shelf) => { %>
+    <li>
+      <%= shelf.name %>
+      <ul>
+        <% shelf.books.forEach((book) => { %>
+          <li><%= book.title %></li>
+        <% }); %>
+      </ul>
+    </li>
+  <% }); %>
+</ul>
