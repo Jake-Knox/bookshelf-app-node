@@ -36,32 +36,21 @@ const loginUser = async (username, password) => {
   }
 };
 
-const loginComplete = () => {
+const loginComplete = async () => {
   // cookies or similar to track user
   console.log('Login successful');
-
   console.log('session check');
-  fetch('/checkSession', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(response => response.json())
-    .then(data => {
-      // Handle the response data
-      if (data.loggedIn) {
-        // User is logged in
-        console.log('User is logged in');
-      } else {
-        // User is not logged in
-        console.log('User is not logged in');
-      }
-    })
-    .catch(error => {
-      // Handle any errors
-      console.error('Error checking session:', error);
-    });
+
+  const response = await fetch('/checkSession', {
+    method: 'POST'
+  });
+  if (response.ok) {
+    // Logout successful
+    console.log("logged in");
+  }
+  else{
+      console.log(response);
+  }
 }
 
 

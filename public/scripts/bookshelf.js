@@ -22,18 +22,37 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const getBooks = async () => {
-    try {
-        const response = await fetch('/getmybooks', {
-          method: 'POST',
-        })
-        .then(response => response.json())
-        .then(data => { 
+
+    checkSession();
+
+  //   try {
+  //       const response = await fetch('/getmybooks', {
+  //         method: 'POST',
+  //       })
+  //       .then(response => response.json())
+  //       .then(data => { 
             
-            console.log(data)
+  //           console.log(data)
 
             
-        });        
-      } catch (error) {
-        console.error('Error:', error);
-      }
+  //       });        
+  //     } catch (error) {
+  //       console.error('Error:', error);
+  //     }
+  }
+
+  const checkSession = async () => {
+    // cookies or similar to track user
+    console.log('session check');
+
+    const response = await fetch('/checkSession', {
+      method: 'POST'
+    });
+    if (response.ok) {
+      // Logout successful
+      console.log("logged in");
+    }
+    else{
+        console.log(response);
+    }
   }

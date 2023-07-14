@@ -69,14 +69,7 @@ client.connect()
       });
     });
 
-    // check session
-    app.post('/checkSession', (req, res) => {
-      if (req.session.isLoggedIn) {
-        res.json({ loggedIn: true });
-      } else {
-        res.json({ loggedIn: false });
-      }
-    });
+    
 
     // login using username and password eg. admin/password123
     app.post('/login', (req, res) => {
@@ -219,7 +212,6 @@ app.post('/register', (req, res) => {
     console.error('Error connecting to MongoDB:', err);
   });
   
-
 // Routes
 // start point
 app.get('/', (req, res) => {
@@ -241,7 +233,14 @@ app.get('/crud', (req, res) => {
 });
 
 
-
+// check session
+app.post('/checkSession', (req, res) => {
+  if (req.session.isLoggedIn) {
+    res.status(200).json({ message: 'logged in' });
+  } else {
+    res.status(200).json({ message: 'not logged in' });
+  }
+});
 
 
 // app.get('/profile', isAuthenticated, async (req, res) => {
