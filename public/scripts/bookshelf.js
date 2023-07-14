@@ -1,5 +1,7 @@
 console.log("bookshelf");
 
+const usernameTitle = document.getElementById("usernameTitle")
+
 document.addEventListener('DOMContentLoaded', () => {
     // fetch('/getmybooks')
     //   .then(response => response.json())
@@ -31,7 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (response.ok) {
         // Logout successful
         console.log("logged in at getmybooks response");
-        console.log(response.data);
+        response.json().then(data => {
+          console.log(data.data);
+        });      
       }
       else{
           console.log("something off in getmybooks");
@@ -56,6 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (response.ok) {
       // Logout successful
       console.log("logged in");
+      response.json().then(data => {
+        usernameTitle.textContent = data.un;
+      });
       return true;
     }
     else{

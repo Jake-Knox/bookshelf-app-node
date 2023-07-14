@@ -107,6 +107,7 @@ client.connect()
     app.post('/getmybooks', (req, res) => {
       console.log("get my books request")
       let username = req.session.username
+      console.log(`un:"${username}"`);
 
       // console.log('isLoggedIn:', req.session.isLoggedIn);
       // console.log('username:', req.session.username);
@@ -236,7 +237,7 @@ app.get('/crud', (req, res) => {
 // check session
 app.post('/checkSession', (req, res) => {
   if (req.session.isLoggedIn) {
-    res.status(200).json({ message: 'logged in' });
+    res.status(200).json({ message: 'logged in', un: req.session.username });
   } else {
     res.status(200).json({ message: 'not logged in' });
   }
