@@ -117,7 +117,7 @@ client.connect()
 
         // find the username in the books collection
         // send the shelf (and book) data back to the user
-        db.collection('books').findOne({ username }, (err, user) => {
+        db.collection('users').findOne({ username }, (err, user) => {
           if (err) {
             console.error('Error finding user:', err);
             res.sendStatus(500);

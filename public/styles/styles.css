@@ -1,122 +1,139 @@
 body {
-    background-color: beige;
-    font-family: Arial, sans-serif;
+  background-color: beige;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 40px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
-  .container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 40px;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+.container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-  .container h1 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
+.form-group {
+  margin-bottom: 20px;
+}
 
-  .form-group {
-    margin-bottom: 20px;
-  }
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
 
-  .form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 
-  .form-group input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
+.form-group button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
-  .form-group button {
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+.nav {
+  position: sticky;
+  top: 0;
+  background-color: #f1f1f1;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+}
 
-  .nav {
-    position: sticky;
-    top: 0;
-    background-color: #f1f1f1;
-    padding: 10px;
-    display: flex;
-    justify-content: space-around;
-  }
+.bookList {
+  list-style: none;
+  padding: 0;
+}
+  
+.bookList li {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: beige;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+  
+.bookList li:last-child {
+  margin-bottom: 0;
+}
+  
+/* Optional: Add additional styles for book titles, images, etc. */
+  
+.bookList li .title {
+  font-weight: bold;
+}
+  
+.bookList li img {
+  max-width: 100%;
+  height: auto;
+}
 
-  .bookList {
-    list-style: none;
-    padding: 0;
-  }
+#crudDiv {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: beige;
+}
   
-  .bookList li {
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: beige;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
+h2 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
   
-  .bookList li:last-child {
-    margin-bottom: 0;
-  }
+.form-input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
   
-  /* Optional: Add additional styles for book titles, images, etc. */
+.btn {
+  padding: 8px 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
   
-  .bookList li .title {
-    font-weight: bold;
-  }
-  
-  .bookList li img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  #crudDiv {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: beige;
-  }
-  
-  h2 {
-    margin-top: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .form-input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .btn {
-    padding: 8px 12px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .btn:hover {
+.btn:hover {
     background-color: #45a049;
   }
   
-  .book-details {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
+.book-details {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#save-btn{
+  width: 100px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px;
+}
+.save-ready{
+  background-color: #45a049;
+} 
+.save-unavailable{
+    background-color: lightgray;
+}
