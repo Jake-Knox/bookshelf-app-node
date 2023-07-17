@@ -39,14 +39,16 @@ app.use(session({
 }));
 
 // Middleware to check if user is authenticated
-// const isAuthenticated = (req, res, next) => {
-//   if (req.session.isLoggedIn) {
-//     console.log("logged in true")
-//     next();
-//   } else {
-//     res.status(401).json({ message: 'Unauthorized' });
-//   }
-// };
+const isAuthenticated = (req, res, next) => {
+  if (req.session.isLoggedIn) {
+    console.log("logged in true")
+    next();
+  } else {
+    console.log("not logged in")
+    res.sendFile(path.join(__dirname, 'public/templates/login.html'));
+    // res.status(401).json({ message: 'Unauthorized' });
+  }
+};
 
 
 // Connect to the MongoDB server
@@ -223,16 +225,17 @@ app.get('/loginPage', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/templates/login.html'));
 });
 
-app.get('/bookshelf', (req, res) => {
-  // const user = req.params.user;
-  // res.
+app.get('/bookshelf', isAuthenticated, (req, res) => {    
   res.sendFile(path.join(__dirname, 'public/templates/bookshelf.html'));
 });
 
-app.get('/crud', (req, res) => {
+app.get('/crud', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, 'public/templates/crud.html'));
 });
 
+app.get('/profile', isAuthenticated, async (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/templates/profile.html'));
+});
 
 // check session
 app.post('/checkSession', (req, res) => {
@@ -244,26 +247,4 @@ app.post('/checkSession', (req, res) => {
 });
 
 
-// app.get('/profile', isAuthenticated, async (req, res) => {
-//   try {
-//     // Retrieve the user's data from the database
-//     const userId = req.session.userId; // or however you store the user ID
-
-//     // Query the database to retrieve user-specific data
-//     const userData = await User.findById(userId)
-//       .populate('shelves')
-//       .populate({
-//         path: 'shelves',
-//         populate: {
-//           path: 'books'
-//         }
-//       });
-
-//     // Render the profile page and pass the user's data to the template
-//     res.render('profile', { user: userData });
-//   } catch (error) {
-//     console.error('Error retrieving user data:', error);
-//     res.sendStatus(500);
-//   }
-// });
 

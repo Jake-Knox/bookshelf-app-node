@@ -1,16 +1,34 @@
-<!-- profile.ejs template -->
-<h1>Welcome, <%= user.username %>!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/styles.css">
+    <title>My Prfile</title>
+</head>
+<body>
+  <div class="nav">
+    <a href="/">Home</a>
+    <a href="/loginPage">Login</a>
+    <a href="/bookshelf">Bookshelf</a>
+    <a href="/crud">CRUD</a>
+    <a href="/profile">Profile</a>
+  </div>
+  <div id="container">
+    <h1>Username</h1>
+    <h3>Following</h3>
+    <h3>Followers</h3>
 
-<h2>Your Shelves:</h2>
-<ul>
-  <% user.shelves.forEach((shelf) => { %>
-    <li>
-      <%= shelf.name %>
-      <ul>
-        <% shelf.books.forEach((book) => { %>
-          <li><%= book.title %></li>
-        <% }); %>
-      </ul>
-    </li>
-  <% }); %>
-</ul>
+    <div>
+        <h4>Change password</h4>
+        <input type="text" placeholder="current password"> 
+        <input type="text" placeholder="repeat password"> 
+        <input type="text" placeholder="new password"> 
+        <button>Change Password</button>
+    </div>
+
+
+  </div>
+  <script src="/scripts/profile.js"></script>
+</body>
+</html>
