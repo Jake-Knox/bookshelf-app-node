@@ -8,6 +8,8 @@ const session = require('express-session');
 const app = express();
 const server = http.createServer(app);
 
+const { google } = require('googleapis');
+
 app.use(bodyParser.json()); // Parse JSON bodies
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
@@ -16,7 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Database setup
 const { MongoClient, ServerApiVersion, Collection } = require('mongodb');
-const { mongodbURI, secretKey } = require('./config.js');
+const { secretKey, mongodbURI, googleBooksKey } = require('./config.js');
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(mongodbURI, {
@@ -25,6 +27,12 @@ const client = new MongoClient(mongodbURI, {
     strict: true,
     deprecationErrors: true,
   }
+});
+
+// setting up google books api connection
+const books = google.books({
+  version: 'v1',
+  auth: googleBooksKey
 });
 
 // Set up session middleware
@@ -203,7 +211,7 @@ app.post('/register', (req, res) => {
       });
     });
 
-
+    googleBookAPITest();
 
     // start server
     const port = process.env.PORT || 3000;
@@ -246,5 +254,23 @@ app.post('/checkSession', (req, res) => {
   }
 });
 
+const googleBookAPITest = () => {
 
+  books.volumes.list({
+    q: 'Harry Potter',
+    maxResults: 10
+  }, (err, response) => {
+    if (err) {
+      console.error('Error retrieving books:', err);
+    } else {
+      const books = response.data.items;
+      // console.log(books);
+      for (let i = 0; i < 10; i++) {
+        const book = books[i];
+        const title = book.volumeInfo.title;
+        console.log(title);
+      }
+    }
+  });
+}
 
