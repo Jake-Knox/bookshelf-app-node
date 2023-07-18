@@ -114,91 +114,98 @@ client.connect()
     });
 
     // 
-    app.post('/getmybooks', (req, res) => {
+    app.post('/getmybooks', isAuthenticated, (req, res) => {
       console.log("get my books request")
+
       let username = req.session.username
-      console.log(`un:"${username}"`);
+     
+      // find the username in the books collection
+      // send the shelf (and book) data back to the user
+      db.collection('users').findOne({ username }, (err, user) => {
+        if (err) {
+          console.error('Error finding user:', err);
+          res.sendStatus(500);
+        } else if (!user) {
+          console.log("user not found");
+          res.status(401).json({ message: 'User not found' });
+        } else {
+            // User found, send data
+            console.log("data found");
+            res.status(200).json({ data: user });
+        }
+      });                
+    });
 
-      // console.log('isLoggedIn:', req.session.isLoggedIn);
-      // console.log('username:', req.session.username);
-
-      if(req.session.isLoggedIn) {
-        console.log("user is logged in")
-
-        // find the username in the books collection
-        // send the shelf (and book) data back to the user
-        db.collection('users').findOne({ username }, (err, user) => {
-          if (err) {
-            console.error('Error finding user:', err);
-            res.sendStatus(500);
-          } else if (!user) {
-            console.log("user not found");
-            res.status(401).json({ message: 'User not found' });
-          } else {
-              // User found, send data
-              console.log("data found");
-              res.status(200).json({ data: user });
-          }
-        }); 
-      }
-      else {
-        // Not logged in
-        console.log("user not logged in")
-        res.status(401).json({ message: 'User not logged in' });
-      }         
+    app.get('/users/:username', isAuthenticated, (req, res) => {
+      const username = req.params.username;
+    
+      // Find the user based on the provided username
+      db.collection('users').findOne({ username }, (err, user) => {
+        if (err) {
+          console.error('Error finding user:', err);
+          res.sendStatus(500);
+        } else if (!user) {
+          console.log("user not found");
+          res.status(401).json({ message: 'User not found' });
+        } else {
+            // User found, send data
+            console.log("data found");
+            res.status(200).json({ data: user }); 
+        }
+      });                
     });
 
 
 
-// register new user - using UN + PW + boiler plate data
-app.post('/register', (req, res) => {
-  const { username, password } = req.body;
+    // register new user - using UN + PW + boiler plate data
+    app.post('/register', (req, res) => {
+      const { username, password } = req.body;
 
-  // Hash the password using bcrypt
-  bcrypt.hash(password, 10, (err, hashedPassword) => {
-  if (err) {
-  console.error('Error hashing password:', err);
-  res.sendStatus(500);
-  } else {
-  // Create a new user object
-  const user = {
-    "username": username,
-    "password": hashedPassword,
-    "following": [],
-    "followers": [],
-    "books": [],
-    "shelves": [
-      {
-        "name": "To be read",
-        "books": [],
-      },
-      {
-        "name": "Hidden",
-        "books": [],
-      }
-    ]
-  };
-  // Insert the new user into the users collection
-  db.collection('users').insertOne(user, (err, result) => {
-    if (err) {
-      console.error('Error adding user:', err);
+      // Hash the password using bcrypt
+      bcrypt.hash(password, 10, (err, hashedPassword) => {
+      if (err) {
+      console.error('Error hashing password:', err);
       res.sendStatus(500);
-    } else {
-      console.log('New user added:', result.insertedId);
-      res.sendStatus(201);
-    }
-  });
-  }     
-  });
-});
-
-
+      } else {
+      // Create a new user object
+      const user = {
+        "username": username,
+        "password": hashedPassword,
+        "following": [],
+        "followers": [],
+        "books": [],
+        "shelves": [
+          {
+            "name": "To be read",
+            "books": [],
+          },
+          {
+            "name": "Hidden",
+            "books": [],
+          }
+        ]
+      };
+      // Insert the new user into the users collection
+      db.collection('users').insertOne(user, (err, result) => {
+        if (err) {
+          console.error('Error adding user:', err);
+          res.sendStatus(500);
+        } else {
+          console.log('New user added:', result.insertedId);
+          res.sendStatus(201);
+        }
+      });
+      }     
+      });
+    });
 
     // check that this works
     app.delete('/books/:isbn', (req, res) => {
       const isbn = req.params.isbn;
-      const db = client.db('bookshelf-db');
-      const collection = db.collection('books');      
+      console.log("book delete request. ISBN:", isbn);
+
+      const collection = db.collection('books');
+  
       // Delete the book entry based on the ISBN
       collection.deleteOne({ isbn: isbn }, (err, result) => {
         if (err) {
@@ -211,15 +218,23 @@ app.post('/register', (req, res) => {
       });
     });
 
-    // let books = [];
-    googleBooksSearch("Pride and Prejudice");
-    // for (let i = 0; i < 10; i++) {
-    //     const book = books[i];
-    //     // const title = book.volumeInfo.title;
-    //     // console.log(title);
-    //     console.log("title");
-    // }
+    // Set up database route handlers
+    app.get('/books', (req, res) => {
+      console.log("books request");
+      const collection = db.collection('books');
+      collection.find().toArray((err, books) => {
+        if (err) {
+          console.error('Error retrieving books:', err);
+          res.sendStatus(500);
+        } else {
+          res.json(books);
+        }
+      });
+    });
 
+
+    googleBooksSearch("Pride and Prejudice");
+    
     // start server
     const port = process.env.PORT || 3000;
     server.listen(port, () => {
