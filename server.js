@@ -211,7 +211,14 @@ app.post('/register', (req, res) => {
       });
     });
 
-    googleBookAPITest();
+    // let books = [];
+    googleBooksSearch("Pride and Prejudice");
+    // for (let i = 0; i < 10; i++) {
+    //     const book = books[i];
+    //     // const title = book.volumeInfo.title;
+    //     // console.log(title);
+    //     console.log("title");
+    // }
 
     // start server
     const port = process.env.PORT || 3000;
@@ -254,10 +261,10 @@ app.post('/checkSession', (req, res) => {
   }
 });
 
-const googleBookAPITest = () => {
+const googleBooksSearch = (searchInput) => {  
 
   books.volumes.list({
-    q: 'Harry Potter',
+    q: searchInput,
     maxResults: 10
   }, (err, response) => {
     if (err) {
@@ -265,11 +272,48 @@ const googleBookAPITest = () => {
     } else {
       const books = response.data.items;
       // console.log(books);
+      // return books;
+
       for (let i = 0; i < 10; i++) {
         const book = books[i];
-        const title = book.volumeInfo.title;
-        console.log(title);
+
+        // try{
+        //   const thumbnail = book.volumeInfo.imageLinks.thumbnail;
+        //   console.log("thumbnail:", thumbnail);
+        // }
+        // catch(err){
+        //   console.error("no thumbnail:", err);
+        // }
+
+        // Retrieve the author, publication date, and page count
+        const title = book.volumeInfo.title || 'Unknown';
+        const author = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
+        const publicationDate = book.volumeInfo.publishedDate || 'Unknown';
+        const pageCount = book.volumeInfo.pageCount || 'Unknown';
+        let thumbnail = "Uknown";
+        try{
+          thumbnail = book.volumeInfo.imageLinks.thumbnail;
+        }
+        catch(err){
+          console.error("no thumbnail:", err);
+        }
+
+        console.log("title:", title);
+        console.log("author:", author);
+        console.log("publicationDate:", publicationDate);
+        console.log("pageCount:", pageCount);
+        console.log("thumbnail:", thumbnail);
+
+
+        console.log(".");
+        console.log(".");
+        // console.log(book.volumeInfo);
+        console.log(".");
+        console.log(".");
+
+
       }
+
     }
   });
 }
