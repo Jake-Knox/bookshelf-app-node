@@ -62,12 +62,15 @@ const isAuthenticated = (req, res, next) => {
 // Connect to the MongoDB server
 client.connect()
   .then(() => {
+
+    // all of this code is kept inside the db connection so that the site doesn't have to reconnect. Inefficient?
+
     console.log('Connected to MongoDB');
     const db = client.db('bookshelf-db');
 
     // Set up database route handlers
     app.get('/books', (req, res) => {
-      console.log("books request");
+      // console.log("books request");
       const collection = db.collection('books');
       collection.find().toArray((err, books) => {
         if (err) {
@@ -232,10 +235,13 @@ client.connect()
       });
     });
 
+    // test to search google for books by title input
+    googleBooksSearchTitle("Pride and Prejudice");
 
-    googleBooksSearch("Pride and Prejudice");
+    // googleBooksSearchISBN("9780141439686") // persuasion - austen // doesn't use any '-'
+
     
-    // start server
+    // start server - after db connection
     const port = process.env.PORT || 3000;
     server.listen(port, () => {
     console.log(`Server listening on port ${port}`);
@@ -245,6 +251,8 @@ client.connect()
     console.error('Error connecting to MongoDB:', err);
   });
   
+
+
 // Routes
 // start point
 app.get('/', (req, res) => {
@@ -276,11 +284,14 @@ app.post('/checkSession', (req, res) => {
   }
 });
 
-const googleBooksSearch = (searchInput) => {  
+
+// Google Books API searches
+
+const googleBooksSearchTitle = (searchInput) => {  
 
   books.volumes.list({
     q: searchInput,
-    maxResults: 10
+    maxResults: 5
   }, (err, response) => {
     if (err) {
       console.error('Error retrieving books:', err);
@@ -289,7 +300,7 @@ const googleBooksSearch = (searchInput) => {
       // console.log(books);
       // return books;
 
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 5; i++) {
         const book = books[i];
 
         // try{
@@ -321,15 +332,51 @@ const googleBooksSearch = (searchInput) => {
 
 
         console.log(".");
-        console.log(".");
         // console.log(book.volumeInfo);
         console.log(".");
-        console.log(".");
-
-
+        
       }
-
     }
   });
 }
 
+const googleBooksSearchISBN = (searchInput) => {  
+
+  books.volumes.list({
+    q: searchInput,
+    maxResults: 1
+  }, (err, response) => {
+    if (err) {
+      console.error('Error retrieving books:', err);
+    } else {
+      const books = response.data.items;
+      // console.log(books);
+
+      const book = books[0];
+
+      // Retrieve the author, publication date, and page count
+      const title = book.volumeInfo.title || 'Unknown';
+      const author = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
+      const publicationDate = book.volumeInfo.publishedDate || 'Unknown';
+      const pageCount = book.volumeInfo.pageCount || 'Unknown';
+      let thumbnail = "Uknown";
+      try{
+        thumbnail = book.volumeInfo.imageLinks.large;
+      }
+      catch(err){
+        console.error("no thumbnail:", err);
+      }
+
+      console.log("title:", title);
+      console.log("author:", author);
+      console.log("publicationDate:", publicationDate);
+      console.log("pageCount:", pageCount);
+      console.log("thumbnail:", thumbnail);
+
+      console.log(".");
+      // console.log(book.volumeInfo);
+      console.log(".");
+
+    }
+  });
+}

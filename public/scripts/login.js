@@ -3,6 +3,9 @@ console.log("login page");
 
 // login
 
+// user123
+// password123
+
 const loginButton = document.getElementById("loginButton");
 loginButton.addEventListener("click", () => {
   console.log("login click")

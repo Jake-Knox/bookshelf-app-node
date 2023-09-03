@@ -21,7 +21,10 @@
 
 
 body {
-  background-color: beige;
+  background-image: url("../images/backgrounds/paper-bg.jpg");
+  background-size: cover;
+  /* background-repeat: repeat; */
+  /* background-color: beige; */
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
@@ -42,7 +45,7 @@ body {
 }
 
 .nav a {
-  color: rgb(211, 208, 208);
+  color: rgb(191, 193, 199);
   text-decoration: none;
   padding: 8px 16px;
   border-radius: 4px;
