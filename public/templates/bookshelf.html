@@ -15,19 +15,38 @@
         <a href="/profile">Profile</a>
     </div>
     <div class="container">
+
         <div>
             <h1 id="usernameTitle">Not logged in</h1>
             <h3 id="followingCount">Following:</h3>
             <h3 id="followersCount">Followers:</h3>
         </div>
-        <div id="save-btn" class="save-ready">
-            <p>Save Shelves</p>
+
+        <div id="add-new">
+            <p>Add to collection</p>
+            <div id="book-search">
+                <input id="search-input" type="text" placeholder="Title or ISBN" > 
+                <button id="search-btn">Go</button> 
+            </div>
+
+            <div id="search-results">
+                <div id="book-results">
+
+                </div>
+
+                <div id="results-btns">
+                    <button>Back</button>
+                    <button>Add</button>
+                </div>
+            </div>
         </div>
+
+        
         <div id="shelves">
             <div class="shelf">
-                <h2 class="shelf-name">TBR</h2>
+                <h2 class="shelf-name">Shelf - TBR</h2>
                 <div class="book-div">
-                    <div class="book-front">
+                    <div class="book-front book-show">
                         <p>Jane Austen</p>
                         <p>Pride and Prejudice</p>
                     </div>
@@ -45,6 +64,9 @@
         <div id="edit-shelves">
 
         </div>  
+        <div id="save-btn" class="save-ready">
+            <p>Save Shelves</p>
+        </div>
     </div>
     <script src="/scripts/bookshelf.js"></script>
 </body>

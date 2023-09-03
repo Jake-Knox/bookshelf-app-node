@@ -33,9 +33,21 @@ document.addEventListener('DOMContentLoaded', () => {
       if (response.ok) {
         // Logout successful
         console.log("logged in at getmybooks response");
-        response.json().then(data => {
-          console.log(data.data);
+        response.json()
+        .then(data => {
+          // console.log(data.data);
+          console.log("retirved data");
 
+          // const bookList = document.getElementById('bookList');
+          // const filterTopFive = data.slice(0, 5); // Get the newest 5 books
+  
+          // insert html from books retrieved
+          // newestBooks.forEach(book => {
+          //   const listItem = document.createElement('li');
+          //   let bookData = (`${book.isbn} ${book.author} ${book.title}`);
+          //   listItem.textContent = bookData;
+          //   bookList.appendChild(listItem);
+          // });
 
           
         });      
