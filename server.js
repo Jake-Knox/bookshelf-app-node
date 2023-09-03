@@ -133,8 +133,18 @@ client.connect()
           res.status(401).json({ message: 'User not found' });
         } else {
             // User found, send data
-            console.log("data found");
-            res.status(200).json({ data: user });
+            // console.log("data found");
+            // console.log(user);
+            
+            const userData = {
+              username: user.username,
+              following: user.following,
+              followers: user.followers,
+              books: user.books,
+              shelves: user.shelves,
+            }
+
+            res.status(200).json({ data: userData });
         }
       });                
     });
@@ -236,6 +246,7 @@ client.connect()
     });
 
     // test to search google for books by title input
+
     // googleBooksSearchTitle("Pride and Prejudice");
     // googleBooksSearchISBN("9780141439686") // persuasion - austen // doesn't use any '-'
 

@@ -2,6 +2,9 @@ console.log("bookshelf");
 
 const usernameTitle = document.getElementById("usernameTitle")
 
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
     // fetch('/getmybooks')
     //   .then(response => response.json())
@@ -20,10 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
     //     })
     // .catch(error => console.error('Error loading books:', error));
 
-    getBooks();
+    getMyBooks();
   });
 
-  const getBooks = async () => {
+  const getMyBooks = async () => {
 
     if(checkSession())
     {
@@ -34,9 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Logout successful
         console.log("logged in at getmybooks response");
         response.json()
-        .then(data => {
+        .then(userData => {
           // console.log(data.data);
           console.log("retirved data");
+
+          console.log(userData.data);
 
           // const bookList = document.getElementById('bookList');
           // const filterTopFive = data.slice(0, 5); // Get the newest 5 books
