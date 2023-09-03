@@ -149,6 +149,44 @@ client.connect()
       });                
     });
 
+    app.get('/addbook/:isbn', isAuthenticated, (req, res) => {
+      const userName = req.params.username;
+    
+      // look through this, there is a lot to do here.
+      // book data is already searched on from front end
+      // so no need to search google again
+      // make sure front end sends data back if possible/ not to inefficient
+
+      // db.collection('users').findOne({ username }, (err, user) => {
+      //   if (err) {
+      //     console.error('Error finding user:', err);
+      //     res.sendStatus(500);
+      //   } else if (!user) {
+      //     console.log("user not found");
+      //     res.status(401).json({ message: 'User not found' });
+      //   } else {
+      //       // User found, send data
+      //       console.log("data found");
+      //       res.status(200).json({ data: user }); 
+      //   }
+      // });  
+
+      // prep the book data
+      const newBook = {
+        title: "Persuasion",
+        author: "Jane Austen",
+        publicationDate: "2003",
+        pageCount: "288",
+        thumbnail: "https://cdn.penguin.co.uk/dam-assets/books/9780141439686/9780141439686-jacket-large.jpg",
+      }
+
+      db.collection('users').updateOne( 
+        { username: userName },
+        { $push: { books: newBook } }
+      );
+
+    });
+
     app.get('/users/:username', isAuthenticated, (req, res) => {
       const username = req.params.username;
     
