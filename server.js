@@ -105,8 +105,9 @@ client.connect()
               req.session.isLoggedIn = true;
               req.session.username = username;
               console.log('isLoggedIn:', req.session.isLoggedIn);
-              console.log('username:', req.session.username);              // res.redirect('/profile');     
-              res.status(200).json({ message: 'Authentication successful' });        
+              console.log('username:', req.session.username);              
+              res.status(200).json({ message: 'Authentication successful' });
+              // res.redirect('/profile');             
             } else {
               // Passwords do not match, authentication failed
               res.status(401).json({ message: 'Invalid username or password' });

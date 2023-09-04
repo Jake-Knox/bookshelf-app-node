@@ -13,7 +13,7 @@ const errorMessage = document.getElementById('errorMessage');
 
 const loginButton = document.getElementById("loginButton");
 loginButton.addEventListener("click", () => {
-  console.log("login click")
+  // console.log("login click")
 
   const username = usernameInput.value;
   const password = passwordInput.value;
@@ -37,7 +37,7 @@ const loginInputChech = (username, password) => {
   }
 }
 
-const showLoginError = (errorMsg) => {
+const showError = (errorMsg) => {
   errorMessage.textContent = (`Error: ${errorMsg}`);
 
   if(errorMessage.classList.contains("hide") == true) {
@@ -62,11 +62,11 @@ const loginUser = async (username, password) => {
       
     } else {
       console.error('Failed to log in:', response.statusText);
-      showLoginError(`Failed to log in: ${response.statusText}`);
+      showError(`Failed to log in: ${response.statusText}`);
     }
   } catch (error) {
     console.error('Error logging in:', error);
-    showLoginError(`Error logging in: ${error}`);
+    showError(`Error logging in: ${error}`);
 
   }
 };
@@ -82,6 +82,10 @@ const loginComplete = async () => {
   if (response.ok) {
     // Logout successful
     console.log("logged in");
+
+    // go to my profile page
+    window.location.href = '/profile';
+
   }
   else{
       console.log(response);
@@ -93,7 +97,7 @@ const loginComplete = async () => {
 
 const registerButton = document.getElementById("registerButton");
 registerButton.addEventListener("click", () => {
-  console.log("register click")
+  // console.log("register click")
 
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
@@ -115,9 +119,13 @@ const addUser = async (username, password) => {
       console.log('User added successfully');
     } else {
       console.error('Failed to add user:', response.statusText);
+      showError(`Failed to add user: ${response.statusText}`);
+
     }
   } catch (error) {
     console.error('Error adding user:', error);
+    showError(`Error adding user: ${error}`);
+
   }
 };
 
