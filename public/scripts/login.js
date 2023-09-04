@@ -1,6 +1,11 @@
 
 console.log("login page");
 
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const errorMessage = document.getElementById('errorMessage');
+
+
 // login
 
 // user123
@@ -10,11 +15,35 @@ const loginButton = document.getElementById("loginButton");
 loginButton.addEventListener("click", () => {
   console.log("login click")
 
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
+  const username = usernameInput.value;
+  const password = passwordInput.value;
 
-  loginUser(username, password);
+  if(loginInputChech(username,password)){
+    loginUser(username, password);
+  }
+
 });
+
+const loginInputChech = (username, password) => {
+
+  if(username = "" || password == "")
+  {
+    showLoginError("Enter a username and password");
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+}
+
+const showLoginError = (errorMsg) => {
+  errorMessage.textContent = (`Error: ${errorMsg}`);
+
+  if(errorMessage.classList.contains("hide") == true) {
+    errorMessage.classList.toggle("hide");  
+  }
+}
 
 const loginUser = async (username, password) => {
   try {
@@ -33,9 +62,12 @@ const loginUser = async (username, password) => {
       
     } else {
       console.error('Failed to log in:', response.statusText);
+      showLoginError(`Failed to log in: ${response.statusText}`);
     }
   } catch (error) {
     console.error('Error logging in:', error);
+    showLoginError(`Error logging in: ${error}`);
+
   }
 };
 

@@ -153,6 +153,7 @@ client.connect()
       const userName = req.params.username;
     
       // look through this, there is a lot to do here.
+
       // book data is already searched on from front end
       // so no need to search google again
       // make sure front end sends data back if possible/ not to inefficient
@@ -170,6 +171,8 @@ client.connect()
       //       res.status(200).json({ data: user }); 
       //   }
       // });  
+
+      // https://www.penguin.co.uk/books/55906/persuasion-by-jane-austen-intro-and-notes-gillian-beer/9780141439686
 
       // prep the book data
       const newBook = {

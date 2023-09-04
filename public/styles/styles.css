@@ -79,6 +79,10 @@ body {
   margin-bottom: 20px;
 }
 
+.hide{
+  display: none;
+}
+
 .form-group {
   margin-bottom: 20px;
 }
@@ -96,14 +100,36 @@ body {
   border-radius: 4px;
 }
 
-.form-group button {
+.form-button {
   width: 100%;
   padding: 10px;
-  background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.login-button {
+  background-color: #4CAF50;
+}
+.login-button:hover {
+  background-color: #2c702e;
+}
+.register-button {
+  background-color: grey;
+}
+.register-button:hover {
+  background-color: rgb(56, 55, 55);
+}
+
+.error-message{
+  width: 100%;
+  padding: 10px;
+  color: white;
+  background-color: red;
+  border: none;
+  border-radius: 4px;
+  
 }
 
 .bookList {
