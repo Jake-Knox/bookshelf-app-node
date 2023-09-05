@@ -1,0 +1,52 @@
+
+
+.flex-column-centre{
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+}
+.flex-row-between{
+    display: flex;
+    flex-direction:row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bookshelf-section{
+    margin-bottom: 2vh;
+    padding-bottom: 2vh;
+
+    border-bottom: 1px solid lightgray;
+}
+
+.shelf{
+    height: 20vh;
+    width: 100%;
+
+}
+.shelf-books{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    border-top: 3px solid #3a3129;
+    border-bottom: 3px solid #3a3129;
+}
+
+.book-front{
+    border: 1px solid red;
+}
+.book-side{
+    border: 1px solid blue;
+
+}
+.book-hide{
+    display: none;
+}
+.book-text{
+    width: fit-content;
+    block-size: fit-content;
+}

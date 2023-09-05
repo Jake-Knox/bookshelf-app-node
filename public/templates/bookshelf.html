@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="/styles/Shelves.css">
     <title>Bookshelf</title>
 </head>
 <body>
-    <div class="nav">
+    <div class="nav nav-container">
         <a href="/">Home</a>
         <a href="/loginPage">Login</a>
         <a href="/bookshelf">Bookshelf</a>
@@ -16,17 +17,21 @@
     </div>
     <div class="container">
 
-        <div>
+        <div class="bookshelf-section flex-row-between">
+            
             <h1 id="usernameTitle"></h1>
-            <h3 id="followingCount"></h3>
-            <h3 id="followersCount"></h3>
+            <div class="flex-column-centre">
+                <h3 id="followingCount"></h3>
+                <h3 id="followersCount"></h3>
+            </div>
+                   
         </div>
 
-        <div id="add-new">
+        <div id="add-new" class="bookshelf-section">
             <p>Add to collection</p>
             <div id="book-search">
                 <input id="search-input" type="text" placeholder="Title or ISBN" > 
-                <button id="search-btn">Go</button> 
+                <button id="search-btn">Search</button> 
             </div>
 
             <div id="search-results">
@@ -41,38 +46,63 @@
             </div>
         </div>
 
-        <div id="books">
+        <div id="books" class="bookshelf-section">
             <h3 id="booksCount">Books: </h3>  
             <div id="booksDisplay">
 
             </div>          
         </div> 
 
-        <div id="shelves">
-            <h3 id="shelvesCount">Shelves: </h3>
-            <div class="shelf">
-                <h2 class="shelf-name">Shelf - TBR</h2>
+        <!--    The following two shelf divs are to help with styling
+                They should be deleted as soon as content is being generated
+                from the databse  -->
+
+        <div class="shelf">
+            <h2 class="shelf-name">Reading</h2>
+            <div class="shelf-books">
                 <div class="book-div">
-                    <div class="book-front book-show">
-                        <p>Jane Austen</p>
-                        <p>Pride and Prejudice</p>
+                    <div class="book-front book-hide">
+                        <p class="book-text">Jane Austen</p>
+                        <p class="book-text">Persuasion</p>
                     </div>
                     <div class="book-side">
-                        <p>Jane Austen</p>
-                        <p>Pride and Prejudice</p>
+                        <p class="book-text">Jane Austen</p>
+                        <p class="book-text">Persuasion</p>
                     </div>
                 </div>
+            </div>                
+        </div>
 
+        <div id="shelves" class="bookshelf-section">
+            <h3 id="shelvesCount">Shelves: </h3>
+
+            <div class="shelf">
+                <h2 class="shelf-name">To Be Read</h2>
+                <div class="shelf-books">
+                    <div class="book-div">
+                        <div class="book-front">
+                            <p class="book-text">Jane Austen</p>
+                            <p class="book-text">Mansfield Park</p>
+                        </div>
+                        <div class="book-side book-hide">
+                            <p class="book-text">Jane Austen</p>
+                            <p class="book-text">Mansfield Park</p>
+                        </div>
+                    </div>
+                </div>                
             </div>
+
+
         </div>   
         
         
-        <div id="edit-shelves">
+        <div id="edit-shelves" class="bookshelf-section">
 
+            <div id="save-btn" class="save-ready">
+                <p>Save Shelves</p>
+            </div>
         </div>  
-        <div id="save-btn" class="save-ready">
-            <p>Save Shelves</p>
-        </div>
+        
     </div>
     <script src="/scripts/bookshelf.js"></script>
 </body>

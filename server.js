@@ -49,10 +49,10 @@ app.use(session({
 // Middleware to check if user is authenticated
 const isAuthenticated = (req, res, next) => {
   if (req.session.isLoggedIn) {
-    console.log("is logged in: true");
+    // console.log("is logged in: true");
     next();
   } else {
-    console.log("is logged in: false");
+    // console.log("is logged in: false");
     res.sendFile(path.join(__dirname, 'public/templates/login.html'));
     // res.status(401).json({ message: 'Unauthorized' });
   }

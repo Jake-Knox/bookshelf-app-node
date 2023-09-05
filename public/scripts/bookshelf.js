@@ -106,9 +106,23 @@ const setupUserElements = (dataArray) => {
   }
 }
 
+searchBtn.addEventListener("click", () => {
+
+  console.log("search btn");
+
+
+});
+
+backBtn.addEventListener("click", () => {
+
+  console.log("back btn");
+
+
+});
+
 addBtn.addEventListener("click", () => {
 
-  console.log("do something");
+  console.log("add btn");
 
   // addBookTest();
 
