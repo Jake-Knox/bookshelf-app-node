@@ -1,29 +1,20 @@
 console.log("bookshelf");
 
-const usernameTitle = document.getElementById("usernameTitle")
+const usernameTitle = document.getElementById("usernameTitle");
+
+// search-input, search-btn, search-results, book-results, results-btns, back-btn, add-btn
+
+const addBtn = document.getElementById("add-btn");
 
 
 
+
+// loading ititial content
 
 document.addEventListener('DOMContentLoaded', () => {
-    // fetch('/getmybooks')
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     const shelvesDiv = document.getElementById('shelves');
-    //     // const newestBooks = data.slice(0, 5); // Get the newest 5 books
-
-    //     // insert html from books retrieved
-    //     data.forEach(datum => {
-    //     //   const listItem = document.createElement('li');
-    //     //   let bookData = (`${book.isbn} ${book.author} ${book.title}`);
-    //     //   listItem.textContent = bookData;
-    //     //   bookList.appendChild(listItem);
-    //     console.log(datum);
-    //     });
-    //     })
-    // .catch(error => console.error('Error loading books:', error));
 
     getMyBooks();
+
   });
 
   const getMyBooks = async () => {
@@ -43,6 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
           console.log(userData.data);
 
+          // func to generate content based on database pull 
+          // move this to a seprate func
+
           // const bookList = document.getElementById('bookList');
           // const filterTopFive = data.slice(0, 5); // Get the newest 5 books
   
@@ -52,9 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
           //   let bookData = (`${book.isbn} ${book.author} ${book.title}`);
           //   listItem.textContent = bookData;
           //   bookList.appendChild(listItem);
-          // });
-
-          
+          // });          
         });      
       }
       else{
@@ -66,8 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log("not logged in")
       // do something here
       // redirect or something
-    }    
-    
+    }  
   }
 
   const checkSession = async () => {
@@ -90,3 +81,5 @@ document.addEventListener('DOMContentLoaded', () => {
         return false;
     }
   }
+
+// page functionality
