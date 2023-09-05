@@ -26,9 +26,9 @@ loginButton.addEventListener("click", () => {
 
 const loginInputChech = (username, password) => {
 
-  if(username = "" || password == "")
+  if(username == "" || password == "")
   {
-    showLoginError("Enter a username and password");
+    showError("Enter a username and password");
     return false;
   }
   else

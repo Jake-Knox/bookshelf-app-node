@@ -21,10 +21,10 @@
 
 
 body {
-  background-image: url("../images/backgrounds/paper-bg.jpg");
-  background-size: cover;
+  /* background-image: url("../images/backgrounds/paper-bg.jpg"); */
+  /* background-size: cover; */
   /* background-repeat: repeat; */
-  /* background-color: beige; */
+  background-color: beige;
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
