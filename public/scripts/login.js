@@ -57,8 +57,7 @@ const loginUser = async (username, password) => {
 
     if (response.ok) {  
 
-      loginComplete();
-      
+      loginComplete();      
       
     } else {
       console.error('Failed to log in:', response.statusText);

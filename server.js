@@ -150,33 +150,14 @@ client.connect()
       });                
     });
 
-    app.get('/addbook/:isbn', isAuthenticated, (req, res) => {
-      const userName = req.params.username;
+    app.post('/adddabook/', isAuthenticated, (req, res) => {
     
-      // look through this, there is a lot to do here.
-
-      // book data is already searched on from front end
-      // so no need to search google again
-      // make sure front end sends data back if possible/ not to inefficient
-
-      // db.collection('users').findOne({ username }, (err, user) => {
-      //   if (err) {
-      //     console.error('Error finding user:', err);
-      //     res.sendStatus(500);
-      //   } else if (!user) {
-      //     console.log("user not found");
-      //     res.status(401).json({ message: 'User not found' });
-      //   } else {
-      //       // User found, send data
-      //       console.log("data found");
-      //       res.status(200).json({ data: user }); 
-      //   }
-      // });  
-
-      // https://www.penguin.co.uk/books/55906/persuasion-by-jane-austen-intro-and-notes-gillian-beer/9780141439686
+      let userName = req.session.username
+      console.log(`un:${userName}`)
 
       // prep the book data
       const newBook = {
+        isbn: "9780141439686",
         title: "Persuasion",
         author: "Jane Austen",
         publicationDate: "2003",
@@ -184,11 +165,28 @@ client.connect()
         thumbnail: "https://cdn.penguin.co.uk/dam-assets/books/9780141439686/9780141439686-jacket-large.jpg",
       }
 
+      // https://www.w3schools.com/nodejs/nodejs_mongodb_update.asp
       db.collection('users').updateOne( 
         { username: userName },
-        { $push: { books: newBook } }
-      );
+        { $push: { books: newBook } }, 
+        (err, user) => {
+          if (err) {
+            console.error('Error finding user:', err);
+            res.sendStatus(500);
+          } else if (!user) {
+            console.log("user not found");
+            res.status(401).json({ message: 'User not found' });
+          } else { 
+            // success?
 
+            console.log("book added to user books array")
+            
+            console.log(user);
+
+            res.status(200).json({ message: 'add successful' });
+          }
+        }
+      );
     });
 
     app.get('/users/:username', isAuthenticated, (req, res) => {
@@ -337,6 +335,17 @@ app.post('/checkSession', (req, res) => {
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
 // Google Books API searches
 
 const googleBooksSearchTitle = (searchInput) => {  
@@ -364,6 +373,7 @@ const googleBooksSearchTitle = (searchInput) => {
         // }
 
         // Retrieve the author, publication date, and page count
+        // const title = book.volumeInfo.title || 'Unknown'; // ISBN
         const title = book.volumeInfo.title || 'Unknown';
         const author = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
         const publicationDate = book.volumeInfo.publishedDate || 'Unknown';
@@ -407,6 +417,7 @@ const googleBooksSearchISBN = (searchInput) => {
       const book = books[0];
 
       // Retrieve the author, publication date, and page count
+      // const title = book.volumeInfo.title || 'Unknown'; // ISBN
       const title = book.volumeInfo.title || 'Unknown';
       const author = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
       const publicationDate = book.volumeInfo.publishedDate || 'Unknown';
