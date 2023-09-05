@@ -49,10 +49,10 @@ app.use(session({
 // Middleware to check if user is authenticated
 const isAuthenticated = (req, res, next) => {
   if (req.session.isLoggedIn) {
-    console.log("logged in true")
+    console.log("is logged in: true");
     next();
   } else {
-    console.log("not logged in")
+    console.log("is logged in: false");
     res.sendFile(path.join(__dirname, 'public/templates/login.html'));
     // res.status(401).json({ message: 'Unauthorized' });
   }
@@ -119,7 +119,7 @@ client.connect()
 
     // 
     app.post('/getmybooks', isAuthenticated, (req, res) => {
-      console.log("get my books request")
+      // console.log("get my books request")
 
       let username = req.session.username
      
@@ -275,7 +275,7 @@ client.connect()
 
     // Set up database route handlers
     app.get('/books', (req, res) => {
-      console.log("books request");
+      // console.log("books request");
       const collection = db.collection('books');
       collection.find().toArray((err, books) => {
         if (err) {

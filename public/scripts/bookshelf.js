@@ -1,11 +1,18 @@
 console.log("bookshelf");
 
 const usernameTitle = document.getElementById("usernameTitle");
+const followingCount = document.getElementById("followingCount");
+const followersCount = document.getElementById("followersCount");
 
-// search-input, search-btn, search-results, book-results, results-btns, back-btn, add-btn
-
+const searchInput = document.getElementById("search-input");
+const searchBtn = document.getElementById("search-btn");
+const searchResults = document.getElementById("search-results");
+const bookResults = document.getElementById("book-results");
+const ResultsBtns = document.getElementById("results-btns");
+const backBtn = document.getElementById("back-btn");
 const addBtn = document.getElementById("add-btn");
 
+const shelvesCount = document.getElementById("shelvesCount");
 
 
 
@@ -32,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // console.log(data.data);
           console.log("retirved data");
 
-          console.log(userData.data);
+          setupUserElements(userData.data)
 
           // func to generate content based on database pull 
           // move this to a seprate func
@@ -72,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Logout successful
       console.log("logged in");
       response.json().then(data => {
-        usernameTitle.textContent = data.un;
+        usernameTitle.textContent = data.un; // done here so that user doesn't see change
       });
       return true;
     }
@@ -83,3 +90,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 // page functionality
+
+const setupUserElements = (dataArray) => {
+console.log(dataArray);
+
+// display user data setup
+// usernameTitle.textContent = dataArray.username;
+followingCount.textContent = (`Following: ${dataArray.following.length}`);
+followersCount.textContent = (`Following: ${dataArray.followers.length}`);
+
+//shelves setup
+shelvesCount.textContent = (`Shelves: ${dataArray.shelves.length}`);
+for(let i = 0; i < dataArray.shelves.length; i++)
+{
+  // for every shelf
+  console.log(`shelf:${i}`);
+
+  for(let j = 0; j < dataArray.shelves[i].books; j++)
+  {
+  // for every book on shelf i 
+  console.log(`book:${j} on shelf:${i}`);
+  }
+
+}
+
+
+}
