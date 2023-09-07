@@ -16,6 +16,10 @@ app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
 // const { start } = require('repl');
 app.use(express.static(path.join(__dirname, 'public')));
 
+// for ejs template stuff
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'public/templates'));
+
 // Database setup
 const { MongoClient, ServerApiVersion, Collection } = require('mongodb');
 const { secretKey, mongodbURI, googleBooksKey } = require('./config.js');
@@ -324,6 +328,33 @@ app.get('/crud', isAuthenticated, (req, res) => {
 app.get('/profile', isAuthenticated, async (req, res) => {
   res.sendFile(path.join(__dirname, 'public/templates/profile.html'));
 });
+
+// test for user generic pages
+app.get('/:username', isAuthenticated, async (req, res) => {
+
+  const urlUsername = req.params.username;
+  const loggedInUsername = req.session.username; 
+
+  let userData = "error";
+
+  if (urlUsername === loggedInUsername) {
+    // User is viewing their own profile
+    userData = "My profile"
+  } else {
+    // User is viewing someone else's profile
+    userData = "Someone elses profile"
+  }
+  res.render('user', { username: urlUsername, data: userData });
+});
+
+const getUserData = () => {
+  const userData = {
+    "a": ["one", "two"],
+    "b": ["three", "four"],
+  }
+  return userData;
+}
+
 
 // check session
 app.post('/checkSession', (req, res) => {
