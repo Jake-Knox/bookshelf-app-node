@@ -17,13 +17,17 @@
     </div>
     <div class="container">
 
+      <h1><%= username %>'s profile</h1>
+      <h2><%= data %></h2>
+
         <div class="bookshelf-section flex-row-between">
             
+
             <h1 id="usernameTitle"></h1>
             <div class="flex-column-centre">
                 <h3 id="followingCount"></h3>
                 <h3 id="followersCount"></h3>
-            </div>
+            </div>            
                    
         </div>
 
@@ -57,11 +61,7 @@
                 They should be deleted as soon as content is being generated
                 from the databse  -->
 
-        <div id="edit-shelves" class="bookshelf-section">
-            <div id="save-btn" class="save-ready">
-                <p>Save Shelves</p>
-            </div>
-        </div>  
+        
 
         <div id="shelves" class="bookshelf-section">
             <h3 id="shelvesCount">Shelves: </h3>
@@ -83,29 +83,22 @@
             </div>
 
             <div class="shelf">
-                <h2 class="shelf-name">Reading</h2>
-                <div class="shelf-books">
-                    <div class="book-div">
-                        <div class="book-front book-hide">
-                            <p class="book-text">Jane Austen</p>
-                            <p class="book-text">Persuasion</p>
-                        </div>
-                        <div class="book-side">
-                            <p class="book-text">Jane Austen</p>
-                            <p class="book-text">Persuasion</p>
-                        </div>
-                    </div>
-                </div>                
-            </div>
-        </div>   
-        
-        <div id="edit-shelves" class="bookshelf-section">
-
-            <div id="save-btn" class="save-ready">
-                <p>Save Shelves</p>
-            </div>
-        </div>  
-        
+              <h2 class="shelf-name">Reading</h2>
+              <div class="shelf-books">
+                  <div class="book-div">
+                      <div class="book-front book-hide">
+                          <p class="book-text">Jane Austen</p>
+                          <p class="book-text">Persuasion</p>
+                      </div>
+                      <div class="book-side">
+                          <p class="book-text">Jane Austen</p>
+                          <p class="book-text">Persuasion</p>
+                      </div>
+                  </div>
+              </div>                
+          </div>
+        </div>                  
+         
     </div>
     <script src="/scripts/bookshelf.js"></script>
 </body>

@@ -318,7 +318,14 @@ app.get('/loginPage', (req, res) => {
 });
 
 app.get('/bookshelf', isAuthenticated, (req, res) => {    
-  res.sendFile(path.join(__dirname, 'public/templates/bookshelf.html'));
+
+  let urlUsername = req.session.username;
+  let userData = "My profile";
+
+  // send them editable page
+  res.render('myBookshelf', { username: urlUsername, data: userData });
+
+  // res.sendFile(path.join(__dirname, 'public/templates/bookshelf.html'));
 });
 
 app.get('/crud', isAuthenticated, (req, res) => {
@@ -330,7 +337,7 @@ app.get('/profile', isAuthenticated, async (req, res) => {
 });
 
 // test for user generic pages
-app.get('/:username', isAuthenticated, async (req, res) => {
+app.get('/bookshelf/:username', isAuthenticated, async (req, res) => {
 
   const urlUsername = req.params.username;
   const loggedInUsername = req.session.username; 
@@ -340,11 +347,22 @@ app.get('/:username', isAuthenticated, async (req, res) => {
   if (urlUsername === loggedInUsername) {
     // User is viewing their own profile
     userData = "My profile"
+
+
+    // send them editable page
+    res.render('myBookshelf', { username: urlUsername, data: userData });
   } else {
     // User is viewing someone else's profile
     userData = "Someone elses profile"
+
+
+    // send them read-only page
+    res.render('otherBookshelf', { username: urlUsername, data: userData });
   }
-  res.render('user', { username: urlUsername, data: userData });
+
+  // remove this when different pages are made
+  // res.render('user', { username: urlUsername, data: userData });
+
 });
 
 const getUserData = () => {
