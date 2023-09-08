@@ -1,5 +1,7 @@
 console.log("bookshelf");
 
+// js for all users accessing any bookshelf - loads data from database, nothing editable
+
 const usernameTitle = document.getElementById("usernameTitle");
 const followingCount = document.getElementById("followingCount");
 const followersCount = document.getElementById("followersCount");
