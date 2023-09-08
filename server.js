@@ -122,6 +122,10 @@ client.connect()
     });
 
     // 
+    // TO BE REPLACED WITH 
+    //
+    // getUserBookshelf/:username
+    //
     app.post('/getmybooks', isAuthenticated, (req, res) => {
       // console.log("get my books request")
 
@@ -153,6 +157,38 @@ client.connect()
         }
       });                
     });
+
+    app.post('/getUserBookshelf/:username', isAuthenticated, (req, res) => {
+      // console.log("get any user books request - affected by privacy")
+      const username = req.params.username;
+
+      // Remember to change database entries to account for privacy options
+      // REMEMBER CHECKS FOR PRIVACY
+
+      db.collection('users').findOne({ username }, (err, user) => {
+        if (err) {
+          console.error('Error finding user:', err);
+          res.sendStatus(500);
+        } else if (!user) {
+          console.log("user not found");
+          res.status(401).json({ message: 'User not found' });
+        } else {
+            // User found, send data
+            
+            const userData = {
+              username: user.username,
+              following: user.following, // add checks for profile privacy
+              followers: user.followers, //
+              // books: user.books, // don't pull books, only bookshelves
+              shelves: user.shelves, // add checks for individual shelf privacy
+            }
+
+            res.status(200).json({ data: userData });
+        }
+      });                
+    });
+
+    
 
     app.post('/adddabook/', isAuthenticated, (req, res) => {
     
@@ -192,6 +228,8 @@ client.connect()
         }
       );
     });
+
+    
 
     app.get('/users/:username', isAuthenticated, (req, res) => {
       const username = req.params.username;
@@ -320,12 +358,9 @@ app.get('/loginPage', (req, res) => {
 app.get('/bookshelf', isAuthenticated, (req, res) => {    
 
   let urlUsername = req.session.username;
-  let userData = "My profile";
 
-  // send them editable page
-  res.render('myBookshelf', { username: urlUsername, data: userData });
-
-  // res.sendFile(path.join(__dirname, 'public/templates/bookshelf.html'));
+  // Redirect to the user-specific bookshelf route
+  res.redirect(`/bookshelf/${urlUsername}`);
 });
 
 app.get('/crud', isAuthenticated, (req, res) => {
