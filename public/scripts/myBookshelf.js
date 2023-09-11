@@ -11,6 +11,13 @@ const backBtn = document.getElementById("back-btn");
 const addBtn = document.getElementById("add-btn");
 
 
+document.addEventListener('DOMContentLoaded', () => {
+
+  getMyBooks();
+
+});
+
+
 searchBtn.addEventListener("click", () => {
 
     console.log("search btn");
@@ -29,21 +36,66 @@ searchBtn.addEventListener("click", () => {
   
     console.log("add btn");
   
-    // addBookTest();
+    // editDatabase();
+    // alert("Database has been updated");
+    alert("NOT connected to update code");
   
   });
     
-  const addBookTest = async () => {
+
+
+
+// shelves can be added to based on books in collection
+
+// no reading/to read - will be done as default shelves
+//
+
+// make changes here
+// lets sort the db out now before carrying on
+
+const getMyBooks = async () => {
+
+  if(checkSession())
+  {
+    const response = await fetch('/getmybooks', {
+      method: 'POST'
+    });
+    if (response.ok) {
+      // Logout successful
+      // console.log("logged in at getmybooks response");
+      response.json()
+      .then(userData => {
+
+        // console.log(data.data);
+        console.log("retirved data");
+        setupUserElements(userData.data);
+
+      });      
+    }
+    else{
+        console.log("something off in getmybooks");
+        console.log(response);
+    }
+  }
+  else{
+    console.log("not logged in")
+    // do something here
+    // redirect or something
+  }  
+}
+
+  const editDatabase = async () => {
   
     const test = "test";
-  
+    const test2 = "test 2";
+
     try {
-      const response = await fetch('/adddabook', {
+      const response = await fetch('/editDatabase', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ test }),
+        body: JSON.stringify({ test, test2 }),
       });
       if (response.ok) {  
   

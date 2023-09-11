@@ -121,137 +121,6 @@ client.connect()
       });    
     });
 
-    // 
-    // TO BE REPLACED WITH 
-    //
-    // getUserBookshelf/:username
-    //
-    app.post('/getmybooks', isAuthenticated, (req, res) => {
-      // console.log("get my books request")
-
-      let username = req.session.username
-     
-      // find the username in the books collection
-      // send the shelf (and book) data back to the user
-      db.collection('users').findOne({ username }, (err, user) => {
-        if (err) {
-          console.error('Error finding user:', err);
-          res.sendStatus(500);
-        } else if (!user) {
-          console.log("user not found");
-          res.status(401).json({ message: 'User not found' });
-        } else {
-            // User found, send data
-            // console.log("data found");
-            // console.log(user);
-            
-            const userData = {
-              username: user.username,
-              following: user.following,
-              followers: user.followers,
-              books: user.books,
-              shelves: user.shelves,
-            }
-
-            res.status(200).json({ data: userData });
-        }
-      });                
-    });
-
-    app.post('/getUserBookshelf/:username', isAuthenticated, (req, res) => {
-      // console.log("get any user books request - affected by privacy")
-      const username = req.params.username;
-
-      // Remember to change database entries to account for privacy options
-      // REMEMBER CHECKS FOR PRIVACY
-
-      db.collection('users').findOne({ username }, (err, user) => {
-        if (err) {
-          console.error('Error finding user:', err);
-          res.sendStatus(500);
-        } else if (!user) {
-          console.log("user not found");
-          res.status(401).json({ message: 'User not found' });
-        } else {
-            // User found, send data
-            
-            const userData = {
-              username: user.username,
-              following: user.following, // add checks for profile privacy
-              followers: user.followers, //
-              // books: user.books, // don't pull books, only bookshelves
-              shelves: user.shelves, // add checks for individual shelf privacy
-            }
-
-            res.status(200).json({ data: userData });
-        }
-      });                
-    });
-
-    
-
-    app.post('/adddabook/', isAuthenticated, (req, res) => {
-    
-      let userName = req.session.username
-      console.log(`un:${userName}`)
-
-      // prep the book data
-      const newBook = {
-        isbn: "9780141439686",
-        title: "Persuasion",
-        author: "Jane Austen",
-        publicationDate: "2003",
-        pageCount: "288",
-        thumbnail: "https://cdn.penguin.co.uk/dam-assets/books/9780141439686/9780141439686-jacket-large.jpg",
-      }
-
-      // https://www.w3schools.com/nodejs/nodejs_mongodb_update.asp
-      db.collection('users').updateOne( 
-        { username: userName },
-        { $push: { books: newBook } }, 
-        (err, user) => {
-          if (err) {
-            console.error('Error finding user:', err);
-            res.sendStatus(500);
-          } else if (!user) {
-            console.log("user not found");
-            res.status(401).json({ message: 'User not found' });
-          } else { 
-            // success?
-
-            console.log("book added to user books array")
-            
-            console.log(user);
-
-            res.status(200).json({ message: 'add successful' });
-          }
-        }
-      );
-    });
-
-    
-
-    app.get('/users/:username', isAuthenticated, (req, res) => {
-      const username = req.params.username;
-    
-      // Find the user based on the provided username
-      db.collection('users').findOne({ username }, (err, user) => {
-        if (err) {
-          console.error('Error finding user:', err);
-          res.sendStatus(500);
-        } else if (!user) {
-          console.log("user not found");
-          res.status(401).json({ message: 'User not found' });
-        } else {
-            // User found, send data
-            console.log("data found");
-            res.status(200).json({ data: user }); 
-        }
-      });                
-    });
-
-
-
     // register new user - using UN + PW + boiler plate data
     app.post('/register', (req, res) => {
       const { username, password } = req.body;
@@ -293,6 +162,167 @@ client.connect()
       }     
       });
     });
+
+
+    app.post('/getUserBookshelf/:username', isAuthenticated, (req, res) => {
+      // console.log("get any user books request - affected by privacy")
+      const username = req.params.username;
+
+      // Remember to change database entries to account for privacy options
+      // REMEMBER CHECKS FOR PRIVACY
+
+      db.collection('users').findOne({ username }, (err, user) => {
+        if (err) {
+          console.error('Error finding user:', err);
+          res.sendStatus(500);
+        } else if (!user) {
+          console.log("user not found");
+          res.status(401).json({ message: 'User not found' });
+        } else {
+            // User found, send data
+            
+            const userData = {
+              username: user.username,
+              following: user.following, // add checks for profile privacy
+              followers: user.followers, //
+              // books: user.books, // don't pull books, only bookshelves
+              shelves: user.shelves, // add checks for individual shelf privacy
+            }
+
+            res.status(200).json({ data: userData });
+        }
+      });                
+    });
+
+    // 
+    // TO BE REPLACED WITH 
+    //
+    // getUserBookshelf/:username
+    //
+    app.post('/getmybooks', isAuthenticated, (req, res) => {
+      // console.log("get my books request")
+
+      let username = req.session.username
+     
+      // find the username in the books collection
+      // send the shelf (and book) data back to the user
+      db.collection('users').findOne({ username }, (err, user) => {
+        if (err) {
+          console.error('Error finding user:', err);
+          res.sendStatus(500);
+        } else if (!user) {
+          console.log("user not found");
+          res.status(401).json({ message: 'User not found' });
+        } else {
+            // User found, send data
+            // console.log("data found");
+            // console.log(user);
+            
+            const userData = {
+              username: user.username,
+              following: user.following,
+              followers: user.followers,
+              books: user.books,
+              shelves: user.shelves,
+            }
+
+            res.status(200).json({ data: userData });
+        }
+      });                
+    });
+
+
+    
+
+    app.post('/editDatabase', isAuthenticated, (req, res) => {
+    
+      // used to edit db of whoeever is logged in
+      const userName = req.session.username
+
+      const { test, test2 } = req.body;
+
+
+      console.log(`un:${userName}`);
+
+      console.log(`test: ${test}, ${test2}`);
+
+
+      // prep the book data
+
+      const newBook = {
+        isbn: "9780141439686",
+        title: "Persuasion",
+        author: "Jane Austen",
+        facing: "front",
+        publicationDate: "2003",
+        pageCount: "288",
+        thumbnail: "https://cdn.penguin.co.uk/dam-assets/books/9780141439686/9780141439686-jacket-large.jpg",
+      }
+
+      const newBook2 = {
+        isbn: "9780141182674",
+        title: "On the Road",
+        author: "Jack Kerouac",
+        facing: "front",
+        publicationDate: "2000",
+        pageCount: "320",
+        thumbnail: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1605112490i/2552.jpg",
+      }
+
+      const newShelf = {
+        position: "0",
+        visibilty: "visible",
+        name: "Reading",
+        books: { newBook, newBook2 }
+      }
+
+      // https://www.w3schools.com/nodejs/nodejs_mongodb_update.asp
+      db.collection('users').updateOne( 
+        { username: userName },
+        { $push: { shelves: newShelf } }, 
+        (err, user) => {
+          if (err) {
+            console.error('Error finding user:', err);
+            res.sendStatus(500);
+          } else if (!user) {
+            console.log("user not found");
+            res.status(401).json({ message: 'User not found' });
+          } else { 
+            // success?
+
+            console.log("book added to user books array")
+            
+            console.log(user);
+
+            res.status(200).json({ message: 'add successful' });
+          }
+        }
+      );
+
+    });
+
+    
+
+    app.get('/users/:username', isAuthenticated, (req, res) => {
+      const username = req.params.username;
+    
+      // Find the user based on the provided username
+      db.collection('users').findOne({ username }, (err, user) => {
+        if (err) {
+          console.error('Error finding user:', err);
+          res.sendStatus(500);
+        } else if (!user) {
+          console.log("user not found");
+          res.status(401).json({ message: 'User not found' });
+        } else {
+            // User found, send data
+            console.log("data found");
+            res.status(200).json({ data: user }); 
+        }
+      });                
+    });
+
+    
 
     // check that this works
     app.delete('/books/:isbn', (req, res) => {

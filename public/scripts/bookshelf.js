@@ -3,53 +3,17 @@ console.log("bookshelf");
 // js for all users accessing any bookshelf - loads data from database, nothing editable
 
 const usernameTitle = document.getElementById("usernameTitle");
+
 const followingCount = document.getElementById("followingCount");
 const followersCount = document.getElementById("followersCount");
 
-
-const booksCount = document.getElementById("booksCount");
 const shelvesCount = document.getElementById("shelvesCount");
 
 
 
-// loading ititial content
 
-document.addEventListener('DOMContentLoaded', () => {
 
-  getMyBooks();
 
-});
-
-const getMyBooks = async () => {
-
-  if(checkSession())
-  {
-    const response = await fetch('/getmybooks', {
-      method: 'POST'
-    });
-    if (response.ok) {
-      // Logout successful
-      // console.log("logged in at getmybooks response");
-      response.json()
-      .then(userData => {
-
-        // console.log(data.data);
-        console.log("retirved data");
-        setupUserElements(userData.data);
-
-      });      
-    }
-    else{
-        console.log("something off in getmybooks");
-        console.log(response);
-    }
-  }
-  else{
-    console.log("not logged in")
-    // do something here
-    // redirect or something
-  }  
-}
 
 const checkSession = async () => {
   // cookies or similar to track user
