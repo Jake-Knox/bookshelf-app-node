@@ -37,8 +37,10 @@ searchBtn.addEventListener("click", () => {
     console.log("add btn");
   
     // editDatabase();
-    // alert("Database has been updated");
-    alert("NOT connected to update code");
+    removeShelf();
+
+    alert("Database has been updated");
+    // alert("NOT connected to update code");
   
   });
     
@@ -84,29 +86,48 @@ const getMyBooks = async () => {
   }  
 }
 
-  const editDatabase = async () => {
-  
-    const test = "test";
-    const test2 = "test 2";
+const editDatabase = async () => {
 
-    try {
-      const response = await fetch('/editDatabase', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ test, test2 }),
-      });
-      if (response.ok) {  
-  
-        console.log(response);
-        
-      } else {
-        console.error('Failed: ', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error: ', error);
-  
+  const test = "test";
+  const test2 = "test 2";
+
+  try {
+    const response = await fetch('/editDatabase', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ test, test2 }),
+    });
+    if (response.ok) {   
+      console.log(response);        
+    } else {
+      console.error('Failed: ', response.statusText);
     }
-  } 
+  } catch (error) {
+    console.error('Error: ', error);
+  }
+} 
   
+const removeShelf = async () => {
+
+  const test = "test";
+  const test2 = "test 2";
+
+  try {
+    const response = await fetch('/removeDBValue', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ test, test2 }),
+    });
+    if (response.ok) {   
+      console.log(response);        
+    } else {
+      console.error('Failed: ', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error: ', error);
+  }
+} 

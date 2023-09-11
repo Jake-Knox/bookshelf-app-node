@@ -231,6 +231,35 @@ client.connect()
       });                
     });
 
+    app.post('/removeDBValue', isAuthenticated, (req, res) => {
+      const userName = req.session.username
+      const { test, test2 } = req.body;
+      console.log(`un:${userName}`);
+      console.log(`test: ${test}, ${test2}`);
+
+      const shelfName = "Test shelf name";
+
+      //https://www.mongodb.com/docs/manual/reference/operator/update/unset/#mongodb-update-up.-unset
+      db.collection('users').updateOne( 
+        { username: userName },
+        { $pull: { shelves: { name: shelfName } } }, //remove bookshelf by name
+        (err, user) => {
+          if (err) {
+            console.error('Error finding user:', err);
+            res.sendStatus(500);
+          } else if (!user) {
+            console.log("user not found");
+            res.status(401).json({ message: 'User not found' });
+          } else { 
+            // success
+            
+            console.log("array item deleted")            
+
+            res.status(200).json({ message: 'remove successful' });
+          }
+        }
+      );
+    });
 
     
 
