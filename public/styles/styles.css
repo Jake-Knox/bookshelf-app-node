@@ -179,6 +179,14 @@ h2 {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+.book-details {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
   
 .btn {
   padding: 8px 12px;
@@ -188,32 +196,27 @@ h2 {
   border-radius: 4px;
   cursor: pointer;
 }
-  
-.btn:hover {
-    background-color: #45a049;
-  }
-  
-.book-details {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-#save-btn{
-  width: 100px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  cursor: pointer;
-  padding: 5px;
+    
+.book-btn{
+    width: 100px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px;
 }
 .save-ready{
-  background-color: #45a049;
+    background-color: #45a049;
+    color: white;
 } 
-.save-unavailable{
-    background-color: lightgray;
+.save-ready:hover {
+  background-color: #357e39;
 }
+
+.save-unavailable{
+      background-color: lightgray;
+      color: black;
+}
+
