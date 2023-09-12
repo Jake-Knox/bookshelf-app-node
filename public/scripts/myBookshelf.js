@@ -10,11 +10,19 @@ const ResultsBtns = document.getElementById("results-btns");
 const backBtn = document.getElementById("back-btn");
 const addBtn = document.getElementById("add-btn");
 
+let bookshelfData;
 
+// checks and setup
 document.addEventListener('DOMContentLoaded', () => {
-
-  getMyBooks();
-
+  if(checkSession())
+  {
+    getMyBooks()
+  }
+  else{
+    console.log("not logged in")
+    // do something here
+    // redirect or something
+  }   
 });
 
 
@@ -35,16 +43,20 @@ searchBtn.addEventListener("click", () => {
   addBtn.addEventListener("click", () => {
   
     console.log("add btn");
+    alert("NOT CONNECTED");
+
   
     // editDatabase();
-    removeShelf();
+    // alert("Database has been updated");
 
-    alert("Database has been updated");
-    // alert("NOT connected to update code");
+
+    // removeShelf();    
+    // alert("Database has been updated");
+
+
   
   });
     
-
 
 
 // shelves can be added to based on books in collection
@@ -56,35 +68,127 @@ searchBtn.addEventListener("click", () => {
 // lets sort the db out now before carrying on
 
 const getMyBooks = async () => {
+  
+  const response = await fetch('/getmybooks', {
+    method: 'POST'
+  });
+  if (response.ok) {
+    // Logout successful
+    // console.log("logged in at getmybooks response");
+    response.json()
+    .then(userData => {
+      // console.log(data.data);
+      console.log("retirved data");
+      bookshelfData = userData.data; // used to set up elements and fill shelves
 
-  if(checkSession())
-  {
-    const response = await fetch('/getmybooks', {
-      method: 'POST'
-    });
-    if (response.ok) {
-      // Logout successful
-      // console.log("logged in at getmybooks response");
-      response.json()
-      .then(userData => {
-
-        // console.log(data.data);
-        console.log("retirved data");
-        setupUserElements(userData.data);
-
-      });      
-    }
-    else{
-        console.log("something off in getmybooks");
-        console.log(response);
-    }
-  }
-  else{
-    console.log("not logged in")
-    // do something here
-    // redirect or something
+      setupUserElements(bookshelfData); // comment to stop trying to use db data
+    });      
   }  
 }
+
+
+
+
+
+
+const setupUserElements = (dataArray) => {
+
+  const shelvesData = dataArray.shelves;
+
+  console.log(dataArray);
+
+  // display user data setup
+  // usernameTitle.textContent = dataArray.username;
+  followingCount.textContent = (`Following: ${dataArray.following.length}`);
+  followersCount.textContent = (`Following: ${dataArray.followers.length}`);
+
+  // books stuff
+  booksCount.textContent = (`Books: ${dataArray.books.length}`);
+
+  //shelves setup
+  shelvesCount.textContent = (`Shelves: ${shelvesData.length}`);
+  for(let i = 0; i < shelvesData.length; i++)
+  {
+    // for every shelf
+    console.log(`shelf:${i}`);
+
+    const newShelf = createShelf(shelvesData[i]);
+
+    const newShelfBooks = document.createElement("div");
+    newShelfBooks.classList.add("shelf-books");
+
+    for(let j = 0; j < shelvesData[i].books.length; j++)
+    {
+      // for every book on shelf i 
+      console.log(`shelf:${i}, book:${j} `);
+
+      const newBook = createShelfBook(shelvesData[i].books[j]);
+
+
+      // add the new book the the shelf
+      newShelfBooks.appendChild(newBook);
+    }
+
+    //add the new shelf to the shelves div
+    newShelf.appendChild(newShelfBooks);
+    shelves.appendChild(newShelf);
+  }  
+}
+
+
+const createCollectionBook = () =>{
+  // to show user data about a book before adding to shelf 
+  // or showing in "books" collection
+
+
+}
+
+const createShelf = (shelfData) =>{
+  // used to easily create many SHELVES during page load
+
+    // div for the shelf
+    const newShelfDiv = document.createElement("div");
+    newShelfDiv.classList.add("shelf");
+
+    const newShelfName = document.createElement("h2");
+    newShelfName.textContent = (`${shelfData.name}`);
+    newShelfDiv.appendChild(newShelfName);
+   
+    return newShelfDiv;
+}
+
+const createShelfBook = (bookData) =>{
+  // used to easily create many BOOKS during page load
+
+  // div for the book
+  const newBookDiv = document.createElement("div");
+  newBookDiv.classList.add("book-div");
+
+  const newBookCoverImg = document.createElement("img");
+  newBookCoverImg.classList.add("cover-img");
+  newBookCoverImg.src = bookData.thumbnail;
+  newBookCoverImg.alt = (`Author: ${bookData.author} - Title: ${bookData.title}`);
+
+
+  //assemble elements
+  newBookDiv.appendChild(newBookCoverImg);
+
+  return newBookDiv;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const editDatabase = async () => {
 

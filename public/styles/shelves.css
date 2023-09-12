@@ -21,7 +21,7 @@
 }
 
 .shelf{
-    height: 20vh;
+    height: 30vh;
     width: 100%;
 
 }
@@ -34,6 +34,14 @@
 
     border-top: 3px solid #3a3129;
     border-bottom: 3px solid #3a3129;
+
+    height: 80%;
+    width: 100%;
+}
+
+.book-div{
+    height: 100%;
+    aspect-ratio: 1 / 1.6;
 }
 
 .book-front{
@@ -49,4 +57,9 @@
 .book-text{
     width: fit-content;
     block-size: fit-content;
+}
+
+.cover-img{
+    height: 100%;
+    width: 100%;
 }

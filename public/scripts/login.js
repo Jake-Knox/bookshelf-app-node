@@ -83,7 +83,7 @@ const loginComplete = async () => {
     console.log("logged in");
 
     // go to my profile page
-    window.location.href = '/profile';
+    window.location.href = '/bookshelf';
 
   }
   else{

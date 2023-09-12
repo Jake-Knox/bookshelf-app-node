@@ -111,7 +111,7 @@ client.connect()
               console.log('isLoggedIn:', req.session.isLoggedIn);
               console.log('username:', req.session.username);              
               res.status(200).json({ message: 'Authentication successful' });
-              // res.redirect('/profile');             
+              // res.redirect('/profile'); // redirected from login.js       
             } else {
               // Passwords do not match, authentication failed
               res.status(401).json({ message: 'Invalid username or password' });
@@ -302,7 +302,7 @@ client.connect()
         position: "0",
         visibilty: "visible",
         name: "Reading",
-        books: { newBook, newBook2 }
+        books: [ newBook, newBook2 ]
       }
 
       // https://www.w3schools.com/nodejs/nodejs_mongodb_update.asp
@@ -439,15 +439,15 @@ app.get('/bookshelf/:username', isAuthenticated, async (req, res) => {
   let userData = "error";
 
   if (urlUsername === loggedInUsername) {
-    // User is viewing their own profile
-    userData = "My profile"
+    // User is viewing their own bookshelf
+    userData = "My bookshelf"
 
 
     // send them editable page
     res.render('myBookshelf', { username: urlUsername, data: userData });
   } else {
-    // User is viewing someone else's profile
-    userData = "Someone elses profile"
+    // User is viewing someone else's bookshelf
+    userData = "Someone elses bookshelf"
 
 
     // send them read-only page

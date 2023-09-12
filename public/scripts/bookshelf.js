@@ -9,9 +9,7 @@ const followersCount = document.getElementById("followersCount");
 
 const shelvesCount = document.getElementById("shelvesCount");
 
-
-
-
+const shelves = document.getElementById("shelves");
 
 
 
@@ -38,29 +36,4 @@ const checkSession = async () => {
 
 // page functionality
 
-const setupUserElements = (dataArray) => {
-  console.log(dataArray);
 
-  // display user data setup
-  // usernameTitle.textContent = dataArray.username;
-  followingCount.textContent = (`Following: ${dataArray.following.length}`);
-  followersCount.textContent = (`Following: ${dataArray.followers.length}`);
-
-  // books stuff
-  booksCount.textContent = (`Books: ${dataArray.books.length}`);
-
-  //shelves setup
-  shelvesCount.textContent = (`Shelves: ${dataArray.shelves.length}`);
-  for(let i = 0; i < dataArray.shelves.length; i++)
-  {
-    // for every shelf
-    console.log(`shelf:${i}`);
-
-    for(let j = 0; j < dataArray.shelves[i].books.length; j++)
-    {
-    // for every book on shelf i 
-    console.log(`book:${j} on shelf:${i}`);
-    }
-
-  }
-}
