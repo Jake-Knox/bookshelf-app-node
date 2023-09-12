@@ -231,11 +231,11 @@ client.connect()
       });                
     });
 
-    app.post('/removeDBValue', isAuthenticated, (req, res) => {
+    app.post('/removeShelf', isAuthenticated, (req, res) => {
       const userName = req.session.username
-      const { test, test2 } = req.body;
+      const { removeShelfName } = req.body;
       console.log(`un:${userName}`);
-      console.log(`test: ${test}, ${test2}`);
+      console.log(`remove: ${removeShelfName}`);
 
       const shelfName = "Test shelf name";
 

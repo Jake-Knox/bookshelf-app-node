@@ -189,7 +189,7 @@ const createShelfBook = (bookData) =>{
 
 
 
-
+// USED for hard code adding stuff to database
 const editDatabase = async () => {
 
   const test = "test";
@@ -212,19 +212,42 @@ const editDatabase = async () => {
     console.error('Error: ', error);
   }
 } 
-  
-const removeShelf = async () => {
 
-  const test = "test";
-  const test2 = "test 2";
+
+
+const addSehlf = async (shelfName) => {
+
+  const addShelfName = shelfName;
 
   try {
-    const response = await fetch('/removeDBValue', {
+    const response = await fetch('/addShelf', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ test, test2 }),
+      body: JSON.stringify({ addShelfName }),
+    });
+    if (response.ok) {   
+      console.log(response);        
+    } else {
+      console.error('Failed: ', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error: ', error);
+  }
+} 
+  
+const removeShelf = async (shelfName) => {
+
+  const removeShelfName = shelfName;
+
+  try {
+    const response = await fetch('/removeShelf', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ removeShelfName }),
     });
     if (response.ok) {   
       console.log(response);        
