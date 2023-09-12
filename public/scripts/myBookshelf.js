@@ -214,8 +214,8 @@ const editDatabase = async () => {
 } 
 
 
-
-const addSehlf = async (shelfName) => {
+// add shelf
+const addShelf = async (shelfName) => {
 
   const addShelfName = shelfName;
 
@@ -237,6 +237,7 @@ const addSehlf = async (shelfName) => {
   }
 } 
   
+// remove shelf
 const removeShelf = async (shelfName) => {
 
   const removeShelfName = shelfName;
@@ -258,3 +259,53 @@ const removeShelf = async (shelfName) => {
     console.error('Error: ', error);
   }
 } 
+
+
+// add book to shelf
+const addBookToShelf = async (bookName ,shelfName) => {
+
+  const addBookName = bookName;
+  const addShelfName = shelfName;
+
+  try {
+    const response = await fetch('/removeBookFromShelf', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ addBookName, addShelfName }),
+    });
+    if (response.ok) {   
+      console.log(response);        
+    } else {
+      console.error('Failed: ', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error: ', error);
+  }
+}
+
+
+// remove book from shelf
+const removeBookFromShelf = async (bookName ,shelfName) => {
+
+  const removeBookName = bookName;
+  const removeShelfName = shelfName;
+
+  try {
+    const response = await fetch('/removeBookFromShelf', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ removeBookName, removeShelfName }),
+    });
+    if (response.ok) {   
+      console.log(response);        
+    } else {
+      console.error('Failed: ', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error: ', error);
+  }
+}
