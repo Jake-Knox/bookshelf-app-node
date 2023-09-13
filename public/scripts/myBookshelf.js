@@ -10,7 +10,7 @@ const ResultsBtns = document.getElementById("results-btns");
 const backBtn = document.getElementById("back-btn");
 const addBtn = document.getElementById("add-btn");
 
-let bookshelfData;
+let bookshelfData = [];
 
 // checks and setup
 document.addEventListener('DOMContentLoaded', () => {
@@ -40,20 +40,14 @@ searchBtn.addEventListener("click", () => {
   
   });
   
-  addBtn.addEventListener("click", () => {
-  
+  addBtn.addEventListener("click", () => {  
     console.log("add btn");
+
+    
     alert("NOT CONNECTED");
 
-  
     // editDatabase();
     // alert("Database has been updated");
-
-
-    // removeShelf();    
-    // alert("Database has been updated");
-
-
   
   });
     
@@ -69,7 +63,7 @@ searchBtn.addEventListener("click", () => {
 
 const getMyBooks = async () => {
   
-  const response = await fetch('/getmybooks', {
+  const response = await fetch('/getMyBookhelf', {
     method: 'POST'
   });
   if (response.ok) {
@@ -80,15 +74,12 @@ const getMyBooks = async () => {
       // console.log(data.data);
       console.log("retirved data");
       bookshelfData = userData.data; // used to set up elements and fill shelves
+      console.log(userData.data);
 
       setupUserElements(bookshelfData); // comment to stop trying to use db data
     });      
   }  
 }
-
-
-
-
 
 
 const setupUserElements = (dataArray) => {
@@ -136,6 +127,8 @@ const setupUserElements = (dataArray) => {
 }
 
 
+// functions for generating content on page
+
 const createCollectionBook = () =>{
   // to show user data about a book before adding to shelf 
   // or showing in "books" collection
@@ -178,18 +171,8 @@ const createShelfBook = (bookData) =>{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // USED for hard code adding stuff to database
+// To be deleted when all functions to edit db are available to user
 const editDatabase = async () => {
 
   const test = "test";
@@ -213,6 +196,7 @@ const editDatabase = async () => {
   }
 } 
 
+// Using these methods going forward
 
 // add shelf
 const addShelf = async (shelfName) => {

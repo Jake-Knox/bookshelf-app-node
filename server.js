@@ -199,7 +199,7 @@ client.connect()
     //
     // getUserBookshelf/:username
     //
-    app.post('/getmybooks', isAuthenticated, (req, res) => {
+    app.post('/getMyBookhelf', isAuthenticated, (req, res) => {
       // console.log("get my books request")
 
       let username = req.session.username
@@ -231,53 +231,17 @@ client.connect()
       });                
     });
 
-    app.post('/removeShelf', isAuthenticated, (req, res) => {
-      const userName = req.session.username
-      const { removeShelfName } = req.body;
-      console.log(`un:${userName}`);
-      console.log(`remove: ${removeShelfName}`);
-
-      const shelfName = "Test shelf name";
-
-      //https://www.mongodb.com/docs/manual/reference/operator/update/unset/#mongodb-update-up.-unset
-      db.collection('users').updateOne( 
-        { username: userName },
-        { $pull: { shelves: { name: shelfName } } }, //remove bookshelf by name
-        (err, user) => {
-          if (err) {
-            console.error('Error finding user:', err);
-            res.sendStatus(500);
-          } else if (!user) {
-            console.log("user not found");
-            res.status(401).json({ message: 'User not found' });
-          } else { 
-            // success
-            
-            console.log("array item deleted")            
-
-            res.status(200).json({ message: 'remove successful' });
-          }
-        }
-      );
-    });
-
-    
-
+    // Using during developement
+    // TO BE DELETED WHEN NOT NEEDED
     app.post('/editDatabase', isAuthenticated, (req, res) => {
     
       // used to edit db of whoeever is logged in
       const userName = req.session.username
-
       const { test, test2 } = req.body;
-
-
       console.log(`un:${userName}`);
-
       console.log(`test: ${test}, ${test2}`);
 
-
-      // prep the book data
-
+      // prep some book data
       const newBook = {
         isbn: "9780141439686",
         title: "Persuasion",
@@ -305,6 +269,8 @@ client.connect()
         books: [ newBook, newBook2 ]
       }
 
+      // currecly makes a shelf with two books - adds it to users db record
+
       // https://www.w3schools.com/nodejs/nodejs_mongodb_update.asp
       db.collection('users').updateOne( 
         { username: userName },
@@ -329,6 +295,58 @@ client.connect()
       );
 
     });
+
+ 
+
+    // add a book to user collecion
+
+    // remove a book from user collection
+
+
+    // add a user shelf
+
+    // remove a user's shelf
+    app.post('/removeShelf', isAuthenticated, (req, res) => {
+      const userName = req.session.username
+      const { removeShelfName } = req.body;
+      console.log(`un:${userName}`);
+      console.log(`remove shelf: ${removeShelfName}`);
+
+      // const shelfName = "Test shelf name";
+
+      //https://www.mongodb.com/docs/manual/reference/operator/update/unset/#mongodb-update-up.-unset
+      db.collection('users').updateOne( 
+        { username: userName },
+        { $pull: { shelves: { name: removeShelfName } } }, //remove bookshelf by name
+        (err, user) => {
+          if (err) {
+            console.error('Error deleting shelf:', err);
+            res.sendStatus(500);
+          } else if (!user) {
+            console.log("user not found");
+            res.status(401).json({ message: 'User not found' });
+          } else { 
+            // success
+            
+            console.log("Shelf deleted")            
+
+            res.status(200).json({ message: 'remove successful' });
+          }
+        }
+      );
+    });
+
+
+    // Think about this more
+    // Should it be add/remove individual books 
+    // Or update shelves based on all changes front end - less server calls
+
+    // add book to shelf
+    // remove book from shelf
+    
+    // update shelf
+
+    
 
     
 
@@ -458,14 +476,6 @@ app.get('/bookshelf/:username', isAuthenticated, async (req, res) => {
   // res.render('user', { username: urlUsername, data: userData });
 
 });
-
-const getUserData = () => {
-  const userData = {
-    "a": ["one", "two"],
-    "b": ["three", "four"],
-  }
-  return userData;
-}
 
 
 // check session
