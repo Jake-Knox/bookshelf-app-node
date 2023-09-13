@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const getUserBookshelf = async (ownerName) => {
   
     try{
-      const response = await fetch(`/getUserBookshelf/:${ownerName}`, {
+      const response = await fetch(`/getUserBookshelf/${ownerName}`, {
         method: 'GET'
       });
   

@@ -204,7 +204,7 @@ client.connect()
     app.get('/getUserBookshelf/:username', (req, res) => {
       // console.log("get any user books request - affected by privacy")
       const username = req.params.username;
-      console.log(username);
+      console.log(`getUserBookshelf -${username}`);
 
       // Remember to change database entries to account for privacy options
       // REMEMBER CHECKS FOR PRIVACY
@@ -223,10 +223,15 @@ client.connect()
             
             const userData = {
               username: user.username,
+              
+              privacy: user.privacy,
+
               following: user.following, // add checks for profile privacy
               followers: user.followers, //
-              // books: user.books, // don't pull books, only bookshelves
               shelves: user.shelves, // add checks for individual shelf privacy
+
+              // books: user.books, // don't pull books, only bookshelves
+
             }
 
             res.status(200).json({ data: userData });
