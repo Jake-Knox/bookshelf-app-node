@@ -164,42 +164,12 @@ client.connect()
     });
 
 
-    app.post('/getUserBookshelf/:username', isAuthenticated, (req, res) => {
-      // console.log("get any user books request - affected by privacy")
-      const username = req.params.username;
-
-      // Remember to change database entries to account for privacy options
-      // REMEMBER CHECKS FOR PRIVACY
-
-      db.collection('users').findOne({ username }, (err, user) => {
-        if (err) {
-          console.error('Error finding user:', err);
-          res.sendStatus(500);
-        } else if (!user) {
-          console.log("user not found");
-          res.status(401).json({ message: 'User not found' });
-        } else {
-            // User found, send data
-            
-            const userData = {
-              username: user.username,
-              following: user.following, // add checks for profile privacy
-              followers: user.followers, //
-              // books: user.books, // don't pull books, only bookshelves
-              shelves: user.shelves, // add checks for individual shelf privacy
-            }
-
-            res.status(200).json({ data: userData });
-        }
-      });                
-    });
-
     // 
     // TO BE REPLACED WITH 
     //
     // getUserBookshelf/:username
     //
-    app.post('/getMyBookhelf', isAuthenticated, (req, res) => {
+    app.get('/getMyBookhelf', isAuthenticated, (req, res) => {
       // console.log("get my books request")
 
       let username = req.session.username
@@ -230,6 +200,39 @@ client.connect()
         }
       });                
     });
+
+    app.get('/getUserBookshelf/:username', isAuthenticated, (req, res) => {
+      // console.log("get any user books request - affected by privacy")
+      const username = req.params.username;
+
+      // Remember to change database entries to account for privacy options
+      // REMEMBER CHECKS FOR PRIVACY
+
+      db.collection('users').findOne({ username }, (err, user) => {
+        if (err) {
+          console.error('Error finding user:', err);
+          res.sendStatus(500);
+        } else if (!user) {
+          console.log("user not found");
+          res.status(401).json({ message: 'User not found' });
+        } else {
+            // User found, send data
+            
+            const userData = {
+              username: user.username,
+              following: user.following, // add checks for profile privacy
+              followers: user.followers, //
+              // books: user.books, // don't pull books, only bookshelves
+              shelves: user.shelves, // add checks for individual shelf privacy
+            }
+
+            res.status(200).json({ data: userData });
+        }
+      });                
+    });
+
+
+
 
     // Using during developement
     // TO BE DELETED WHEN NOT NEEDED

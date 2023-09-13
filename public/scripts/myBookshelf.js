@@ -43,7 +43,7 @@ searchBtn.addEventListener("click", () => {
   addBtn.addEventListener("click", () => {  
     console.log("add btn");
 
-    
+
     alert("NOT CONNECTED");
 
     // editDatabase();
@@ -63,21 +63,30 @@ searchBtn.addEventListener("click", () => {
 
 const getMyBooks = async () => {
   
-  const response = await fetch('/getMyBookhelf', {
-    method: 'POST'
-  });
-  if (response.ok) {
-    // Logout successful
-    // console.log("logged in at getmybooks response");
-    response.json()
-    .then(userData => {
-      // console.log(data.data);
+  try{
+    const response = await fetch('/getMyBookhelf', {
+      method: 'GET'
+    });
+
+    // response from server
+    if (response.ok) {
+
+      const userData = await response.json();  
       console.log("retirved data");
+
       bookshelfData = userData.data; // used to set up elements and fill shelves
       console.log(userData.data);
-
+  
       setupUserElements(bookshelfData); // comment to stop trying to use db data
-    });      
+      
+    }  
+    else {
+      console.error('Error in response getting user bookshelf:', response.statusText);
+    }
+
+  }
+  catch (error) {
+    console.error('Error in try getting user bookshelf:', error);
   }  
 }
 
