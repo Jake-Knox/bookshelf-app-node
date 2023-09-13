@@ -201,9 +201,10 @@ client.connect()
       });                
     });
 
-    app.get('/getUserBookshelf/:username', isAuthenticated, (req, res) => {
+    app.get('/getUserBookshelf/:username', (req, res) => {
       // console.log("get any user books request - affected by privacy")
       const username = req.params.username;
+      console.log(username);
 
       // Remember to change database entries to account for privacy options
       // REMEMBER CHECKS FOR PRIVACY
@@ -218,7 +219,7 @@ client.connect()
         } else {
             // User found, send data
 
-            
+
             
             const userData = {
               username: user.username,
@@ -454,7 +455,7 @@ app.get('/profile', isAuthenticated, async (req, res) => {
 });
 
 // test for user generic pages
-app.get('/bookshelf/:username', isAuthenticated, async (req, res) => {
+app.get('/bookshelf/:username', async (req, res) => {
 
   const urlUsername = req.params.username;
   const loggedInUsername = req.session.username; 

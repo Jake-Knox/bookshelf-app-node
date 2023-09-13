@@ -79,6 +79,16 @@ body {
   margin-bottom: 20px;
 }
 
+.container h2 {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.centre-text{
+  text-align: center;
+}
+
 .hide{
   display: none;
 }
@@ -167,11 +177,6 @@ body {
   background-color: beige;
 }
   
-h2 {
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-  
 .form-input {
   width: 100%;
   padding: 8px;
@@ -220,3 +225,11 @@ h2 {
       color: black;
 }
 
+#noUserContainerDiv{
+  display: none;
+}
+
+.extra-spacing{
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+}
