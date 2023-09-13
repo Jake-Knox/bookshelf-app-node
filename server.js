@@ -217,6 +217,8 @@ client.connect()
           res.status(401).json({ message: 'User not found' });
         } else {
             // User found, send data
+
+            
             
             const userData = {
               username: user.username,

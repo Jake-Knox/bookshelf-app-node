@@ -16,7 +16,7 @@ let bookshelfData = [];
 document.addEventListener('DOMContentLoaded', () => {
   if(checkSession())
   {
-    getMyBooks()
+    getMyBookshelf()
   }
   else{
     console.log("not logged in")
@@ -61,7 +61,7 @@ searchBtn.addEventListener("click", () => {
 // make changes here
 // lets sort the db out now before carrying on
 
-const getMyBooks = async () => {
+const getMyBookshelf = async () => {
   
   try{
     const response = await fetch('/getMyBookhelf', {
