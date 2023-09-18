@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/styles/styles.css">
-  <title>Login</title>
+  <title>Register</title>
 </head>
 <body>
     <div class="nav nav-container">
@@ -16,7 +16,7 @@
     </div>
     <div class="container">
 
-        <h2>Login</h2>
+        <h2>Register</h2>
 
         <div class="form-group">
             <label for="username">Username</label>
@@ -28,24 +28,21 @@
             <input type="password" id="password" name="password" placeholder="Password" required>
         </div>
 
+        <div class="form-group">
+            <label for="password">Confirm Password</label>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+        </div>
+
         <div class="form-group ">
             <p id="errorMessage" class="error-message hide">Error:</p>
         </div>
 
         <div class="form-group">
-            <button id="loginButton" class="form-button login-button">Login</button>
+            <button id="loginButton" class="form-button login-button">Regitser Account</button>
         </div>
 
-       
-
-        <div class="form-group">
-            <p class="guidence-text">Don't have acccount? Register below.</p>
-            <a href="/registerPage"><button id="registerButton" class="form-button register-button">Register</button></a>
-        </div>
-
-      
 
     </div>
-  <script src="/scripts/login.js"></script>
+  <script src="/scripts/register.js"></script>
 </body>
 </html>

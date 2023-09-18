@@ -135,18 +135,35 @@ client.connect()
       const user = {
         "username": username,
         "password": hashedPassword,
+        "privacy": "public",
         "following": [],
         "followers": [],
         "books": [],
         "shelves": [
           {
-            "name": "To be read",
-            "books": [],
+            "position": "0",
+            "name": "Reading",
+            "privacy": "public",
+            "books": [],            
           },
           {
+            "position": "1",
+            "name": "To Be Read",
+            "privacy": "public",
+            "books": [],            
+          },
+          {
+            "position": "2",
+            "name": "Read",
+            "privacy": "public",
+            "books": [],            
+          },
+          {
+            "position": "3",
             "name": "Hidden",
-            "books": [],
-          }
+            "privacy": "private",
+            "books": [],           
+          },
         ]
       };
       // Insert the new user into the users collection
@@ -441,6 +458,10 @@ app.get('/', (req, res) => {
 
 app.get('/loginPage', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/templates/login.html'));
+});
+
+app.get('/registerPage', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/templates/register.html'));
 });
 
 app.get('/bookshelf', isAuthenticated, (req, res) => {    
