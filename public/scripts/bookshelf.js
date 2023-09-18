@@ -37,3 +37,37 @@ const checkSession = async () => {
 // page functionality
 
 
+// generating this is common to both types of view
+
+const createShelf = (shelfData) =>{
+  // used to easily create many SHELVES during page load
+
+    // div for the shelf
+    const newShelfDiv = document.createElement("div");
+    newShelfDiv.classList.add("shelf");
+
+    const newShelfName = document.createElement("h2");
+    newShelfName.textContent = (`${shelfData.name}`);
+    newShelfDiv.appendChild(newShelfName);
+   
+    return newShelfDiv;
+}
+
+const createShelfBook = (bookData) =>{
+  // used to easily create many BOOKS during page load
+
+  // div for the book
+  const newBookDiv = document.createElement("div");
+  newBookDiv.classList.add("book-div");
+
+  const newBookCoverImg = document.createElement("img");
+  newBookCoverImg.classList.add("cover-img");
+  newBookCoverImg.src = bookData.thumbnail;
+  newBookCoverImg.alt = (`Author: ${bookData.author} - Title: ${bookData.title}`);
+
+
+  //assemble elements
+  newBookDiv.appendChild(newBookCoverImg);
+
+  return newBookDiv;
+}

@@ -18,7 +18,7 @@
     <div id="containerDiv" class="container">
 
       <input type="hidden" id="bookshelfOwner" name="<%= username %>" value="<%= username %>">
-      <h1><%= username %></h1>
+      <!-- <h1><%= username %></h1> -->
       <!-- <h2><%= data %></h2> -->
 
         <div class="bookshelf-section flex-row-between">
@@ -26,8 +26,10 @@
             <div class="flex-column-centre">
                 <h3 id="followingCount"></h3>
                 <h3 id="followersCount"></h3>
-            </div>               
+            </div>   
         </div>
+        
+        <h2 id="privacyNotice"></h2>  
 
        <div id="shelves" class="bookshelf-section">
             <h3 id="shelvesCount"></h3>
