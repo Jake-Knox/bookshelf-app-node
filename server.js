@@ -23,6 +23,7 @@ app.set('views', path.join(__dirname, 'public/templates'));
 // Database setup
 const { MongoClient, ServerApiVersion, Collection } = require('mongodb');
 const { secretKey, mongodbURI, googleBooksKey } = require('./config.js');
+const { listenerCount } = require('stream');
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(mongodbURI, {
@@ -221,9 +222,8 @@ client.connect()
     app.get('/getUserBookshelf/:username', (req, res) => {
       // console.log("get any user books request - affected by privacy")
       const username = req.params.username;
-      console.log(`getUserBookshelf -${username}`);
+      // console.log(`getUserBookshelf -${username}`);
 
-      // Remember to change database entries to account for privacy options
       // REMEMBER CHECKS FOR PRIVACY
 
       db.collection('users').findOne({ username }, (err, user) => {
@@ -236,20 +236,37 @@ client.connect()
         } else {
             // User found, send data
 
+            let userData = {
+              username: user.username,              
+              privacy: user.privacy,    
+              following: [],   
+              followers: [],  
+              shelves: [], 
+            }
 
+            if(user.privacy == "public")
+            {
+              console.log("profile is public");
+
+              userData.following = user.following;
+              userData.followers = user.followers;
+
+              for(let i = 0; i < user.shelves.length; i++)
+            {
+              if(user.shelves[i].privacy == "public"){
+                userData.shelves.push(user.shelves[i]);
+              }
+            }
             
-            const userData = {
-              username: user.username,
-              
-              privacy: user.privacy,
-
-              following: user.following, // add checks for profile privacy
-              followers: user.followers, //
-              shelves: user.shelves, // add checks for individual shelf privacy
-
-              // books: user.books, // don't pull books, only bookshelves
+            }
+            else{
+              console.log("profile is private");
 
             }
+
+            // for each shelf - only add public shelves to userData.shelves array
+            
+
 
             res.status(200).json({ data: userData });
         }

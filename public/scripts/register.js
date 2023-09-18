@@ -1,18 +1,21 @@
 console.log("register page");
 
-
-
 // register
 
 const registerButton = document.getElementById("registerButton");
 registerButton.addEventListener("click", () => {
-  // console.log("register click")
 
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
+  const password2 = document.getElementById('password2').value;
 
-  // start working again here 
-  //   addUser(username, password);
+  if(password == password2){
+    addUser(username, password);
+  }
+  else{
+    showError(`Error: Passwords must match`);
+  }
+
 });
 
 const addUser = async (username, password) => {
@@ -27,6 +30,7 @@ const addUser = async (username, password) => {
 
     if (response.ok) {
       console.log('User added successfully');
+      registerComplete();
     } else {
       console.error('Failed to add user:', response.statusText);
       showError(`Failed to add user: ${response.statusText}`);
@@ -45,4 +49,10 @@ const registerComplete = () => {
     window.location.href = '/loginPage';
   }
 
+const showError = (errorMsg) => {
+  errorMessage.textContent = (`Error: ${errorMsg}`);
 
+  if(errorMessage.classList.contains("hide") == true) {
+    errorMessage.classList.toggle("hide");  
+  }
+}

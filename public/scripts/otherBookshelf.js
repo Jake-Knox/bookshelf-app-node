@@ -2,21 +2,15 @@ console.log("other bookshelf");
 
 const containerDiv = document.getElementById("containerDiv");
 const noUserContainerDiv = document.getElementById("noUserContainerDiv");
-
 const bookshelfOwner = document.getElementById("bookshelfOwner");
 const bookshelfOwnerName = bookshelfOwner.value;
 
+let bookshelfData = [];
+
 document.addEventListener('DOMContentLoaded', () => {
-    if(true)
-    {       
-        console.log(`Page owner - ${bookshelfOwnerName}`);
-        getUserBookshelf(bookshelfOwnerName)
-    }
-    else{
-        console.log("not logged in")
-        // do something here
-        // redirect or something
-    }   
+
+  getUserBookshelf(bookshelfOwnerName);
+      
 });
 
 
@@ -33,10 +27,8 @@ const getUserBookshelf = async (ownerName) => {
         const userData = await response.json();  
         console.log("retirved data");
   
-        bookshelfData = userData.data; // used to set up elements and fill shelves
-        console.log(userData.data);
-    
-        // setupUserElements(bookshelfData); // comment to stop trying to use db data
+        bookshelfData = userData.data; // used to set up elements and fill shelves    
+        setupUserElements(bookshelfData); // comment to stop trying to use db data
         
       }  
       else {
@@ -48,6 +40,27 @@ const getUserBookshelf = async (ownerName) => {
       console.error('Error in try getting user bookshelf:', error);
     }  
 }
+
+ const setupUserElements = (bookshelfData) => {
+  console.log(bookshelfData);
+
+  if(bookshelfData.privacy == "private")
+  {
+    console.log("Bookshelf is private - limited content to render");
+
+  }
+  else{
+    console.log("Bookshelf is public - more content to render");
+
+  }
+
+  // render content that is limited by array length
+
+
+
+
+ } 
+
 
 const toggleNoUserFound = () => {
     containerDiv.style.display = "none";

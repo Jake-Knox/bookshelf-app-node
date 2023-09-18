@@ -19,61 +19,22 @@
 
       <input type="hidden" id="bookshelfOwner" name="<%= username %>" value="<%= username %>">
       <h1><%= username %></h1>
-      <h2><%= data %></h2>
+      <!-- <h2><%= data %></h2> -->
 
         <div class="bookshelf-section flex-row-between">
-            
-
             <h1 id="usernameTitle"></h1>
             <div class="flex-column-centre">
                 <h3 id="followingCount"></h3>
                 <h3 id="followersCount"></h3>
-            </div>            
-                   
+            </div>               
         </div>
-       
+
+       <div id="shelves" class="bookshelf-section">
+            <h3 id="shelvesCount"></h3>
         
-        <!--    The following two shelf divs are to help with styling
-                They should be deleted as soon as content is being generated
-                from the databse  -->
-
-        
-
-        <div id="shelves" class="bookshelf-section">
-            <h3 id="shelvesCount">Shelves: </h3>
-
-            <div class="shelf">
-                <h2 class="shelf-name">To Be Read</h2>
-                <div class="shelf-books">
-                    <div class="book-div">
-                        <div class="book-front">
-                            <p class="book-text">Jane Austen</p>
-                            <p class="book-text">Mansfield Park</p>
-                        </div>
-                        <div class="book-side book-hide">
-                            <p class="book-text">Jane Austen</p>
-                            <p class="book-text">Mansfield Park</p>
-                        </div>
-                    </div>
-                </div>                
-            </div>
-
-            <div class="shelf">
-              <h2 class="shelf-name">Reading</h2>
-              <div class="shelf-books">
-                  <div class="book-div">
-                      <div class="book-front book-hide">
-                          <p class="book-text">Jane Austen</p>
-                          <p class="book-text">Persuasion</p>
-                      </div>
-                      <div class="book-side">
-                          <p class="book-text">Jane Austen</p>
-                          <p class="book-text">Persuasion</p>
-                      </div>
-                  </div>
-              </div>                
-          </div>
-        </div>                  
+                    
+                    
+        </div>                 
          
     </div>
     <div id="noUserContainerDiv" class="container">
