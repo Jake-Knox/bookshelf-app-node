@@ -235,7 +235,6 @@ client.connect()
           res.status(401).json({ message: 'User not found' });
         } else {
             // User found, send data
-
             let userData = {
               username: user.username,              
               privacy: user.privacy,    
@@ -246,28 +245,22 @@ client.connect()
 
             if(user.privacy == "public")
             {
-              console.log("profile is public");
-
+              // console.log("profile is public");
               userData.following = user.following;
               userData.followers = user.followers;
 
               for(let i = 0; i < user.shelves.length; i++)
-            {
-              if(user.shelves[i].privacy == "public"){
-                userData.shelves.push(user.shelves[i]);
-              }
-            }
-            
+              {
+                if(user.shelves[i].privacy == "public"){
+                  userData.shelves.push(user.shelves[i]);
+                }
+              }            
             }
             else{
-              console.log("profile is private");
-
+              // console.log("profile is private");
             }
-
             // for each shelf - only add public shelves to userData.shelves array
             
-
-
             res.status(200).json({ data: userData });
         }
       });                
@@ -391,7 +384,31 @@ client.connect()
     
     // update shelf
 
-    
+    app.get('/searchBooks/:search', isAuthenticated, (req, res) => {
+
+      const searchTerm = req.params.search;
+      console.log(`${searchTerm}`);
+
+      if(searchTerm.length == 11 && isNumeric(searchTerm))
+      {
+        // enough tests to treat as an ISBN
+
+        // conduct isbn search
+        googleBooksSearchISBN(searchTerm);
+
+
+      }
+      else{
+        // treat as a book name search
+        googleBooksSearchTitle(searchTerm);
+        
+      }
+
+      //
+
+
+
+    });
 
     
 
@@ -644,4 +661,8 @@ const googleBooksSearchISBN = (searchInput) => {
 
     }
   });
+}
+
+const isNumeric = (value) => {
+  return /^\d+$/.test(value);
 }

@@ -52,12 +52,12 @@ const getUserBookshelf = async (ownerName) => {
 
   if(bookshelfData.privacy == "private")
   {
-    console.log("Bookshelf is private - limited content to render");
+    // console.log("Bookshelf is private - limited content to render");
     privacyNotice.textContent = ("This Bookshelf is Private");
 
   }
   else{
-    console.log("Bookshelf is public - more content to render");
+    // console.log("Bookshelf is public - more content to render");
 
     followingCount.textContent = (`Following: ${bookshelfData.following.length}`);
     followersCount.textContent = (`Following: ${bookshelfData.followers.length}`);

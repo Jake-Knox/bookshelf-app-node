@@ -27,11 +27,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 searchBtn.addEventListener("click", () => {
+  console.log("search btn");
 
-    console.log("search btn");
+  // send search requets to server for API data
+  const searchTerm = searchInput.value;
+  searchAPI(searchTerm);
+
   
-  
-  });
+});
+
+const searchAPI = async (searchTerm) => {
+  try{
+    const response = await fetch(`/searchBooks/${searchTerm}`, {
+      method: 'GET'
+    });
+
+    // response from server
+    if (response.ok) {
+
+      const fromServer = await response.json();  
+      console.log(fromServer);
+
+    }  
+    else {
+      console.error('Error in :', response.statusText);
+    }
+
+  }
+  catch (error) {
+    console.error('Error in :', error);
+  }
+}
+
+
+
+
   
   backBtn.addEventListener("click", () => {
   
