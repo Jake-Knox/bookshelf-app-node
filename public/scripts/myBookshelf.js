@@ -45,17 +45,17 @@ const searchAPI = async (searchTerm) => {
     // response from server
     if (response.ok) {
 
-      const fromServer = await response.json();  
-      console.log(fromServer);
+      const searchData = await response.json();  
+      console.log(searchData);
 
     }  
     else {
-      console.error('Error in :', response.statusText);
+      console.error('Response Error:', response.statusText);
     }
 
   }
   catch (error) {
-    console.error('Error in :', error);
+    console.error('Get Error:', error);
   }
 }
 

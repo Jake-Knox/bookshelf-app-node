@@ -387,27 +387,38 @@ client.connect()
     app.get('/searchBooks/:search', isAuthenticated, (req, res) => {
 
       const searchTerm = req.params.search;
-      console.log(`${searchTerm}`);
+      console.log(`search term :${searchTerm}`);
 
-      if(searchTerm.length == 11 && isNumeric(searchTerm))
+      let searchData = [];
+
+      if(searchTerm.length == 13 && isNumeric(searchTerm))
       {
-        // enough tests to treat as an ISBN
-
+        // enough tests to treat as an ISBN-13
         // conduct isbn search
-        googleBooksSearchISBN(searchTerm);
-
-
+        searchData = googleBooksSearchISBN(searchTerm);
+        
       }
       else{
         // treat as a book name search
-        googleBooksSearchTitle(searchTerm);
-        
+        searchData = googleBooksSearchTitle(searchTerm);
+       
       }
 
-      //
+      console.log("search data below -");      
+      console.log(searchData);
 
-
-
+      
+      // send data back to user
+      if(searchData.length != 0){
+        // data found - send it back to user
+        console.log("data found");
+        res.status(200).json({ data: searchData }); 
+      }
+      else{
+        // error, no data found - send error to user
+        console.log("book data not found");
+        res.status(401).json({ message: 'book data not found' });
+      }
     });
 
     
@@ -558,70 +569,11 @@ app.post('/checkSession', (req, res) => {
 
 
 
-
-
-
-
-
-
-
 // Google Books API searches
 
 const googleBooksSearchTitle = (searchInput) => {  
 
-  books.volumes.list({
-    q: searchInput,
-    maxResults: 5
-  }, (err, response) => {
-    if (err) {
-      console.error('Error retrieving books:', err);
-    } else {
-      const books = response.data.items;
-      // console.log(books);
-      // return books;
-
-      for (let i = 0; i < 5; i++) {
-        const book = books[i];
-
-        // try{
-        //   const thumbnail = book.volumeInfo.imageLinks.thumbnail;
-        //   console.log("thumbnail:", thumbnail);
-        // }
-        // catch(err){
-        //   console.error("no thumbnail:", err);
-        // }
-
-        // Retrieve the author, publication date, and page count
-        // const title = book.volumeInfo.title || 'Unknown'; // ISBN
-        const title = book.volumeInfo.title || 'Unknown';
-        const author = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
-        const publicationDate = book.volumeInfo.publishedDate || 'Unknown';
-        const pageCount = book.volumeInfo.pageCount || 'Unknown';
-        let thumbnail = "Uknown";
-        try{
-          thumbnail = book.volumeInfo.imageLinks.thumbnail;
-        }
-        catch(err){
-          console.error("no thumbnail:", err);
-        }
-
-        console.log("title:", title);
-        console.log("author:", author);
-        console.log("publicationDate:", publicationDate);
-        console.log("pageCount:", pageCount);
-        console.log("thumbnail:", thumbnail);
-
-
-        console.log(".");
-        // console.log(book.volumeInfo);
-        console.log(".");
-        
-      }
-    }
-  });
-}
-
-const googleBooksSearchISBN = (searchInput) => {  
+  let returnData = [];
 
   books.volumes.list({
     q: searchInput,
@@ -632,35 +584,111 @@ const googleBooksSearchISBN = (searchInput) => {
     } else {
       const books = response.data.items;
       // console.log(books);
+      // return books;
+
+
+      for (let i = 0; i < 1; i++) {
+        const book = books[i];
+
+        // console.log(book.volumeInfo);
+
+        const bIsbn = book.volumeInfo.industryIdentifiers[0].identifier || 'Unknown';
+        const bTitle = book.volumeInfo.title || 'Unknown';
+        const bAuthor = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
+        const bPublicationDate = book.volumeInfo.publishedDate || 'Unknown';
+        const bPageCount = book.volumeInfo.pageCount || 'Unknown';
+        let bThumbnail = "Uknown";
+        try{
+          bThumbnail = book.volumeInfo.imageLinks.thumbnail;
+        }
+        catch(err){
+          bThumbnail = "Uknown";
+          // console.error("no thumbnail:", err);
+        }
+
+        let newBookObj = {
+          isbn: bIsbn,
+          title: bTitle,
+          author: bAuthor,
+          publicationDate: bPublicationDate,
+          pageCount: bPageCount,
+          thumbnail: bThumbnail
+        };
+
+        // console.log("newBookObj:")
+        // console.log(newBookObj);
+        
+        returnData.push(newBookObj);
+
+        console.log("returnData 1:")
+        console.log(returnData);
+
+        return returnData;
+      }
+      
+    }
+  });
+
+  // console.log("returnData 2:")
+  // console.log(returnData);
+
+}
+
+
+
+const googleBooksSearchISBN = (searchInput) => {  
+
+  let returnData = [];
+
+  books.volumes.list({
+    q: searchInput,
+    maxResults: 1
+  }, (err, response) => {
+    if (err) {
+      console.error('Error retrieving books:', err);
+    } 
+    else 
+    {
+
+      const books = response.data.items;
+      // console.log(books);
 
       const book = books[0];
-
-      // Retrieve the author, publication date, and page count
-      // const title = book.volumeInfo.title || 'Unknown'; // ISBN
-      const title = book.volumeInfo.title || 'Unknown';
-      const author = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
-      const publicationDate = book.volumeInfo.publishedDate || 'Unknown';
-      const pageCount = book.volumeInfo.pageCount || 'Unknown';
-      let thumbnail = "Uknown";
+     
+      const bIsbn = book.volumeInfo.isbn || 'Unknown';
+      const bTitle = book.volumeInfo.title || 'Unknown';
+      const bAuthor = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
+      const bPublicationDate = book.volumeInfo.publishedDate || 'Unknown';
+      const bPageCount = book.volumeInfo.pageCount || 'Unknown';
+      let bThumbnail = "Uknown";
       try{
-        thumbnail = book.volumeInfo.imageLinks.large;
+        bThumbnail = book.volumeInfo.imageLinks.thumbnail;
       }
       catch(err){
-        console.error("no thumbnail:", err);
+        bThumbnail = "Uknown";
+        // console.error("no thumbnail:", err);
       }
 
-      console.log("title:", title);
-      console.log("author:", author);
-      console.log("publicationDate:", publicationDate);
-      console.log("pageCount:", pageCount);
-      console.log("thumbnail:", thumbnail);
+      let newBookObj = {
+        isbn: bIsbn,
+        title: bTitle,
+        author: bAuthor,
+        publicationDate: bPublicationDate,
+        pageCount: bPageCount,
+        thumbnail: bThumbnail
+      };
 
-      console.log(".");
-      // console.log(book.volumeInfo);
-      console.log(".");
+      //console.log(newBookObj);
+        
+      returnData.push(newBookObj);
+      // console.log(returnData);
 
     }
   });
+
+  console.log(returnData);
+  return returnData;
+
 }
 
 const isNumeric = (value) => {
