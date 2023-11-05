@@ -87,7 +87,7 @@ client.connect()
       });
     });
 
-    
+
 
     // login using username and password eg. admin/password123
     app.post('/login', (req, res) => {
@@ -110,7 +110,7 @@ client.connect()
               req.session.isLoggedIn = true;
               req.session.username = username;
               console.log('isLoggedIn:', req.session.isLoggedIn);
-              console.log('username:', req.session.username);              
+              console.log('username:', req.session.username);
               res.status(200).json({ message: 'Authentication successful' });
               // res.redirect('/profile'); // redirected from login.js       
             } else {
@@ -119,7 +119,7 @@ client.connect()
             }
           });
         }
-      });    
+      });
     });
 
     // register new user - using UN + PW + boiler plate data
@@ -128,56 +128,56 @@ client.connect()
 
       // Hash the password using bcrypt
       bcrypt.hash(password, 10, (err, hashedPassword) => {
-      if (err) {
-      console.error('Error hashing password:', err);
-      res.sendStatus(500);
-      } else {
-      // Create a new user object
-      const user = {
-        "username": username,
-        "password": hashedPassword,
-        "privacy": "public",
-        "following": [],
-        "followers": [],
-        "books": [],
-        "shelves": [
-          {
-            "position": "0",
-            "name": "Reading",
-            "privacy": "public",
-            "books": [],            
-          },
-          {
-            "position": "1",
-            "name": "To Be Read",
-            "privacy": "public",
-            "books": [],            
-          },
-          {
-            "position": "2",
-            "name": "Read",
-            "privacy": "public",
-            "books": [],            
-          },
-          {
-            "position": "3",
-            "name": "Hidden",
-            "privacy": "private",
-            "books": [],           
-          },
-        ]
-      };
-      // Insert the new user into the users collection
-      db.collection('users').insertOne(user, (err, result) => {
         if (err) {
-          console.error('Error adding user:', err);
+          console.error('Error hashing password:', err);
           res.sendStatus(500);
         } else {
-          console.log('New user added:', result.insertedId);
-          res.sendStatus(201);
+          // Create a new user object
+          const user = {
+            "username": username,
+            "password": hashedPassword,
+            "privacy": "public",
+            "following": [],
+            "followers": [],
+            "books": [],
+            "shelves": [
+              {
+                "position": "0",
+                "name": "Reading",
+                "privacy": "public",
+                "books": [],
+              },
+              {
+                "position": "1",
+                "name": "To Be Read",
+                "privacy": "public",
+                "books": [],
+              },
+              {
+                "position": "2",
+                "name": "Read",
+                "privacy": "public",
+                "books": [],
+              },
+              {
+                "position": "3",
+                "name": "Hidden",
+                "privacy": "private",
+                "books": [],
+              },
+            ]
+          };
+          // Insert the new user into the users collection
+          db.collection('users').insertOne(user, (err, result) => {
+            if (err) {
+              console.error('Error adding user:', err);
+              res.sendStatus(500);
+            } else {
+              console.log('New user added:', result.insertedId);
+              res.sendStatus(201);
+            }
+          });
         }
-      });
-      }     
       });
     });
 
@@ -191,7 +191,7 @@ client.connect()
       // console.log("get my books request")
 
       let username = req.session.username
-     
+
       // find the username in the books collection
       // send the shelf (and book) data back to the user
       db.collection('users').findOne({ username }, (err, user) => {
@@ -202,21 +202,21 @@ client.connect()
           console.log("user not found");
           res.status(401).json({ message: 'User not found' });
         } else {
-            // User found, send data
-            // console.log("data found");
-            // console.log(user);
-            
-            const userData = {
-              username: user.username,
-              following: user.following,
-              followers: user.followers,
-              books: user.books,
-              shelves: user.shelves,
-            }
+          // User found, send data
+          // console.log("data found");
+          // console.log(user);
 
-            res.status(200).json({ data: userData });
+          const userData = {
+            username: user.username,
+            following: user.following,
+            followers: user.followers,
+            books: user.books,
+            shelves: user.shelves,
+          }
+
+          res.status(200).json({ data: userData });
         }
-      });                
+      });
     });
 
     app.get('/getUserBookshelf/:username', (req, res) => {
@@ -234,36 +234,34 @@ client.connect()
           console.log("user not found");
           res.status(401).json({ message: 'User not found' });
         } else {
-            // User found, send data
-            let userData = {
-              username: user.username,              
-              privacy: user.privacy,    
-              following: [],   
-              followers: [],  
-              shelves: [], 
-            }
+          // User found, send data
+          let userData = {
+            username: user.username,
+            privacy: user.privacy,
+            following: [],
+            followers: [],
+            shelves: [],
+          }
 
-            if(user.privacy == "public")
-            {
-              // console.log("profile is public");
-              userData.following = user.following;
-              userData.followers = user.followers;
+          if (user.privacy == "public") {
+            // console.log("profile is public");
+            userData.following = user.following;
+            userData.followers = user.followers;
 
-              for(let i = 0; i < user.shelves.length; i++)
-              {
-                if(user.shelves[i].privacy == "public"){
-                  userData.shelves.push(user.shelves[i]);
-                }
-              }            
+            for (let i = 0; i < user.shelves.length; i++) {
+              if (user.shelves[i].privacy == "public") {
+                userData.shelves.push(user.shelves[i]);
+              }
             }
-            else{
-              // console.log("profile is private");
-            }
-            // for each shelf - only add public shelves to userData.shelves array
-            
-            res.status(200).json({ data: userData });
+          }
+          else {
+            // console.log("profile is private");
+          }
+          // for each shelf - only add public shelves to userData.shelves array
+
+          res.status(200).json({ data: userData });
         }
-      });                
+      });
     });
 
 
@@ -272,7 +270,7 @@ client.connect()
     // Using during developement
     // TO BE DELETED WHEN NOT NEEDED
     app.post('/editDatabase', isAuthenticated, (req, res) => {
-    
+
       // used to edit db of whoeever is logged in
       const userName = req.session.username
       const { test, test2 } = req.body;
@@ -304,15 +302,15 @@ client.connect()
         position: "0",
         visibilty: "visible",
         name: "Reading",
-        books: [ newBook, newBook2 ]
+        books: [newBook, newBook2]
       }
 
       // currecly makes a shelf with two books - adds it to users db record
 
       // https://www.w3schools.com/nodejs/nodejs_mongodb_update.asp
-      db.collection('users').updateOne( 
+      db.collection('users').updateOne(
         { username: userName },
-        { $push: { shelves: newShelf } }, 
+        { $push: { shelves: newShelf } },
         (err, user) => {
           if (err) {
             console.error('Error finding user:', err);
@@ -320,11 +318,11 @@ client.connect()
           } else if (!user) {
             console.log("user not found");
             res.status(401).json({ message: 'User not found' });
-          } else { 
+          } else {
             // success?
 
             console.log("book added to user books array")
-            
+
             console.log(user);
 
             res.status(200).json({ message: 'add successful' });
@@ -334,7 +332,7 @@ client.connect()
 
     });
 
- 
+
 
     // add a book to user collecion
 
@@ -353,7 +351,7 @@ client.connect()
       // const shelfName = "Test shelf name";
 
       //https://www.mongodb.com/docs/manual/reference/operator/update/unset/#mongodb-update-up.-unset
-      db.collection('users').updateOne( 
+      db.collection('users').updateOne(
         { username: userName },
         { $pull: { shelves: { name: removeShelfName } } }, //remove bookshelf by name
         (err, user) => {
@@ -363,10 +361,10 @@ client.connect()
           } else if (!user) {
             console.log("user not found");
             res.status(401).json({ message: 'User not found' });
-          } else { 
+          } else {
             // success
-            
-            console.log("Shelf deleted")            
+
+            console.log("Shelf deleted")
 
             res.status(200).json({ message: 'remove successful' });
           }
@@ -381,7 +379,7 @@ client.connect()
 
     // add book to shelf
     // remove book from shelf
-    
+
     // update shelf
 
     app.get('/searchBooks/:search', isAuthenticated, (req, res) => {
@@ -391,41 +389,40 @@ client.connect()
 
       let searchData = [];
 
-      if(searchTerm.length == 13 && isNumeric(searchTerm))
-      {
+      if (searchTerm.length == 13 && isNumeric(searchTerm)) {
         // enough tests to treat as an ISBN-13
         // conduct isbn search
         searchData = googleBooksSearchISBN(searchTerm);
-        
+
       }
-      else{
+      else {
         // treat as a book name search
         searchData = googleBooksSearchTitle(searchTerm);
-       
+
       }
 
-      console.log("search data below -");      
+      console.log("search data below -");
       console.log(searchData);
 
-      
+
       // send data back to user
-      if(searchData.length != 0){
+      if (searchData.length != 0) {
         // data found - send it back to user
         console.log("data found");
-        res.status(200).json({ data: searchData }); 
+        res.status(200).json({ data: searchData });
       }
-      else{
+      else {
         // error, no data found - send error to user
         console.log("book data not found");
         res.status(401).json({ message: 'book data not found' });
       }
     });
 
-    
+
 
     app.get('/users/:username', isAuthenticated, (req, res) => {
       const username = req.params.username;
-    
+
       // Find the user based on the provided username
       db.collection('users').findOne({ username }, (err, user) => {
         if (err) {
@@ -435,14 +432,14 @@ client.connect()
           console.log("user not found");
           res.status(401).json({ message: 'User not found' });
         } else {
-            // User found, send data
-            console.log("data found");
-            res.status(200).json({ data: user }); 
+          // User found, send data
+          console.log("data found");
+          res.status(200).json({ data: user });
         }
-      });                
+      });
     });
 
-    
+
 
     // check that this works
     app.delete('/books/:isbn', (req, res) => {
@@ -450,7 +447,7 @@ client.connect()
       console.log("book delete request. ISBN:", isbn);
 
       const collection = db.collection('books');
-  
+
       // Delete the book entry based on the ISBN
       collection.deleteOne({ isbn: isbn }, (err, result) => {
         if (err) {
@@ -482,23 +479,23 @@ client.connect()
     // googleBooksSearchTitle("Pride and Prejudice");
     // googleBooksSearchISBN("9780141439686") // persuasion - austen // doesn't use any '-'
 
-    
+
     // start server - after db connection
     const port = process.env.PORT || 3000;
     server.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-   });
+      console.log(`Server listening on port ${port}`);
+    });
   })
   .catch((err) => {
     console.error('Error connecting to MongoDB:', err);
   });
-  
+
 
 
 // Routes
 // start point
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/templates/index.html');
+  res.sendFile(__dirname + '/public/templates/index.html');
 });
 
 app.get('/loginPage', (req, res) => {
@@ -509,7 +506,7 @@ app.get('/registerPage', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/templates/register.html'));
 });
 
-app.get('/bookshelf', isAuthenticated, (req, res) => {    
+app.get('/bookshelf', isAuthenticated, (req, res) => {
 
   let urlUsername = req.session.username;
 
@@ -529,7 +526,7 @@ app.get('/profile', isAuthenticated, async (req, res) => {
 app.get('/bookshelf/:username', async (req, res) => {
 
   const urlUsername = req.params.username;
-  const loggedInUsername = req.session.username; 
+  const loggedInUsername = req.session.username;
 
   let userData = "error";
 
@@ -565,43 +562,99 @@ app.post('/checkSession', (req, res) => {
 });
 
 
-
-
-
-
 // Google Books API searches
 
-const googleBooksSearchTitle = (searchInput) => {  
+const googleBooksSearchTitle = async (searchInput) => {
+  return new Promise((resolve, reject) => {
 
-  let returnData = [];
+    let returnData = [];
 
-  books.volumes.list({
-    q: searchInput,
-    maxResults: 1
-  }, (err, response) => {
-    if (err) {
-      console.error('Error retrieving books:', err);
-    } else {
-      const books = response.data.items;
-      // console.log(books);
-      // return books;
+    books.volumes.list({
+      q: searchInput,
+      maxResults: 1
+    }, (err, response) => {
+      if (err) {
+        console.error('Error retrieving books:', err);
+        reject(err); // Reject the promise if there's an error.
+      } else {
+        const books = response.data.items;
+        // console.log(books);
+        // return books;
+
+        for (let i = 0; i < 1; i++) {
+          const book = books[i];
+
+          // console.log(book.volumeInfo);
+
+          const bIsbn = book.volumeInfo.industryIdentifiers[0].identifier || 'Unknown';
+          const bTitle = book.volumeInfo.title || 'Unknown';
+          const bAuthor = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
+          const bPublicationDate = book.volumeInfo.publishedDate || 'Unknown';
+          const bPageCount = book.volumeInfo.pageCount || 'Unknown';
+          let bThumbnail = "Uknown";
+          try {
+            bThumbnail = book.volumeInfo.imageLinks.thumbnail;
+          }
+          catch (err) {
+            bThumbnail = "Uknown";
+            // console.error("no thumbnail:", err);
+          }
+
+          let newBookObj = {
+            isbn: bIsbn,
+            title: bTitle,
+            author: bAuthor,
+            publicationDate: bPublicationDate,
+            pageCount: bPageCount,
+            thumbnail: bThumbnail
+          };
+          // console.log("newBookObj:")
+          // console.log(newBookObj);
+
+          returnData.push(newBookObj);
+          console.log("returnData from title after push:")
+          console.log(returnData);
+        }
+
+        // return returnData;
+        resolve(returnData); // Resolve the promise with the data.
+      }
+    });
+  });
+}
 
 
-      for (let i = 0; i < 1; i++) {
-        const book = books[i];
 
-        // console.log(book.volumeInfo);
+const googleBooksSearchISBN = (searchInput) => {
+  return new Promise((resolve, reject) => {
 
-        const bIsbn = book.volumeInfo.industryIdentifiers[0].identifier || 'Unknown';
+    let returnData = [];
+
+    books.volumes.list({
+      q: searchInput,
+      maxResults: 1
+    }, (err, response) => {
+      if (err) {
+        console.error('Error retrieving books:', err);
+        reject(err); // Reject the promise if there's an error.
+      }
+      else {
+
+        const books = response.data.items;
+        // console.log(books);
+
+        const book = books[0];
+
+        const bIsbn = book.volumeInfo.isbn || 'Unknown';
         const bTitle = book.volumeInfo.title || 'Unknown';
         const bAuthor = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
         const bPublicationDate = book.volumeInfo.publishedDate || 'Unknown';
         const bPageCount = book.volumeInfo.pageCount || 'Unknown';
         let bThumbnail = "Uknown";
-        try{
+        try {
           bThumbnail = book.volumeInfo.imageLinks.thumbnail;
         }
-        catch(err){
+        catch (err) {
           bThumbnail = "Uknown";
           // console.error("no thumbnail:", err);
         }
@@ -614,81 +667,18 @@ const googleBooksSearchTitle = (searchInput) => {
           pageCount: bPageCount,
           thumbnail: bThumbnail
         };
+        //console.log(newBookObj);
 
-        // console.log("newBookObj:")
-        // console.log(newBookObj);
-        
         returnData.push(newBookObj);
-
-        console.log("returnData 1:")
+        console.log("returnData from isbn after push:")
         console.log(returnData);
-
-        return returnData;
       }
-      
-    }
+
+      // return returnData;
+      resolve(returnData); // Resolve the promise with the data.
+
+    });
   });
-
-  // console.log("returnData 2:")
-  // console.log(returnData);
-
-}
-
-
-
-const googleBooksSearchISBN = (searchInput) => {  
-
-  let returnData = [];
-
-  books.volumes.list({
-    q: searchInput,
-    maxResults: 1
-  }, (err, response) => {
-    if (err) {
-      console.error('Error retrieving books:', err);
-    } 
-    else 
-    {
-
-      const books = response.data.items;
-      // console.log(books);
-
-      const book = books[0];
-     
-      const bIsbn = book.volumeInfo.isbn || 'Unknown';
-      const bTitle = book.volumeInfo.title || 'Unknown';
-      const bAuthor = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
-      const bPublicationDate = book.volumeInfo.publishedDate || 'Unknown';
-      const bPageCount = book.volumeInfo.pageCount || 'Unknown';
-      let bThumbnail = "Uknown";
-      try{
-        bThumbnail = book.volumeInfo.imageLinks.thumbnail;
-      }
-      catch(err){
-        bThumbnail = "Uknown";
-        // console.error("no thumbnail:", err);
-      }
-
-      let newBookObj = {
-        isbn: bIsbn,
-        title: bTitle,
-        author: bAuthor,
-        publicationDate: bPublicationDate,
-        pageCount: bPageCount,
-        thumbnail: bThumbnail
-      };
-
-      //console.log(newBookObj);
-        
-      returnData.push(newBookObj);
-      // console.log(returnData);
-
-    }
-  });
-
-  console.log(returnData);
-  return returnData;
-
 }
 
 const isNumeric = (value) => {

@@ -14,15 +14,14 @@ let bookshelfData = [];
 
 // checks and setup
 document.addEventListener('DOMContentLoaded', () => {
-  if(checkSession())
-  {
+  if (checkSession()) {
     getMyBookshelf()
   }
-  else{
+  else {
     console.log("not logged in")
     // do something here
     // redirect or something
-  }   
+  }
 });
 
 
@@ -33,26 +32,29 @@ searchBtn.addEventListener("click", () => {
   const searchTerm = searchInput.value;
   searchAPI(searchTerm);
 
-  
+
 });
 
 const searchAPI = async (searchTerm) => {
-  try{
+  try {
     const response = await fetch(`/searchBooks/${searchTerm}`, {
       method: 'GET'
     });
 
     // response from server
     if (response.ok) {
+      const searchData = await response.json();
 
-      const searchData = await response.json();  
+      console.log("await response is 'ok'");
+
+      // SWAP THIS OUT WITH DISPLAY DATA
       console.log(searchData);
+      // displayBookSearch() // or something
 
-    }  
+    }
     else {
       console.error('Response Error:', response.statusText);
     }
-
   }
   catch (error) {
     console.error('Get Error:', error);
@@ -62,25 +64,25 @@ const searchAPI = async (searchTerm) => {
 
 
 
-  
-  backBtn.addEventListener("click", () => {
-  
-    console.log("back btn");
-  
-  
-  });
-  
-  addBtn.addEventListener("click", () => {  
-    console.log("add btn");
+
+backBtn.addEventListener("click", () => {
+
+  console.log("back btn");
 
 
-    alert("NOT CONNECTED");
+});
 
-    // editDatabase();
-    // alert("Database has been updated");
-  
-  });
-    
+addBtn.addEventListener("click", () => {
+  console.log("add btn");
+
+
+  alert("NOT CONNECTED");
+
+  // editDatabase();
+  // alert("Database has been updated");
+
+});
+
 
 
 // shelves can be added to based on books in collection
@@ -92,8 +94,8 @@ const searchAPI = async (searchTerm) => {
 // lets sort the db out now before carrying on
 
 const getMyBookshelf = async () => {
-  
-  try{
+
+  try {
     const response = await fetch('/getMyBookhelf', {
       method: 'GET'
     });
@@ -101,15 +103,15 @@ const getMyBookshelf = async () => {
     // response from server
     if (response.ok) {
 
-      const userData = await response.json();  
+      const userData = await response.json();
       console.log("retirved data");
 
       bookshelfData = userData.data; // used to set up elements and fill shelves
       console.log(userData.data);
-  
+
       setupUserElements(bookshelfData); // comment to stop trying to use db data
-      
-    }  
+
+    }
     else {
       console.error('Error in response getting user bookshelf:', response.statusText);
     }
@@ -117,7 +119,7 @@ const getMyBookshelf = async () => {
   }
   catch (error) {
     console.error('Error in try getting user bookshelf:', error);
-  }  
+  }
 }
 
 
@@ -137,8 +139,7 @@ const setupUserElements = (dataArray) => {
 
   //shelves setup
   shelvesCount.textContent = (`Shelves: ${shelvesData.length}`);
-  for(let i = 0; i < shelvesData.length; i++)
-  {
+  for (let i = 0; i < shelvesData.length; i++) {
     // for every shelf
     console.log(`shelf:${i}`);
 
@@ -147,8 +148,7 @@ const setupUserElements = (dataArray) => {
     const newShelfBooks = document.createElement("div");
     newShelfBooks.classList.add("shelf-books");
 
-    for(let j = 0; j < shelvesData[i].books.length; j++)
-    {
+    for (let j = 0; j < shelvesData[i].books.length; j++) {
       // for every book on shelf i 
       console.log(`shelf:${i}, book:${j} `);
 
@@ -162,13 +162,13 @@ const setupUserElements = (dataArray) => {
     //add the new shelf to the shelves div
     newShelf.appendChild(newShelfBooks);
     shelves.appendChild(newShelf);
-  }  
+  }
 }
 
 
 // functions for generating content on page
 
-const createCollectionBook = () =>{
+const createCollectionBook = () => {
   // to show user data about a book before adding to shelf 
   // or showing in "books" collection
 
@@ -192,15 +192,15 @@ const editDatabase = async () => {
       },
       body: JSON.stringify({ test, test2 }),
     });
-    if (response.ok) {   
-      console.log(response);        
+    if (response.ok) {
+      console.log(response);
     } else {
       console.error('Failed: ', response.statusText);
     }
   } catch (error) {
     console.error('Error: ', error);
   }
-} 
+}
 
 // Using these methods going forward
 
@@ -217,16 +217,16 @@ const addShelf = async (shelfName) => {
       },
       body: JSON.stringify({ addShelfName }),
     });
-    if (response.ok) {   
-      console.log(response);        
+    if (response.ok) {
+      console.log(response);
     } else {
       console.error('Failed: ', response.statusText);
     }
   } catch (error) {
     console.error('Error: ', error);
   }
-} 
-  
+}
+
 // remove shelf
 const removeShelf = async (shelfName) => {
 
@@ -240,19 +240,19 @@ const removeShelf = async (shelfName) => {
       },
       body: JSON.stringify({ removeShelfName }),
     });
-    if (response.ok) {   
-      console.log(response);        
+    if (response.ok) {
+      console.log(response);
     } else {
       console.error('Failed: ', response.statusText);
     }
   } catch (error) {
     console.error('Error: ', error);
   }
-} 
+}
 
 
 // add book to shelf
-const addBookToShelf = async (bookName ,shelfName) => {
+const addBookToShelf = async (bookName, shelfName) => {
 
   const addBookName = bookName;
   const addShelfName = shelfName;
@@ -265,8 +265,8 @@ const addBookToShelf = async (bookName ,shelfName) => {
       },
       body: JSON.stringify({ addBookName, addShelfName }),
     });
-    if (response.ok) {   
-      console.log(response);        
+    if (response.ok) {
+      console.log(response);
     } else {
       console.error('Failed: ', response.statusText);
     }
@@ -277,7 +277,7 @@ const addBookToShelf = async (bookName ,shelfName) => {
 
 
 // remove book from shelf
-const removeBookFromShelf = async (bookName ,shelfName) => {
+const removeBookFromShelf = async (bookName, shelfName) => {
 
   const removeBookName = bookName;
   const removeShelfName = shelfName;
@@ -290,8 +290,8 @@ const removeBookFromShelf = async (bookName ,shelfName) => {
       },
       body: JSON.stringify({ removeBookName, removeShelfName }),
     });
-    if (response.ok) {   
-      console.log(response);        
+    if (response.ok) {
+      console.log(response);
     } else {
       console.error('Failed: ', response.statusText);
     }
