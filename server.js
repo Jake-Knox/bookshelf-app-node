@@ -382,7 +382,7 @@ client.connect()
 
     // update shelf
 
-    app.get('/searchBooks/:search', isAuthenticated, (req, res) => {
+    app.get('/searchBooks/:search', isAuthenticated, async (req, res) => {
 
       const searchTerm = req.params.search;
       console.log(`search term :${searchTerm}`);
@@ -392,12 +392,12 @@ client.connect()
       if (searchTerm.length == 13 && isNumeric(searchTerm)) {
         // enough tests to treat as an ISBN-13
         // conduct isbn search
-        searchData = googleBooksSearchISBN(searchTerm);
+        searchData = await googleBooksSearchISBN(searchTerm);
 
       }
       else {
         // treat as a book name search
-        searchData = googleBooksSearchTitle(searchTerm);
+        searchData = await googleBooksSearchTitle(searchTerm);
 
       }
 
@@ -408,7 +408,7 @@ client.connect()
       // send data back to user
       if (searchData.length != 0) {
         // data found - send it back to user
-        console.log("data found");
+        console.log("book data found");
         res.status(200).json({ data: searchData });
       }
       else {
