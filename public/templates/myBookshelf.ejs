@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="/styles/Shelves.css">
     <title>Bookshelf</title>
 </head>
+
 <body>
     <div class="nav nav-container">
         <a href="/">Home</a>
@@ -17,25 +19,25 @@
     </div>
     <div class="container">
 
-      <!-- <h1><%= username %>'s profile</h1> -->
-      <!-- <h2><%= data %></h2> -->
+        <!-- <h1><%= username %>'s profile</h1> -->
+        <!-- <h2><%= data %></h2> -->
 
         <div class="bookshelf-section flex-row-between">
-            
+
 
             <h1 id="usernameTitle"></h1>
             <div class="flex-column-centre">
                 <h3 id="followingCount"></h3>
                 <h3 id="followersCount"></h3>
-            </div>            
-                   
+            </div>
+
         </div>
 
         <div id="add-new" class="bookshelf-section">
             <p>Add to collection</p>
             <div id="book-search">
-                <input id="search-input" type="text" placeholder="Title or ISBN" > 
-                <button id="search-btn">Search</button> 
+                <input id="search-input" type="text" placeholder="Title or ISBN">
+                <button id="search-btn">Search</button>
             </div>
 
             <div id="search-results">
@@ -51,11 +53,11 @@
         </div>
 
         <div id="books" class="bookshelf-section">
-            <h3 id="booksCount">Books: </h3>  
+            <h3 id="booksCount">Books: </h3>
             <div id="booksDisplay">
 
-            </div>          
-        </div> 
+            </div>
+        </div>
 
         <!--    The following two shelf divs are to help with styling
                 They should be deleted as soon as content is being generated
@@ -65,26 +67,27 @@
             <div id="save-btn" class="btn book-btn save-ready">
                 <p>Save Shelves</p>
             </div>
-        </div>  
+        </div>
 
         <div id="shelves" class="bookshelf-section">
             <h3 id="shelvesCount">Shelves: </h3>
 
-            
-            
-        </div>          
-        
+
+
+        </div>
+
         <div id="edit-shelves" class="bookshelf-section">
             <div id="new-shelf-btn" class="btn book-btn save-unavailable">
                 <p>New Shelf</p>
             </div>
             <div id="save-btn" class="btn book-btn save-ready">
-              <p>Save Shelves</p>
-          </div>
-      </div>  
-         
+                <p>Save Shelves</p>
+            </div>
+        </div>
+
     </div>
     <script src="/scripts/bookshelf.js"></script>
     <script src="/scripts/myBookshelf.js"></script>
 </body>
+
 </html>

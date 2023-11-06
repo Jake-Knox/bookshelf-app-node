@@ -1,66 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/styles/styles.css">
-    <title>CRUD</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/styles.css">
+  <title>CRUD</title>
 </head>
+
 <body>
-    <div class="nav nav-container">
-        <a href="/">Home</a>
-        <a href="/loginPage">Login</a>
-        <a href="/bookshelf">Bookshelf</a>
-        <a href="/crud">CRUD</a>
-        <a href="/profile">Profile</a>
+  <div class="nav nav-container">
+    <a href="/">Home</a>
+    <a href="/loginPage">Login</a>
+    <a href="/bookshelf">Bookshelf</a>
+    <a href="/crud">CRUD</a>
+    <a href="/profile">Profile</a>
+  </div>
+  <div class="container">
+    <h2>Create, Read, Update, Delete</h2>
+
+    <div id="crudDiv">
+      <!-- Create Section -->
+      <h2>Create Book</h2>
+      <form id="createForm">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" class="form-input" required>
+        <label for="author">Author:</label>
+        <input type="text" id="author" name="author" class="form-input" required>
+        <label for="isbn">ISBN:</label>
+        <input type="text" id="isbn" name="isbn" class="form-input" required>
+        <button type="submit" class="btn">Create</button>
+      </form>
+
+      <!-- Read Section -->
+      <h2>Read Book</h2>
+      <form id="readForm">
+        <label for="readIsbn">Enter ISBN:</label>
+        <input type="text" id="readIsbn" name="readIsbn" class="form-input">
+        <button type="submit" class="btn">Read</button>
+      </form>
+      <div id="bookInfo" class="book-details"></div>
+
+      <!-- Update Section -->
+      <h2>Update Book</h2>
+      <form id="updateForm">
+        <label for="updateIsbn">Enter ISBN:</label>
+        <input type="text" id="updateIsbn" name="updateIsbn" class="form-input" required>
+        <label for="newTitle">New Title:</label>
+        <input type="text" id="newTitle" name="newTitle" class="form-input">
+        <label for="newAuthor">New Author:</label>
+        <input type="text" id="newAuthor" name="newAuthor" class="form-input">
+        <button type="submit" class="btn">Update</button>
+      </form>
+
+      <!-- Delete Section -->
+      <h2>Delete Book</h2>
+      <form id="deleteForm">
+        <label for="deleteIsbn">Enter ISBN:</label>
+        <input type="text" id="deleteIsbn" name="deleteIsbn" class="form-input">
+        <button type="submit" class="btn">Delete</button>
+      </form>
     </div>
-    <div class="container">
-        <h2>Create, Read, Update, Delete</h2>
 
-        <div id="crudDiv">
-            <!-- Create Section -->
-            <h2>Create Book</h2>
-            <form id="createForm">
-              <label for="title">Title:</label>
-              <input type="text" id="title" name="title" class="form-input" required>
-              <label for="author">Author:</label>
-              <input type="text" id="author" name="author" class="form-input" required>
-              <label for="isbn">ISBN:</label>
-              <input type="text" id="isbn" name="isbn" class="form-input" required>
-              <button type="submit" class="btn">Create</button>
-            </form>
-          
-            <!-- Read Section -->
-            <h2>Read Book</h2>
-            <form id="readForm">
-              <label for="readIsbn">Enter ISBN:</label>
-              <input type="text" id="readIsbn" name="readIsbn" class="form-input">
-              <button type="submit" class="btn">Read</button>
-            </form>
-            <div id="bookInfo" class="book-details"></div>
-          
-            <!-- Update Section -->
-            <h2>Update Book</h2>
-            <form id="updateForm">
-              <label for="updateIsbn">Enter ISBN:</label>
-              <input type="text" id="updateIsbn" name="updateIsbn" class="form-input" required>
-              <label for="newTitle">New Title:</label>
-              <input type="text" id="newTitle" name="newTitle" class="form-input">
-              <label for="newAuthor">New Author:</label>
-              <input type="text" id="newAuthor" name="newAuthor" class="form-input">
-              <button type="submit" class="btn">Update</button>
-            </form>
-          
-            <!-- Delete Section -->
-            <h2>Delete Book</h2>
-            <form id="deleteForm">
-              <label for="deleteIsbn">Enter ISBN:</label>
-              <input type="text" id="deleteIsbn" name="deleteIsbn" class="form-input">
-              <button type="submit" class="btn">Delete</button>
-            </form>
-          </div>
-
-    </div>  
-    <script src="/scripts/crud.js"></script>
+  </div>
+  <script src="/scripts/crud.js"></script>
 </body>
+
 </html>

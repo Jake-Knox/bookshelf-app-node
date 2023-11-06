@@ -1,21 +1,39 @@
 /* Define the colors from the color palette */
 :root {
-  /* --primary-brand-color: #8B4513;   Earthy Brown */
-  --primary-brand-color: #C8DBBE;   /* Earthy Brown */
+  /* --primary-brand-color: #8B4513; */
+  --primary-brand-color: #FF7F27;
+  /* Earthy Brown */
 
-  /* --secondary-brand-color: #4B0082; Rich Mahogany */
-  --secondary-brand-color: #3C2317; 
+  --secondary-brand-color: #5E5E5E;
+  /* --secondary-brand-color: #4B0082; */
+  /* --secondary-brand-color: #3C2317; */
+  /* 
+  Soft Charcoal Gray: #333333
+  Deep Slate Gray: #4A4A4A
+  Midnight Gray: #5E5E5E  
+  */
 
-  /* --background-color: #006400;      Library Green */
-  --background-color: #3a3129;     
+  --background-color: #FFFDD0;
+  /* --background-color: #006400;  */
+  /* --background-color: #3a3129; */
+  /* 
+    Off-White: #F5F5F5
+    Ivory: #FFFFF0
+    Cream: #FFFDD0 
+*/
 
-  --accent-color: #000000;          /* Ink Black */
+  --accent-color: #000000;
+  /* Ink Black */
+  /* 
+  Light Silver: #C0C0C0
+  Dove Gray: #6A6A6A
+  Cool Gray: #8C8C8C
+  */
 
   /* 
   #C8DBBE
   #9F8772
-  #3C2317
-  
+  #3C2317  
   */
 }
 
@@ -24,15 +42,19 @@ body {
   /* background-image: url("../images/backgrounds/paper-bg.jpg"); */
   /* background-size: cover; */
   /* background-repeat: repeat; */
-  background-color: beige;
-  font-family: Arial, sans-serif;
+  background-color: var(--background-color);
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 16px;
+
+
   margin: 0;
   padding: 0;
 }
 
 /* Navbar styles */
 .nav {
-  background-color: var(--background-color);
+  background-color: var(--primary-brand-color);
   padding: 10px;
   position: sticky;
   top: 0;
@@ -45,7 +67,7 @@ body {
 }
 
 .nav a {
-  color: rgb(191, 193, 199);
+  color: var(--accent-color);
   text-decoration: none;
   padding: 8px 16px;
   border-radius: 4px;
@@ -61,8 +83,22 @@ body {
 }
 
 .nav a.active {
-  background-color: var(--secondary-brand-color);
+  background-color: var(--primary-brand-color);
   color: var(--accent-color);
+}
+
+
+.banner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* bookends logo badge */
+.logo-badge {
+  border: 2px solid var(--primary-brand-color);
+  border-radius: 2vw;
 }
 
 /* container */
@@ -70,9 +106,9 @@ body {
   max-width: 800px;
   margin: 0 auto;
   padding: 40px;
-  background-color: white;
+  background-color: var(--background-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+}
 
 .container h1 {
   text-align: center;
@@ -85,11 +121,11 @@ body {
   margin-bottom: 10px;
 }
 
-.centre-text{
+.centre-text {
   text-align: center;
 }
 
-.hide{
+.hide {
   display: none;
 }
 
@@ -122,31 +158,34 @@ body {
 .login-button {
   background-color: #4CAF50;
 }
+
 .login-button:hover {
   background-color: #2c702e;
 }
+
 .register-button {
   background-color: grey;
 }
+
 .register-button:hover {
   background-color: rgb(56, 55, 55);
 }
 
-.error-message{
+.error-message {
   width: 100%;
   padding: 10px;
   color: white;
   background-color: red;
   border: none;
   border-radius: 4px;
-  
+
 }
 
 .bookList {
   list-style: none;
   padding: 0;
 }
-  
+
 .bookList li {
   margin-bottom: 10px;
   padding: 10px;
@@ -154,17 +193,17 @@ body {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
-  
+
 .bookList li:last-child {
   margin-bottom: 0;
 }
-  
+
 /* Optional: Add additional styles for book titles, images, etc. */
-  
+
 .bookList li .title {
   font-weight: bold;
 }
-  
+
 .bookList li img {
   max-width: 100%;
   height: auto;
@@ -176,7 +215,7 @@ body {
   padding: 20px;
   background-color: beige;
 }
-  
+
 .form-input {
   width: 100%;
   padding: 8px;
@@ -192,7 +231,7 @@ body {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-  
+
 .btn {
   padding: 8px 12px;
   background-color: #4CAF50;
@@ -201,35 +240,37 @@ body {
   border-radius: 4px;
   cursor: pointer;
 }
-    
-.book-btn{
-    width: 100px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 5px;
+
+.book-btn {
+  width: 100px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px;
 }
-.save-ready{
-    background-color: #45a049;
-    color: white;
-} 
+
+.save-ready {
+  background-color: #45a049;
+  color: white;
+}
+
 .save-ready:hover {
   background-color: #357e39;
 }
 
-.save-unavailable{
-      background-color: lightgray;
-      color: black;
+.save-unavailable {
+  background-color: lightgray;
+  color: black;
 }
 
-#noUserContainerDiv{
+#noUserContainerDiv {
   display: none;
 }
 
-.extra-spacing{
+.extra-spacing {
   margin-top: 10vh;
   margin-bottom: 10vh;
 }

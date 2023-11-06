@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="/styles/Shelves.css">
     <title>Bookshelf</title>
 </head>
+
 <body>
     <div class="nav nav-container">
         <a href="/">Home</a>
@@ -17,34 +19,38 @@
     </div>
     <div id="containerDiv" class="container">
 
-      <input type="hidden" id="bookshelfOwner" name="<%= username %>" value="<%= username %>">
-      <!-- <h1><%= username %></h1> -->
-      <!-- <h2><%= data %></h2> -->
+        <input type="hidden" id="bookshelfOwner" name="<%= username %>" value="<%= username %>">
+        <!-- <h1><%= username %></h1> -->
+        <!-- <h2><%= data %></h2> -->
 
         <div class="bookshelf-section flex-row-between">
             <h1 id="usernameTitle"></h1>
             <div class="flex-column-centre">
                 <h3 id="followingCount"></h3>
                 <h3 id="followersCount"></h3>
-            </div>   
+            </div>
         </div>
-        
-        <h2 id="privacyNotice"></h2>  
 
-       <div id="shelves" class="bookshelf-section">
+        <h2 id="privacyNotice"></h2>
+
+        <div id="shelves" class="bookshelf-section">
             <h3 id="shelvesCount"></h3>
-        
-                    
-                    
-        </div>                 
-         
+
+
+
+        </div>
+
     </div>
     <div id="noUserContainerDiv" class="container">
-        <h1 class="extra-spacing"><%= username %></h1>
-        <h2 class="extra-spacing">This user does not exist.</h2>      
-        <p class="centre-text extra-spacing">Check that the username is correct or register an account <a href="/loginPage">here</a>.</p>
+        <h1 class="extra-spacing">
+            <%= username %>
+        </h1>
+        <h2 class="extra-spacing">This user does not exist.</h2>
+        <p class="centre-text extra-spacing">Check that the username is correct or register an account <a
+                href="/loginPage">here</a>.</p>
     </div>
     <script src="/scripts/bookshelf.js"></script>
     <script src="/scripts/otherBookshelf.js"></script>
 </body>
+
 </html>
