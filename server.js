@@ -612,8 +612,8 @@ const googleBooksSearchTitle = async (searchInput) => {
           // console.log(newBookObj);
 
           returnData.push(newBookObj);
-          console.log("returnData from title after push:")
-          console.log(returnData);
+          // console.log("returnData from title after push:")
+          // console.log(returnData);
         }
 
         // return returnData;
@@ -670,8 +670,8 @@ const googleBooksSearchISBN = (searchInput) => {
         //console.log(newBookObj);
 
         returnData.push(newBookObj);
-        console.log("returnData from isbn after push:")
-        console.log(returnData);
+        // console.log("returnData from isbn after push:")
+        // console.log(returnData);
       }
 
       // return returnData;

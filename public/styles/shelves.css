@@ -1,31 +1,31 @@
-
-
-.flex-column-centre{
+.flex-column-centre {
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-.flex-row-between{
+
+.flex-row-between {
     display: flex;
-    flex-direction:row;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
 }
 
-.bookshelf-section{
+.bookshelf-section {
     margin-bottom: 2vh;
     padding-bottom: 2vh;
 
     border-bottom: 1px solid lightgray;
 }
 
-.shelf{
+.shelf {
     height: 30vh;
     width: 100%;
 
 }
-.shelf-books{
+
+.shelf-books {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -39,7 +39,7 @@
     width: 100%;
 }
 
-.book-div{
+.book-div {
     /* test height */
     /* height: 50vh; */
 
@@ -47,22 +47,32 @@
     aspect-ratio: 1 / 1.6;
 }
 
-.book-front{
+.book-front {
     border: 1px solid red;
 }
-.book-side{
+
+.book-side {
     border: 1px solid blue;
 
 }
-.book-hide{
+
+.book-hide {
     display: none;
 }
-.book-text{
+
+.book-text {
     width: fit-content;
     block-size: fit-content;
 }
 
-.cover-img{
+.cover-img {
     height: 100%;
     width: 100%;
+}
+
+#book-results {
+    height: 200px;
+    background-color: beige;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
 }
