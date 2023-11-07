@@ -28,6 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
 searchBtn.addEventListener("click", () => {
   console.log("search btn");
 
+  // empty search results div first  
+  bookResults.innerHTML = "";
+
   // send search requets to server for API data
   const searchTerm = searchInput.value;
   searchAPI(searchTerm);
@@ -48,8 +51,11 @@ const searchAPI = async (searchTerm) => {
       console.log("await response is 'ok'");
 
       // SWAP THIS OUT WITH DISPLAY DATA
-      console.log(searchData);
-      // displayBookSearch() // or something
+      console.log(`Search length: ${searchData.data.length}`)
+      console.log(searchData.data);
+
+      showSearchResults(searchData.data);
+
 
     }
     else {
@@ -127,7 +133,7 @@ const setupUserElements = (dataArray) => {
 
   const shelvesData = dataArray.shelves;
 
-  console.log(dataArray);
+  // console.log(dataArray);
 
   // display user data setup
   // usernameTitle.textContent = dataArray.username;
@@ -167,6 +173,69 @@ const setupUserElements = (dataArray) => {
 
 
 // functions for generating content on page
+
+//
+const showSearchResults = (data) => {
+
+  for (let i = 0; i < data.length; i++) {
+    let newResultDiv = createSearchResult(data[i]);
+
+    bookResults.appendChild(newResultDiv);
+  }
+
+}
+
+// to egenrate content when a user searches for a book
+const createSearchResult = (data) => {
+
+  const newResultDiv = document.createElement("div");
+
+  const bookImg = document.createElement("img");
+  bookImg.src = data.thumbnail;
+  bookImg.alt = "Thumbnail not found";
+  bookImg.classList += "book-search-img";
+  newResultDiv.appendChild(bookImg);
+
+  const bookInfo = document.createElement("div");
+  bookInfo.classList += "book-search-info";
+  newResultDiv.appendChild(bookInfo);
+
+  const bookISBN = document.createElement("p");
+  bookISBN.innerText = `${data.isbn}`;
+  bookISBN.classList += "";
+  bookInfo.appendChild(bookISBN);
+
+  const bookTitle = document.createElement("p");
+  bookTitle.innerText = `${data.title}`;
+  bookTitle.classList += "";
+  bookInfo.appendChild(bookTitle);
+
+  const bookAuthor = document.createElement("p");
+  bookAuthor.innerText = `${data.author}`;
+  bookAuthor.classList += "";
+  bookInfo.appendChild(bookAuthor);
+
+  const bookPublicationDate = document.createElement("p");
+  bookPublicationDate.innerText = `Published: ${data.publicationDate}`;
+  bookPublicationDate.classList += "";
+  bookInfo.appendChild(bookPublicationDate);
+
+  const bookPageCount = document.createElement("p");
+  bookPageCount.innerText = `Pages: ${data.pageCount}`;
+  bookPageCount.classList += "";
+  bookInfo.appendChild(bookPageCount);
+
+  const bookThumbmail = document.createElement("input");
+  bookThumbmail.type = "text";
+  bookThumbmail.classList += "";
+  bookInfo.appendChild(bookThumbmail);
+
+  // newResultDiv.innerText = (`${data.author}, ${data.title}`);
+  newResultDiv.classList += "book-search-result";
+
+  return newResultDiv;
+}
+
 
 const createCollectionBook = () => {
   // to show user data about a book before adding to shelf 

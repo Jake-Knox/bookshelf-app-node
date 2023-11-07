@@ -571,7 +571,7 @@ const googleBooksSearchTitle = async (searchInput) => {
 
     books.volumes.list({
       q: searchInput,
-      maxResults: 1
+      maxResults: 4
     }, (err, response) => {
       if (err) {
         console.error('Error retrieving books:', err);
@@ -581,7 +581,8 @@ const googleBooksSearchTitle = async (searchInput) => {
         // console.log(books);
         // return books;
 
-        for (let i = 0; i < 1; i++) {
+        // remember the index here as well as maxResults
+        for (let i = 0; i < 4; i++) {
           const book = books[i];
 
           // console.log(book.volumeInfo);
