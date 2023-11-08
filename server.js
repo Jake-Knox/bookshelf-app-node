@@ -506,14 +506,18 @@ app.get('/registerPage', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/templates/register.html'));
 });
 
+app.get('/community', isAuthenticated, async (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/templates/community.html'));
+});
+
 app.get('/bookshelf', isAuthenticated, (req, res) => {
 
   let urlUsername = req.session.username;
-
   // Redirect to the user-specific bookshelf route
   res.redirect(`/bookshelf/${urlUsername}`);
 });
 
+// CRUD To be removed
 app.get('/crud', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, 'public/templates/crud.html'));
 });
@@ -522,9 +526,16 @@ app.get('/profile', isAuthenticated, async (req, res) => {
   res.sendFile(path.join(__dirname, 'public/templates/profile.html'));
 });
 
-app.get('/community', isAuthenticated, async (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/templates/community.html'));
+app.get('/myFollowing', isAuthenticated, async (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/templates/myFollowing.html'));
 });
+
+app.get('/myFollowers', isAuthenticated, async (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/templates/myFollowers.html'));
+});
+
+
+
 
 // test for user generic pages
 app.get('/bookshelf/:username', async (req, res) => {
@@ -552,7 +563,6 @@ app.get('/bookshelf/:username', async (req, res) => {
 
   // remove this when different pages are made
   // res.render('user', { username: urlUsername, data: userData });
-
 });
 
 
