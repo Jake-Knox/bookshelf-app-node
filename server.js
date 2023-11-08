@@ -522,6 +522,10 @@ app.get('/profile', isAuthenticated, async (req, res) => {
   res.sendFile(path.join(__dirname, 'public/templates/profile.html'));
 });
 
+app.get('/community', isAuthenticated, async (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/templates/community.html'));
+});
+
 // test for user generic pages
 app.get('/bookshelf/:username', async (req, res) => {
 
