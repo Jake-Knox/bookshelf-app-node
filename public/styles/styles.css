@@ -316,3 +316,9 @@ body {
   margin-top: 10vh;
   margin-bottom: 10vh;
 }
+
+.content {
+  height: 40vh;
+  border-bottom: 1px solid var(--secondary-brand-color);
+
+}
