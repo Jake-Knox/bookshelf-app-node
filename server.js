@@ -385,20 +385,20 @@ client.connect()
     app.get('/searchBooks/:search', isAuthenticated, async (req, res) => {
 
       const searchTerm = req.params.search;
-      console.log(`search term :${searchTerm}`);
+      // console.log(`search term :${searchTerm}`);
 
       let searchData = [];
 
-      if (searchTerm.length == 13 && isNumeric(searchTerm)) {
+      if ((searchTerm.length == 13 || searchTerm.length == 10) && isNumeric(searchTerm)) {
+        console.log(`ISBN search for :${searchTerm}`);
         // enough tests to treat as an ISBN-13
         // conduct isbn search
         searchData = await googleBooksSearchISBN(searchTerm);
-
       }
       else {
+        console.log(`Title search for :${searchTerm}`);
         // treat as a book name search
         searchData = await googleBooksSearchTitle(searchTerm);
-
       }
 
       console.log("search data below -");
@@ -591,9 +591,15 @@ const googleBooksSearchTitle = async (searchInput) => {
         console.error('Error retrieving books:', err);
         reject(err); // Reject the promise if there's an error.
       } else {
+
         const books = response.data.items;
         // console.log(books);
         // return books;
+
+        if (books.length == 0 || books == undefined) {
+          console.error('No books found for this title: ');
+          reject(); // Reject the promise if there's an error.
+        }
 
         // remember the index here as well as maxResults
         for (let i = 0; i < 4; i++) {
@@ -658,9 +664,23 @@ const googleBooksSearchISBN = (searchInput) => {
         const books = response.data.items;
         // console.log(books);
 
+        if (books.length == 0 || books == undefined) {
+          console.error('No books found for this isbn: ');
+          reject(); // Reject the promise if there's an error.
+        }
+
         const book = books[0];
 
-        const bIsbn = book.volumeInfo.isbn || 'Unknown';
+        console.log(book.volumeInfo);
+
+        if (searchInput.length == 13) {
+          // ISBN_13
+          const bIsbn = book.volumeInfo.industryIdentifiers[0].identifier || 'Unknown';
+        }
+        else {
+          // ISBN_10
+          const bIsbn = book.volumeInfo.industryIdentifiers[1].identifier || 'Unknown';
+        }
         const bTitle = book.volumeInfo.title || 'Unknown';
         const bAuthor = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
         const bPublicationDate = book.volumeInfo.publishedDate || 'Unknown';
