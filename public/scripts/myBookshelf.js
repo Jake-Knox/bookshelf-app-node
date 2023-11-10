@@ -6,6 +6,7 @@ const searchInput = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-btn");
 const searchResults = document.getElementById("search-results");
 const bookResults = document.getElementById("book-results");
+
 const ResultsBtns = document.getElementById("results-btns");
 const backBtn = document.getElementById("back-btn");
 const addBtn = document.getElementById("add-btn");
@@ -54,6 +55,7 @@ const searchAPI = async (searchTerm) => {
       console.log(`Search length: ${searchData.data.length}`)
       console.log(searchData.data);
 
+
       showSearchResults(searchData.data);
 
 
@@ -70,24 +72,24 @@ const searchAPI = async (searchTerm) => {
 
 
 
+// REMOVED WHEN moved away from static buttons
+// backBtn.addEventListener("click", () => {
 
-backBtn.addEventListener("click", () => {
-
-  console.log("back btn");
-
-
-});
-
-addBtn.addEventListener("click", () => {
-  console.log("add btn");
+//   console.log("back btn");
 
 
-  alert("NOT CONNECTED");
+// });
 
-  // editDatabase();
-  // alert("Database has been updated");
+// addBtn.addEventListener("click", () => {
+//   console.log("add btn");
 
-});
+
+//   alert("NOT CONNECTED");
+
+//   // editDatabase();
+//   // alert("Database has been updated");
+
+// });
 
 
 
@@ -178,7 +180,7 @@ const setupUserElements = (dataArray) => {
 const showSearchResults = (data) => {
 
   for (let i = 0; i < data.length; i++) {
-    let newResultDiv = createSearchResult(data[i]);
+    let newResultDiv = createSearchResult(data[i], i);
 
     bookResults.appendChild(newResultDiv);
   }
@@ -186,7 +188,7 @@ const showSearchResults = (data) => {
 }
 
 // to egenrate content when a user searches for a book
-const createSearchResult = (data) => {
+const createSearchResult = (data, index) => {
 
   const newResultDiv = document.createElement("div");
 
@@ -227,8 +229,34 @@ const createSearchResult = (data) => {
 
   const bookThumbmail = document.createElement("input");
   bookThumbmail.type = "text";
-  bookThumbmail.classList += "";
+  bookThumbmail.placeholder = "Custom image link";
+  bookThumbmail.classList += "input-image-ref";
   bookInfo.appendChild(bookThumbmail);
+
+  const bookAddBtn = document.createElement("button");
+  bookAddBtn.textContent = "Add";
+  bookAddBtn.id = (`addBookBtn${index}`);
+  bookThumbmail.classList += "btn-add-search";
+  bookAddBtn.addEventListener("click", () => {
+    //send submit and send data based on id's to backend
+
+    console.log("Add this book");
+
+    const sendData = {
+      "isbn": data.isbn,
+      "title": data.title,
+      "author": data.author,
+      "publicationDate": data.publicationDate,
+      "pageCount": data.pageCount,
+      "thumbnail": data.thumbnail,
+    };
+    console.log(sendData);
+
+
+
+  });
+  bookInfo.appendChild(bookAddBtn);
+
 
   // newResultDiv.innerText = (`${data.author}, ${data.title}`);
   newResultDiv.classList += "book-search-result";

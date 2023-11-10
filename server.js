@@ -402,7 +402,7 @@ client.connect()
       }
 
       console.log("search data below -");
-      console.log(searchData);
+      // console.log(searchData);
 
 
       // send data back to user
@@ -585,7 +585,7 @@ const googleBooksSearchTitle = async (searchInput) => {
 
     books.volumes.list({
       q: searchInput,
-      maxResults: 4
+      maxResults: 10
     }, (err, response) => {
       if (err) {
         console.error('Error retrieving books:', err);
@@ -602,7 +602,7 @@ const googleBooksSearchTitle = async (searchInput) => {
         }
 
         // remember the index here as well as maxResults
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 10; i++) {
           const book = books[i];
 
           // console.log(book.volumeInfo);
@@ -671,15 +671,16 @@ const googleBooksSearchISBN = (searchInput) => {
 
         const book = books[0];
 
-        console.log(book.volumeInfo);
+        // console.log(book.volumeInfo);
 
+        let bIsbn;
         if (searchInput.length == 13) {
           // ISBN_13
-          const bIsbn = book.volumeInfo.industryIdentifiers[0].identifier || 'Unknown';
+          bIsbn = book.volumeInfo.industryIdentifiers[0].identifier || 'Unknown';
         }
         else {
           // ISBN_10
-          const bIsbn = book.volumeInfo.industryIdentifiers[1].identifier || 'Unknown';
+          bIsbn = book.volumeInfo.industryIdentifiers[1].identifier || 'Unknown';
         }
         const bTitle = book.volumeInfo.title || 'Unknown';
         const bAuthor = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
