@@ -13,6 +13,9 @@ const addBtn = document.getElementById("add-btn");
 
 let bookshelfData = [];
 
+// Regex
+const hyperlinkRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/;
+
 // checks and setup
 document.addEventListener('DOMContentLoaded', () => {
   if (checkSession()) {
@@ -236,13 +239,11 @@ const createSearchResult = (data, index) => {
   const bookAddBtn = document.createElement("button");
   bookAddBtn.textContent = "Add";
   bookAddBtn.id = (`addBookBtn${index}`);
-  bookThumbmail.classList += "btn-add-search";
+  bookAddBtn.classList += "btn-add-search";
+
   bookAddBtn.addEventListener("click", () => {
     //send submit and send data based on id's to backend
-
-    console.log("Add this book");
-
-    const sendData = {
+    let sendData = {
       "isbn": data.isbn,
       "title": data.title,
       "author": data.author,
@@ -250,13 +251,19 @@ const createSearchResult = (data, index) => {
       "pageCount": data.pageCount,
       "thumbnail": data.thumbnail,
     };
+
+    // test for hyperlink input
+    if (bookThumbmail.value != "") {
+      if (hyperlinkRegex.test(bookThumbmail.value)) {
+        // console.log("Valid hyperlink!");
+        sendData.thumbnail = bookThumbmail.value;
+      } else {
+        console.log("Not a valid hyperlink.");
+      }
+    }
     console.log(sendData);
-
-
-
   });
   bookInfo.appendChild(bookAddBtn);
-
 
   // newResultDiv.innerText = (`${data.author}, ${data.title}`);
   newResultDiv.classList += "book-search-result";
