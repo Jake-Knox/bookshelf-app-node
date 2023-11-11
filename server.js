@@ -167,6 +167,7 @@ client.connect()
               },
             ]
           };
+
           // Insert the new user into the users collection
           db.collection('users').insertOne(user, (err, result) => {
             if (err) {
@@ -269,7 +270,7 @@ client.connect()
 
     // Using during developement
     // TO BE DELETED WHEN NOT NEEDED
-    app.post('/editDatabase', isAuthenticated, (req, res) => {
+    app.post('/editDatabase123', isAuthenticated, (req, res) => {
 
       // used to edit db of whoeever is logged in
       const userName = req.session.username
@@ -335,14 +336,56 @@ client.connect()
 
 
     // add a book to user collecion
+    app.post('/addBookToUserBooks', isAuthenticated, (req, res) => {
+      // used to edit db of whoeever is logged in
+      const userName = req.session.username
+      console.log(`un:${userName}`);
+
+      // fontend = sendData // backend = sentData
+      // console.log(req.body);
+
+      const sentData = req.body.sendData;
+      console.log(sentData);
+
+      // prep some book data
+      const newBook = {
+        isbn: sentData.isbn,
+        title: sentData.title,
+        author: sentData.author,
+        publicationDate: sentData.publicationDate,
+        pageCount: sentData.pageCount,
+        thumbnail: sentData.thumbnail,
+      }
+      console.log(newBook);
+      // https://www.w3schools.com/nodejs/nodejs_mongodb_update.asp
+      db.collection('users').updateOne(
+        { username: userName },
+        { $push: { books: newBook } },
+        (err, user) => {
+          if (err) {
+            console.error('Error finding user:', err);
+            res.sendStatus(500);
+          } else if (!user) {
+            console.log("user not found");
+            res.status(401).json({ message: 'User not found' });
+          } else {
+            // success
+            console.log("book added to user books array")
+            res.status(200).json({ message: 'add successful' });
+          }
+        }
+      );
+    });
+
 
     // remove a book from user collection
 
 
     // add a user shelf
 
+
     // remove a user's shelf
-    app.post('/removeShelf', isAuthenticated, (req, res) => {
+    app.post('/removeShelf', isAuthenticated, async (req, res) => {
       const userName = req.session.username
       const { removeShelfName } = req.body;
       console.log(`un:${userName}`);

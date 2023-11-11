@@ -241,7 +241,7 @@ const createSearchResult = (data, index) => {
   bookAddBtn.id = (`addBookBtn${index}`);
   bookAddBtn.classList += "btn-add-search";
 
-  bookAddBtn.addEventListener("click", () => {
+  bookAddBtn.addEventListener("click", async () => {
     //send submit and send data based on id's to backend
     let sendData = {
       "isbn": data.isbn,
@@ -258,10 +258,31 @@ const createSearchResult = (data, index) => {
         // console.log("Valid hyperlink!");
         sendData.thumbnail = bookThumbmail.value;
       } else {
-        console.log("Not a valid hyperlink.");
+        console.error("Invalid input for image link - using origional image link instead.");
       }
     }
+
     console.log(sendData);
+
+    // send to backend
+    try {
+      const response = await fetch('/addBookToUserBooks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ sendData }),
+      });
+      if (response.ok) {
+        alert("Submitted");
+      } else {
+        alert("Error: response?");
+        console.error('Failed: ', response.statusText);
+      }
+    } catch (error) {
+      alert("Error: cannot post?");
+      console.error('Error: ', error);
+    }
   });
   bookInfo.appendChild(bookAddBtn);
 
