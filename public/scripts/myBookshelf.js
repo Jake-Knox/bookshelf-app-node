@@ -248,7 +248,8 @@ const createSearchResult = (data, index) => {
         body: JSON.stringify({ sendData }),
       });
       if (response.ok) {
-        alert("Submitted");
+        alert("Book added to your collection. Reload page to view this change.");
+        // location.reload();
       } else {
         alert("Error: response?");
         console.error('Failed: ', response.statusText);

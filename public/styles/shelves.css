@@ -133,6 +133,9 @@
 }
 
 #booksDisplay {
+
+    height: 25vh;
+
     display: flex;
     flex-direction: row;
     justify-content: left;
@@ -140,12 +143,11 @@
     flex-wrap: nowrap;
 
     box-sizing: border-box;
-
-    height: 25vh;
+    border-top: 3px solid #3a3129;
+    border-bottom: 3px solid #3a3129;
 
     overflow-x: auto;
     overflow-y: hidden;
-
 }
 
 .user-book {
@@ -154,6 +156,8 @@
     width: 20%;
     max-width: 200px;
 
-    border: 1px solid;
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
     box-sizing: border-box;
+
 }
