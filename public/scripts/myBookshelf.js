@@ -145,6 +145,15 @@ const setupShelves = (shelvesData) => {
     }
     //add the new shelf to the shelves div
     newShelf.appendChild(newShelfBooks);
+
+    const shelfNewBookDiv = document.createElement("div");
+    const shelfSearchBar = document.createElement("input");
+    shelfSearchBar.type = "text";
+    shelfSearchBar.placeholder = "Add book from collection";
+    shelfNewBookDiv.appendChild(shelfSearchBar);
+    newShelf.appendChild(shelfNewBookDiv);
+
+
     shelves.appendChild(newShelf);
   }
 }

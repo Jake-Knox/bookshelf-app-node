@@ -47,7 +47,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: {
     secure: false,
-    maxAge: 60 * 60 * 1000, // 1 hr
+    maxAge: 1 * 60 * 60 * 1000, // 1 hr time until timeout
   },
 }));
 
