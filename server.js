@@ -650,7 +650,13 @@ const googleBooksSearchTitle = async (searchInput) => {
 
           // console.log(book.volumeInfo);
 
-          const bIsbn = book.volumeInfo.industryIdentifiers[0].identifier || 'Unknown';
+          // const bIsbn = book.volumeInfo.industryIdentifiers[0].identifier || 'Unknown';
+          const bIsbn = (
+            book.volumeInfo.industryIdentifiers?.find((identifier) => identifier.type === 'ISBN_13')?.identifier ||
+            book.volumeInfo.industryIdentifiers?.find((identifier) => identifier.type === 'ISBN_10')?.identifier ||
+            'Unknown'
+          );
+
           const bTitle = book.volumeInfo.title || 'Unknown';
           const bAuthor = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
           const bPublicationDate = book.volumeInfo.publishedDate || 'Unknown';

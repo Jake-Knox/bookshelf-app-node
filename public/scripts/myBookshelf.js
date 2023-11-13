@@ -60,10 +60,7 @@ const searchAPI = async (searchTerm) => {
       console.log(`Search length: ${searchData.data.length}`)
       console.log(searchData.data);
 
-
       showSearchResults(searchData.data);
-
-
     }
     else {
       console.error('Response Error:', response.statusText);
@@ -204,11 +201,11 @@ const createSearchResult = (data, index) => {
   bookPageCount.classList += "";
   bookInfo.appendChild(bookPageCount);
 
-  const bookThumbmail = document.createElement("input");
-  bookThumbmail.type = "text";
-  bookThumbmail.placeholder = "Custom image link";
-  bookThumbmail.classList += "input-image-ref";
-  bookInfo.appendChild(bookThumbmail);
+  const bookThumbnail = document.createElement("input");
+  bookThumbnail.type = "text";
+  bookThumbnail.placeholder = "Custom image link";
+  bookThumbnail.classList += "input-image-ref";
+  bookInfo.appendChild(bookThumbnail);
 
   const bookAddBtn = document.createElement("button");
   bookAddBtn.textContent = "Add";
@@ -227,10 +224,10 @@ const createSearchResult = (data, index) => {
     };
 
     // test for hyperlink input
-    if (bookThumbmail.value != "") {
-      if (hyperlinkRegex.test(bookThumbmail.value)) {
+    if (bookThumbnail.value != "") {
+      if (hyperlinkRegex.test(bookThumbnail.value)) {
         // console.log("Valid hyperlink!");
-        sendData.thumbnail = bookThumbmail.value;
+        sendData.thumbnail = bookThumbnail.value;
       } else {
         console.error("Invalid input for image link - using origional image link instead.");
       }
