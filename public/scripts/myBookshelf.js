@@ -7,6 +7,8 @@ const searchBtn = document.getElementById("search-btn");
 const searchResults = document.getElementById("search-results");
 const bookResults = document.getElementById("book-results");
 
+const bookDisplay = document.getElementById("booksDisplay");
+
 const ResultsBtns = document.getElementById("results-btns");
 const backBtn = document.getElementById("back-btn");
 const addBtn = document.getElementById("add-btn");
@@ -72,30 +74,6 @@ const searchAPI = async (searchTerm) => {
   }
 }
 
-
-
-
-// REMOVED WHEN moved away from static buttons
-// backBtn.addEventListener("click", () => {
-
-//   console.log("back btn");
-
-
-// });
-
-// addBtn.addEventListener("click", () => {
-//   console.log("add btn");
-
-
-//   alert("NOT CONNECTED");
-
-//   // editDatabase();
-//   // alert("Database has been updated");
-
-// });
-
-
-
 // shelves can be added to based on books in collection
 
 // no reading/to read - will be done as default shelves
@@ -120,56 +98,54 @@ const getMyBookshelf = async () => {
       bookshelfData = userData.data; // used to set up elements and fill shelves
       console.log(userData.data);
 
-      setupUserElements(bookshelfData); // comment to stop trying to use db data
+      //setup followers
+      setupFollowers(bookshelfData.following, bookshelfData.followers)
+
+      //setup books
+      setupUserBooks(bookshelfData.books);
+
+      //setup shelves
+      setupShelves(bookshelfData.shelves); // comment to stop trying to use db data
 
     }
     else {
       console.error('Error in response getting user bookshelf:', response.statusText);
     }
-
   }
   catch (error) {
     console.error('Error in try getting user bookshelf:', error);
   }
 }
 
+const setupFollowers = (followingData, followersData) => {
+  followingCount.textContent = (`Following: ${followingData.length}`);
+  followersCount.textContent = (`Following: ${followersData.length}`);
+}
 
-const setupUserElements = (dataArray) => {
+const setupUserBooks = (booksData) => {
+  booksCount.textContent = (`Books: ${booksData.length}`);
+  for (let i = 0; i < booksData.length; i++) {
+    const newUserBook = createUserBook(booksData[i], i);
+    newUserBook.id = (`userBook${i}`);
+    newUserBook.classList.add("user-book");
+    bookDisplay.appendChild(newUserBook);
+  }
+}
 
-  const shelvesData = dataArray.shelves;
-
-  // console.log(dataArray);
-
-  // display user data setup
-  // usernameTitle.textContent = dataArray.username;
-  followingCount.textContent = (`Following: ${dataArray.following.length}`);
-  followersCount.textContent = (`Following: ${dataArray.followers.length}`);
-
-  // books stuff
-  booksCount.textContent = (`Books: ${dataArray.books.length}`);
-
+const setupShelves = (shelvesData) => {
   //shelves setup
   shelvesCount.textContent = (`Shelves: ${shelvesData.length}`);
   for (let i = 0; i < shelvesData.length; i++) {
     // for every shelf
-    console.log(`shelf:${i}`);
-
     const newShelf = createShelf(shelvesData[i]);
-
     const newShelfBooks = document.createElement("div");
     newShelfBooks.classList.add("shelf-books");
-
     for (let j = 0; j < shelvesData[i].books.length; j++) {
       // for every book on shelf i 
-      console.log(`shelf:${i}, book:${j} `);
-
       const newBook = createShelfBook(shelvesData[i].books[j]);
-
-
       // add the new book the the shelf
       newShelfBooks.appendChild(newBook);
     }
-
     //add the new shelf to the shelves div
     newShelf.appendChild(newShelfBooks);
     shelves.appendChild(newShelf);
@@ -184,10 +160,8 @@ const showSearchResults = (data) => {
 
   for (let i = 0; i < data.length; i++) {
     let newResultDiv = createSearchResult(data[i], i);
-
     bookResults.appendChild(newResultDiv);
   }
-
 }
 
 // to egenrate content when a user searches for a book
@@ -292,14 +266,26 @@ const createSearchResult = (data, index) => {
   return newResultDiv;
 }
 
+const createUserBook = (data, index) => {
+  const newUserBook = document.createElement("div");
 
-const createCollectionBook = () => {
-  // to show user data about a book before adding to shelf 
-  // or showing in "books" collection
+  const bookISBN = document.createElement("p");
+  bookISBN.innerText = `${data.isbn}`;
+  bookISBN.classList += "";
+  newUserBook.appendChild(bookISBN);
 
+  const bookTitle = document.createElement("p");
+  bookTitle.innerText = `${data.title}`;
+  bookTitle.classList += "";
+  newUserBook.appendChild(bookTitle);
 
+  const bookAuthor = document.createElement("p");
+  bookAuthor.innerText = `${data.author}`;
+  bookAuthor.classList += "";
+  newUserBook.appendChild(bookAuthor);
+
+  return newUserBook;
 }
-
 
 
 // USED for hard code adding stuff to database

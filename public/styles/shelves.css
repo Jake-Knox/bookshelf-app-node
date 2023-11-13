@@ -1,3 +1,13 @@
+/* Define the colors from the color palette */
+:root {
+    --primary-brand-color: #FF7F27;
+    --secondary-brand-color: #5E5E5E;
+    --background-color: #F5F5F5;
+    --accent-color: #000000;
+
+    /* make sure to stay up to date with styles.css */
+}
+
 .flex-column-centre {
     display: flex;
     flex-direction: column;
@@ -120,4 +130,30 @@
     flex-direction: column;
     justify-content: left;
     align-items: center;
+}
+
+#booksDisplay {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    box-sizing: border-box;
+
+    height: 25vh;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+}
+
+.user-book {
+
+    height: 100%;
+    width: 20%;
+    max-width: 200px;
+
+    border: 1px solid;
+    box-sizing: border-box;
 }
