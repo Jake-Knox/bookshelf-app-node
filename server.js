@@ -142,25 +142,29 @@ client.connect()
             "books": [],
             "shelves": [
               {
-                "position": "0",
+                "_id": ObjectId(),
+                "order": 0,
                 "name": "Reading",
                 "privacy": "public",
                 "books": [],
               },
               {
-                "position": "1",
+                "_id": ObjectId(),
+                "order": 1,
                 "name": "To Be Read",
                 "privacy": "public",
                 "books": [],
               },
               {
-                "position": "2",
+                "_id": ObjectId(),
+                "order": 2,
                 "name": "Read",
                 "privacy": "public",
                 "books": [],
               },
               {
-                "position": "3",
+                "_id": ObjectId(),
+                "order": 2,
                 "name": "Hidden",
                 "privacy": "private",
                 "books": [],

@@ -132,6 +132,16 @@ const setupUserBooks = (booksData) => {
 const setupShelves = (shelvesData) => {
   //shelves setup
   shelvesCount.textContent = (`Shelves: ${shelvesData.length}`);
+
+  // order the shelves correctly
+  const shelvesDataSorted = shelvesData;
+  shelvesDataSorted.sort((a, b) => a.order - b.order);
+
+  for (let i = 0; i < shelvesDataSorted.length; i++) {
+    shelvesDataSorted[i].books.sort((a, b) => a.order - b.order);
+  }
+  console.log(shelvesDataSorted);
+
   for (let i = 0; i < shelvesData.length; i++) {
     // for every shelf
     const newShelf = createShelf(shelvesData[i]);
