@@ -134,19 +134,22 @@ const setupShelves = (shelvesData) => {
   shelvesCount.textContent = (`Shelves: ${shelvesData.length}`);
 
   // order the shelves correctly
+  // sorts data while still using 'shelvesData variable later on'
   const shelvesDataSorted = shelvesData;
   shelvesDataSorted.sort((a, b) => a.order - b.order);
 
   for (let i = 0; i < shelvesDataSorted.length; i++) {
     shelvesDataSorted[i].books.sort((a, b) => a.order - b.order);
   }
-  console.log(shelvesDataSorted);
+  // console.log(shelvesDataSorted);
 
   for (let i = 0; i < shelvesData.length; i++) {
     // for every shelf
     const newShelf = createShelf(shelvesData[i]);
     const newShelfBooks = document.createElement("div");
     newShelfBooks.classList.add("shelf-books");
+    newShelfBooks.id = (`shelfBooks${i}`);
+
     for (let j = 0; j < shelvesData[i].books.length; j++) {
       // for every book on shelf i 
       const newBook = createShelfBook(shelvesData[i].books[j]);
@@ -165,6 +168,13 @@ const setupShelves = (shelvesData) => {
 
 
     shelves.appendChild(newShelf);
+  }
+
+  for (let i = 0; i < shelvesData.length; i++) {
+    // jQuery to allow sorting by user
+    $(`#shelfBooks${i}`).sortable({
+      cursor: "move", // Set cursor to indicate draggable
+    });
   }
 }
 
