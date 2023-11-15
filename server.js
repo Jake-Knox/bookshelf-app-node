@@ -625,11 +625,55 @@ app.post('/checkSession', (req, res) => {
 
 // Google Books API searches
 
+const searchBooksObjects = (books, resultsLimit) => {
+
+  let returnData = [];
+
+  const limitedResults = books.slice(0, resultsLimit);
+  // Loop through the limited results with index
+  limitedResults.forEach((book, index) => {
+
+    // console.log(`Result ${index + 1}:`);
+    // console.log(book.volumeInfo.title || 'Unknown');
+    // console.log(book.volumeInfo.industryIdentifiers);
+    // console.log(book.volumeInfo.imageLinks);
+
+    const bIsbn = (
+      book.volumeInfo.industryIdentifiers?.find((identifier) => identifier.type === 'ISBN_13')?.identifier ||
+      book.volumeInfo.industryIdentifiers?.find((identifier) => identifier.type === 'ISBN_10')?.identifier ||
+      'Unknown'
+    );
+
+    const bTitle = book.volumeInfo.title || 'Unknown';
+    const bAuthor = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
+    const bPublicationDate = book.volumeInfo.publishedDate || 'Unknown';
+    const bPageCount = book.volumeInfo.pageCount || 'Unknown';
+
+    const bThumbnail = (
+      book.volumeInfo.imageLinks?.thumbnail ||
+      book.volumeInfo.imageLinks?.smallThumbnail ||
+      'Unknown'
+    );
+
+    let newBookObj = {
+      isbn: bIsbn,
+      title: bTitle,
+      author: bAuthor,
+      publicationDate: bPublicationDate,
+      pageCount: bPageCount,
+      thumbnail: bThumbnail
+    };
+    // console.log(newBookObj);
+    returnData.push(newBookObj);
+
+  });
+  return returnData;
+}
+
 const googleBooksSearchTitle = async (searchInput) => {
   return new Promise((resolve, reject) => {
 
     let returnData = [];
-
     const resultsLimit = 10
 
     books.volumes.list({
@@ -640,7 +684,6 @@ const googleBooksSearchTitle = async (searchInput) => {
         console.error('Error retrieving books:', err);
         reject(err); // Reject the promise if there's an error.
       } else {
-
         const books = response.data.items;
         // console.log(books);
 
@@ -650,52 +693,9 @@ const googleBooksSearchTitle = async (searchInput) => {
           resolve([]);
         }
         else {
+          // generate objects
+          returnData = searchBooksObjects(books, resultsLimit);
 
-          // use this instead of loop
-          const limitedResults = books.slice(0, resultsLimit);
-          // Loop through the limited results with index
-          limitedResults.forEach((result, index) => {
-            // Your logic here to process each result
-            console.log(`Result ${index + 1}:`);
-          });
-
-          // remember the index here as well as resultsLimit
-          for (let i = 0; i < resultsLimit; i++) {
-            const book = books[i];
-
-            // console.log(book.volumeInfo);
-
-            // const bIsbn = book.volumeInfo.industryIdentifiers[0].identifier || 'Unknown';
-            const bIsbn = (
-              book.volumeInfo.industryIdentifiers?.find((identifier) => identifier.type === 'ISBN_13')?.identifier ||
-              book.volumeInfo.industryIdentifiers?.find((identifier) => identifier.type === 'ISBN_10')?.identifier ||
-              'Unknown'
-            );
-
-            const bTitle = book.volumeInfo.title || 'Unknown';
-            const bAuthor = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
-            const bPublicationDate = book.volumeInfo.publishedDate || 'Unknown';
-            const bPageCount = book.volumeInfo.pageCount || 'Unknown';
-            let bThumbnail = "Uknown";
-            try {
-              bThumbnail = book.volumeInfo.imageLinks.thumbnail;
-            }
-            catch (err) {
-              bThumbnail = "Uknown";
-              // console.error("no thumbnail:", err);
-            }
-
-            let newBookObj = {
-              isbn: bIsbn,
-              title: bTitle,
-              author: bAuthor,
-              publicationDate: bPublicationDate,
-              pageCount: bPageCount,
-              thumbnail: bThumbnail
-            };
-            // console.log(newBookObj);
-            returnData.push(newBookObj);
-          }
           // return returnData;
           resolve(returnData); // Resolve the promise with the data.
         }
@@ -710,7 +710,6 @@ const googleBooksSearchISBN = (searchInput) => {
   return new Promise((resolve, reject) => {
 
     let returnData = [];
-
     const resultsLimit = 10
 
     books.volumes.list({
@@ -722,7 +721,6 @@ const googleBooksSearchISBN = (searchInput) => {
         reject(err); // Reject the promise if there's an error.
       }
       else {
-
         const books = response.data.items;
         // console.log(books);
 
@@ -732,51 +730,9 @@ const googleBooksSearchISBN = (searchInput) => {
           resolve([]);
         }
         else {
+          // generate objects
+          returnData = searchBooksObjects(books, resultsLimit);
 
-          // use this instead of loop
-          const limitedResults = books.slice(0, resultsLimit);
-          // Loop through the limited results with index
-          limitedResults.forEach((result, index) => {
-            // Your logic here to process each result
-            console.log(`Result ${index + 1}:`);
-          });
-
-          for (let i = 0; i < resultsLimit; i++) {
-            const book = books[i];
-            // const book = books[0];
-
-            // console.log(book.volumeInfo);
-
-            const bIsbn = (
-              book.volumeInfo.industryIdentifiers?.find((identifier) => identifier.type === 'ISBN_13')?.identifier ||
-              book.volumeInfo.industryIdentifiers?.find((identifier) => identifier.type === 'ISBN_10')?.identifier ||
-              'Unknown'
-            );
-
-            const bTitle = book.volumeInfo.title || 'Unknown';
-            const bAuthor = book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Unknown';
-            const bPublicationDate = book.volumeInfo.publishedDate || 'Unknown';
-            const bPageCount = book.volumeInfo.pageCount || 'Unknown';
-            let bThumbnail = "Uknown";
-            try {
-              bThumbnail = book.volumeInfo.imageLinks.thumbnail;
-            }
-            catch (err) {
-              bThumbnail = "Uknown";
-              // console.error("no thumbnail:", err);
-            }
-
-            let newBookObj = {
-              isbn: bIsbn,
-              title: bTitle,
-              author: bAuthor,
-              publicationDate: bPublicationDate,
-              pageCount: bPageCount,
-              thumbnail: bThumbnail
-            };
-            //console.log(newBookObj);
-            returnData.push(newBookObj);
-          }
           // return returnData;
           resolve(returnData); // Resolve the promise with the data.
         }
