@@ -63,6 +63,9 @@ const isAuthenticated = (req, res, next) => {
   }
 };
 
+const isNumeric = (value) => {
+  return /^\d+$/.test(value);
+}
 
 // Connect to the MongoDB server
 client.connect()
@@ -704,13 +707,11 @@ const googleBooksSearchTitle = async (searchInput) => {
   });
 }
 
-
-
 const googleBooksSearchISBN = (searchInput) => {
   return new Promise((resolve, reject) => {
 
     let returnData = [];
-    const resultsLimit = 10
+    const resultsLimit = 5
 
     books.volumes.list({
       q: searchInput,
@@ -741,6 +742,3 @@ const googleBooksSearchISBN = (searchInput) => {
   });
 }
 
-const isNumeric = (value) => {
-  return /^\d+$/.test(value);
-}

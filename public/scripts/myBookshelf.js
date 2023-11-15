@@ -435,3 +435,19 @@ const removeBookFromShelf = async (bookName, shelfName) => {
     console.error('Error: ', error);
   }
 }
+
+$(document).ready(function () {
+  // jQuery stuff
+  console.log("jquery load");
+
+  $("#searchSlideToggle").click(function () {
+    $("#book-search").slideToggle("slow");
+    $("#search-results").slideToggle("slow");
+  });
+
+  $("#booksCount").click(function () {
+    $("#booksDisplay").slideToggle("slow");
+  });
+
+
+});
