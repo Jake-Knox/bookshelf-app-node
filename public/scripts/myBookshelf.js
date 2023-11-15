@@ -159,12 +159,9 @@ const setupShelves = (shelvesData) => {
     //add the new shelf to the shelves div
     newShelf.appendChild(newShelfBooks);
 
-    const shelfNewBookDiv = document.createElement("div");
-    const shelfSearchBar = document.createElement("input");
-    shelfSearchBar.type = "text";
-    shelfSearchBar.placeholder = "Add book from collection";
-    shelfNewBookDiv.appendChild(shelfSearchBar);
-    newShelf.appendChild(shelfNewBookDiv);
+    // create and add the save order and search section to each shelf
+    const newShelfButtons = createShelfButtons(i);
+    newShelf.appendChild(newShelfButtons);
 
 
     shelves.appendChild(newShelf);
@@ -176,6 +173,32 @@ const setupShelves = (shelvesData) => {
       cursor: "move", // Set cursor to indicate draggable
     });
   }
+}
+
+const createShelfButtons = (index) => {
+  const newShelfButtons = document.createElement("div");
+  newShelfButtons.classList.add("shelf-search-container");
+
+  const shelfSaveOrderBtn = document.createElement("button");
+  shelfSaveOrderBtn.id = (`save${index}`);
+  shelfSaveOrderBtn.classList.add("shelf-save-order-btn");
+  shelfSaveOrderBtn.textContent = ("Save Book Order");
+  newShelfButtons.appendChild(shelfSaveOrderBtn);
+
+  const shelfSearchInput = document.createElement("input");
+  shelfSearchInput.id = (`search${index}`);
+  shelfSearchInput.classList.add("shelf-search-input");
+  shelfSearchInput.type = "text";
+  shelfSearchInput.placeholder = ("Search...");
+  newShelfButtons.appendChild(shelfSearchInput);
+
+  const shelfAddBtn = document.createElement("button");
+  shelfAddBtn.id = (`add${index}`);
+  shelfAddBtn.classList.add("shelf-add-btn");
+  shelfAddBtn.textContent = ("+");
+  newShelfButtons.appendChild(shelfAddBtn);
+
+  return newShelfButtons;
 }
 
 
@@ -314,31 +337,6 @@ const createUserBook = (data, index) => {
   return newUserBook;
 }
 
-
-// USED for hard code adding stuff to database
-// To be deleted when all functions to edit db are available to user
-const editDatabase = async () => {
-
-  const test = "test";
-  const test2 = "test 2";
-
-  try {
-    const response = await fetch('/editDatabase', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ test, test2 }),
-    });
-    if (response.ok) {
-      console.log(response);
-    } else {
-      console.error('Failed: ', response.statusText);
-    }
-  } catch (error) {
-    console.error('Error: ', error);
-  }
-}
 
 // Using these methods going forward
 
