@@ -175,31 +175,6 @@ const setupShelves = (shelvesData) => {
   }
 }
 
-const createShelfButtons = (index) => {
-  const newShelfButtons = document.createElement("div");
-  newShelfButtons.classList.add("shelf-search-container");
-
-  const shelfSaveOrderBtn = document.createElement("button");
-  shelfSaveOrderBtn.id = (`save${index}`);
-  shelfSaveOrderBtn.classList.add("shelf-save-order-btn");
-  shelfSaveOrderBtn.textContent = ("Save Book Order");
-  newShelfButtons.appendChild(shelfSaveOrderBtn);
-
-  const shelfSearchInput = document.createElement("input");
-  shelfSearchInput.id = (`search${index}`);
-  shelfSearchInput.classList.add("shelf-search-input");
-  shelfSearchInput.type = "text";
-  shelfSearchInput.placeholder = ("Search...");
-  newShelfButtons.appendChild(shelfSearchInput);
-
-  const shelfAddBtn = document.createElement("button");
-  shelfAddBtn.id = (`add${index}`);
-  shelfAddBtn.classList.add("shelf-add-btn");
-  shelfAddBtn.textContent = ("+");
-  newShelfButtons.appendChild(shelfAddBtn);
-
-  return newShelfButtons;
-}
 
 
 // functions for generating content on page
@@ -308,6 +283,9 @@ const createSearchResult = (data, index) => {
       console.error('Error: ', error);
     }
   });
+  // end of button add click 
+
+
   bookInfo.appendChild(bookAddBtn);
 
   // newResultDiv.innerText = (`${data.author}, ${data.title}`);
@@ -315,28 +293,6 @@ const createSearchResult = (data, index) => {
 
   return newResultDiv;
 }
-
-const createUserBook = (data, index) => {
-  const newUserBook = document.createElement("div");
-
-  const bookISBN = document.createElement("p");
-  bookISBN.innerText = `${data.isbn}`;
-  bookISBN.classList += "";
-  newUserBook.appendChild(bookISBN);
-
-  const bookTitle = document.createElement("p");
-  bookTitle.innerText = `${data.title}`;
-  bookTitle.classList += "";
-  newUserBook.appendChild(bookTitle);
-
-  const bookAuthor = document.createElement("p");
-  bookAuthor.innerText = `${data.author}`;
-  bookAuthor.classList += "";
-  newUserBook.appendChild(bookAuthor);
-
-  return newUserBook;
-}
-
 
 // Using these methods going forward
 
@@ -435,6 +391,93 @@ const removeBookFromShelf = async (bookName, shelfName) => {
     console.error('Error: ', error);
   }
 }
+
+// element creation
+
+
+// each book in a user's collection
+const createUserBook = (data, index) => {
+  const newUserBook = document.createElement("div");
+
+  const bookISBN = document.createElement("p");
+  bookISBN.innerText = `${data.isbn}`;
+  bookISBN.classList += "";
+  newUserBook.appendChild(bookISBN);
+
+  const bookTitle = document.createElement("p");
+  bookTitle.innerText = `${data.title}`;
+  bookTitle.classList += "";
+  newUserBook.appendChild(bookTitle);
+
+  const bookAuthor = document.createElement("p");
+  bookAuthor.innerText = `${data.author}`;
+  bookAuthor.classList += "";
+  newUserBook.appendChild(bookAuthor);
+
+  return newUserBook;
+}
+
+// buttons fo rthe bottom of each shelf
+const createShelfButtons = (index) => {
+  const newShelfButtons = document.createElement("div");
+  newShelfButtons.classList.add("shelf-search-container");
+
+  const shelfSaveOrderBtn = document.createElement("button");
+  shelfSaveOrderBtn.id = (`save${index}`);
+  shelfSaveOrderBtn.classList.add("shelf-save-order-btn");
+  shelfSaveOrderBtn.textContent = ("Save Book Order");
+  shelfSaveOrderBtn.addEventListener("click", async () => {
+    console.log(`save book order, shelf index ${index}`);
+    // send to backend
+
+    // let sendData = {
+    //   "_id": data._id, // Assuming _id is already available in your 'data' object
+    //   "shelfPosition": data.shelfPosition, // Assuming shelfPosition is available
+    //   "books": [
+
+    //   ]
+    // };
+
+    // try {
+    //   const response = await fetch('/saveShelfOrder', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ sendData }),
+    //   });
+    //   if (response.ok) {
+    //     alert("Book added to your collection. Reload page to view this change.");
+    //     // location.reload();
+    //   } else {
+    //     alert("Error: response?");
+    //     console.error('Failed: ', response.statusText);
+    //   }
+    // } catch (error) {
+    //   alert("Error: cannot post?");
+    //   console.error('Error: ', error);
+    // }
+
+  });
+  newShelfButtons.appendChild(shelfSaveOrderBtn);
+
+  const shelfSearchInput = document.createElement("input");
+  shelfSearchInput.id = (`search${index}`);
+  shelfSearchInput.classList.add("shelf-search-input");
+  shelfSearchInput.type = "text";
+  shelfSearchInput.placeholder = ("Search...");
+  newShelfButtons.appendChild(shelfSearchInput);
+
+  const shelfAddBtn = document.createElement("button");
+  shelfAddBtn.id = (`add${index}`);
+  shelfAddBtn.classList.add("shelf-add-btn");
+  shelfAddBtn.textContent = ("+");
+  newShelfButtons.appendChild(shelfAddBtn);
+
+  return newShelfButtons;
+}
+
+
 
 $(document).ready(function () {
   // jQuery stuff
