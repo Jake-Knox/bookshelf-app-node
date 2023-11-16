@@ -271,3 +271,36 @@
     cursor: pointer;
     /* Change cursor on hover */
 }
+
+/* Style for Autocomplete suggestions container */
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    z-index: 1000;
+}
+
+/* Style for Autocomplete suggestion items */
+.ui-menu-item {
+    padding: 8px;
+    cursor: pointer;
+    list-style: none;
+    /* Remove bullet points */
+    background-color: #e4e4e4;
+    /* Slightly darker initial background color */
+}
+
+/* Style for selected Autocomplete suggestion item */
+.ui-state-focus {
+    background-color: #4CAF50;
+    /* Highlight color */
+    color: #ffffff;
+    /* Text color */
+}
+
+/* Style for Autocomplete suggestion items on hover */
+.ui-menu-item:hover {
+    background-color: #d8d8d8;
+    /* A shade darker background on hover */
+}
