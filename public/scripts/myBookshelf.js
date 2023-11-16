@@ -160,7 +160,7 @@ const setupShelves = (shelvesData) => {
     newShelf.appendChild(newShelfBooks);
 
     // create and add the save order and search section to each shelf
-    const newShelfButtons = createShelfButtons(i);
+    const newShelfButtons = createShelfButtons(shelvesData[i], i);
     newShelf.appendChild(newShelfButtons);
 
 
@@ -172,6 +172,9 @@ const setupShelves = (shelvesData) => {
     $(`#shelfBooks${i}`).sortable({
       cursor: "move", // Set cursor to indicate draggable
     });
+
+    initAutocomplete(`search${i}`, `add${i}`);
+
   }
 }
 
@@ -418,7 +421,7 @@ const createUserBook = (data, index) => {
 }
 
 // buttons fo rthe bottom of each shelf
-const createShelfButtons = (index) => {
+const createShelfButtons = (shelvesData, index) => {
   const newShelfButtons = document.createElement("div");
   newShelfButtons.classList.add("shelf-search-container");
 
@@ -431,7 +434,7 @@ const createShelfButtons = (index) => {
     // send to backend
 
     // let sendData = {
-    //   "_id": data._id, // Assuming _id is already available in your 'data' object
+    //   "_id": shelvesData._id, // Assuming _id is already available in your 'data' object
     //   "shelfPosition": data.shelfPosition, // Assuming shelfPosition is available
     //   "books": [
 
@@ -474,6 +477,9 @@ const createShelfButtons = (index) => {
   shelfAddBtn.textContent = ("+");
   newShelfButtons.appendChild(shelfAddBtn);
 
+  // const inputName = (`search${index}`);
+  // const btnName = (`add${index}`);
+
   return newShelfButtons;
 }
 
@@ -494,3 +500,50 @@ $(document).ready(function () {
 
 
 });
+
+// jQuery functions for searching
+// Function to initialize autocomplete
+function initAutocomplete(inputId, buttonId) {
+  $("#" + inputId).autocomplete({
+    source: function (request, response) {
+      var term = request.term.toLowerCase();
+      var matchingItems = bookshelfData.books.filter(function (item) {
+        return item.title.toLowerCase().includes(term) || item.author.toLowerCase().includes(term) || item.isbn.toLowerCase().includes(term);
+      });
+
+      // Map the matching items to an array of label and value pairs
+      var suggestions = matchingItems.map(function (item) {
+        return {
+          label: item.title + ", " + item.author + " ISBN:" + item.isbn,
+          value: item.isbn // This is what will be inserted into the input field when an item is selected
+        };
+      });
+
+      response(suggestions);
+    },
+    minLength: 1, // Minimum characters to trigger autocomplete
+    select: function (event, ui) {
+      // Log the selected item's name
+      console.log("Selected: " + ui.item.value + " (Name: " + ui.item.label + ")");
+    }
+  });
+
+  // Function to initialize log button click event
+  $("#" + buttonId).on("click", function () {
+    var inputValue = $("#" + inputId).val().toLowerCase();
+
+    // Check if the input value matches any of the data values
+    if (bookshelfData.books.some(item => item.name.toLowerCase() === inputValue || item.category.toLowerCase() === inputValue)) {
+      console.log(`Button #${buttonId} Clicked: ${inputValue}`);
+      // TO DO
+
+      // send to back end
+
+      // see if I need another param to get the right shelf
+
+
+    } else {
+      console.log("Input value does not match any data values.");
+    }
+  });
+}

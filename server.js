@@ -5,6 +5,9 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 
+// const ObjectID = require('mongodb').ObjectID;
+const { ObjectId } = require('mongodb');
+
 const app = express();
 const server = http.createServer(app);
 
@@ -352,7 +355,7 @@ client.connect()
       // console.log(req.body);
 
       const sentData = req.body.sendData;
-      console.log(sentData);
+      // console.log(sentData);
 
       // prep some book data
       const newBook = {
@@ -363,7 +366,7 @@ client.connect()
         pageCount: sentData.pageCount,
         thumbnail: sentData.thumbnail,
       }
-      console.log(newBook);
+      // console.log(newBook);
       // https://www.w3schools.com/nodejs/nodejs_mongodb_update.asp
       db.collection('users').updateOne(
         { username: userName },
@@ -421,6 +424,16 @@ client.connect()
         }
       );
     });
+
+    // add book to shelf
+
+
+
+    // remove book from shelf
+
+
+
+    // save book positions of shelf
 
 
     // Think about this more
