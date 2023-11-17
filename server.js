@@ -170,7 +170,7 @@ client.connect()
               },
               {
                 "_id": ObjectId(),
-                "order": 2,
+                "order": 3,
                 "name": "Hidden",
                 "privacy": "private",
                 "books": [],
@@ -426,7 +426,39 @@ client.connect()
     });
 
     // add book to shelf
+    app.post('/addBookToShelf', isAuthenticated, (req, res) => {
+      const userName = req.session.username
+      const { shelfId, bookData } = req.body;
+      console.log(`shelf _id:${shelfId}`);
+      // console.log(bookData);
 
+      let newBook = bookData;
+      let newID = { "_id": ObjectId() };
+      newBook._id = newID._id;
+
+      console.log(newBook);
+
+      // send to database
+      //find the right user, find the right shelf from _id, push the new book
+      db.collection('users').updateOne(
+        { username: userName, 'shelves._id': shelfId },
+        { $push: { 'shelves.$.books': newBook } },
+        (err, user) => {
+          if (err) {
+            console.error('Error adding book to shelf:', err);
+            res.sendStatus(500);
+          } else if (!user) {
+            console.log("user not found");
+            res.status(401).json({ message: 'User not found' });
+          } else {
+            // success
+            console.log("book added to shelf")
+
+            res.status(200).json({ message: 'book added to shelf' });
+          }
+        }
+      );
+    });
 
 
     // remove book from shelf
@@ -536,12 +568,6 @@ client.connect()
         }
       });
     });
-
-    // test to search google for books by title input
-
-    // googleBooksSearchTitle("Pride and Prejudice");
-    // googleBooksSearchISBN("9780141439686") // persuasion - austen // doesn't use any '-'
-
 
     // start server - after db connection
     const port = process.env.PORT || 3000;

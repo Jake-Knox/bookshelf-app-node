@@ -149,6 +149,8 @@ const setupShelves = (shelvesData) => {
     const newShelfBooks = document.createElement("div");
     newShelfBooks.classList.add("shelf-books");
     newShelfBooks.id = (`shelfBooks${i}`);
+    newShelfBooks.setAttribute('data-shelf-id', shelvesData[i]._id);
+
 
     for (let j = 0; j < shelvesData[i].books.length; j++) {
       // for every book on shelf i 
@@ -347,18 +349,14 @@ const removeShelf = async (shelfName) => {
 
 
 // add book to shelf
-const addBookToShelf = async (bookName, shelfName) => {
-
-  const addBookName = bookName;
-  const addShelfName = shelfName;
-
+const addBookToShelf = async (shelfId, bookData) => {
   try {
-    const response = await fetch('/removeBookFromShelf', {
+    const response = await fetch('/addBookToShelf', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ addBookName, addShelfName }),
+      body: JSON.stringify({ shelfId, bookData }),
     });
     if (response.ok) {
       console.log(response);
@@ -421,20 +419,21 @@ const createUserBook = (data, index) => {
 }
 
 // buttons fo rthe bottom of each shelf
-const createShelfButtons = (shelvesData, index) => {
+const createShelfButtons = (shelfData, index) => {
   const newShelfButtons = document.createElement("div");
   newShelfButtons.classList.add("shelf-search-container");
 
   const shelfSaveOrderBtn = document.createElement("button");
   shelfSaveOrderBtn.id = (`save${index}`);
   shelfSaveOrderBtn.classList.add("shelf-save-order-btn");
+  shelfSaveOrderBtn.setAttribute('data-shelf-id', shelfData._id);
   shelfSaveOrderBtn.textContent = ("Save Book Order");
   shelfSaveOrderBtn.addEventListener("click", async () => {
     console.log(`save book order, shelf index ${index}`);
     // send to backend
 
     // let sendData = {
-    //   "_id": shelvesData._id, // Assuming _id is already available in your 'data' object
+    //   "_id": shelfData._id, // Assuming _id is already available in your 'data' object
     //   "shelfPosition": data.shelfPosition, // Assuming shelfPosition is available
     //   "books": [
 
@@ -474,6 +473,8 @@ const createShelfButtons = (shelvesData, index) => {
   const shelfAddBtn = document.createElement("button");
   shelfAddBtn.id = (`add${index}`);
   shelfAddBtn.classList.add("shelf-add-btn");
+  // custom attribute for the shelf unique id
+  shelfAddBtn.setAttribute('data-shelf-id', shelfData._id);
   shelfAddBtn.textContent = ("+");
   newShelfButtons.appendChild(shelfAddBtn);
 
@@ -524,7 +525,7 @@ function initAutocomplete(inputId, buttonId) {
     minLength: 1, // Minimum characters to trigger autocomplete
     select: function (event, ui) {
       // Log the selected item's name
-      console.log("Selected: " + ui.item.value + " (Name: " + ui.item.label + ")");
+      // console.log("Selected: " + ui.item.value + " (Name: " + ui.item.label + ")");
     }
   });
 
@@ -532,14 +533,27 @@ function initAutocomplete(inputId, buttonId) {
   $("#" + buttonId).on("click", function () {
     var inputValue = $("#" + inputId).val().toLowerCase();
 
+    // Retrieve the data-shelf-id attribute of the clicked button
+    var shelfId = $(this).attr('data-shelf-id');
+
     // Check if the input value matches any of the data values
-    if (bookshelfData.books.some(item => item.name.toLowerCase() === inputValue || item.category.toLowerCase() === inputValue)) {
-      console.log(`Button #${buttonId} Clicked: ${inputValue}`);
-      // TO DO
+    if (bookshelfData.books.some(item => item.isbn.toLowerCase() === inputValue)) {
+      // console.log(`Button #${buttonId} Clicked: ${inputValue}`);
+      // console.log(`Shelf ID: ${shelfId}`);
+
+      let bookData = bookshelfData ? bookshelfData.books.find(book => book.isbn === inputValue) : null;
+
+      const targetShelf = bookshelfData.books.find(shelf => shelf._id === shelfId);
+      const newBookPos = (targetShelf ? targetShelf.books.length : 0);
+
+      // get the right book data
+      bookData.order = newBookPos;
+      bookData.facing = "front";
+
+      console.log(bookData);
 
       // send to back end
-
-      // see if I need another param to get the right shelf
+      addBookToShelf(shelfId, bookData);
 
 
     } else {
