@@ -429,8 +429,8 @@ client.connect()
     app.post('/addBookToShelf', isAuthenticated, (req, res) => {
       const userName = req.session.username
       const { shelfId, bookData } = req.body;
-      console.log(`shelf _id:${shelfId}`);
-      // console.log(bookData);
+      // console.log(`shelf _id:${shelfId}`);
+      const shelfObjectId = new ObjectId(shelfId);
 
       let newBook = bookData;
       let newID = { "_id": ObjectId() };
@@ -441,7 +441,8 @@ client.connect()
       // send to database
       //find the right user, find the right shelf from _id, push the new book
       db.collection('users').updateOne(
-        { username: userName, 'shelves._id': shelfId },
+        { username: userName, 'shelves._id': shelfObjectId },
+        // { username: userName, 'shelves.name': "Reading" }, // works but don't want to use name
         { $push: { 'shelves.$.books': newBook } },
         (err, user) => {
           if (err) {
