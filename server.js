@@ -425,6 +425,13 @@ client.connect()
       );
     });
 
+    // Think about this more
+    // Should it be add/remove individual books 
+    // Or update shelves based on all changes front end - less server calls
+    // add book to shelf
+    // remove book from shelf
+
+
     // add book to shelf
     app.post('/addBookToShelf', isAuthenticated, (req, res) => {
       const userName = req.session.username
@@ -467,16 +474,54 @@ client.connect()
 
 
     // save book positions of shelf
+    app.post('/saveShelfBooksOrder', isAuthenticated, (req, res) => {
+      const userName = req.session.username
+      const { shelfId, booksData } = req.body;
+
+      const shelfObjectId = new ObjectId(shelfId);
+      console.log(`shelf _id:${shelfObjectId}`);
+
+      // let newBook = bookData;
+      // let newID = { "_id": ObjectId() };
+      // newBook._id = newID._id;
+
+      // console.log(newBook);
+
+      booksData.forEach((updatedBook) => {
+        // update the books within here -> update the db however many times necesarry with updateOne
+
+        updatedBook._id = new ObjectId(book.id)
+
+        // send to database
+        // db.collection('users').updateOne(
+        //   { username: userName, 'shelves._id': shelfObjectId, 'shelves.books._id': _id },
+        //   { $set: { 'shelves.$.books.$.order': order } },
+        //   (err, result) => {
+        //     if (err) {
+        //       console.error('Error updating book order:', err);
+        //       res.sendStatus(500);
+        //     } else if (result.modifiedCount === 0) {
+        //       console.log('Book not found in the shelf');
+        //       res.status(404).json({ message: 'Book not found in the shelf' });
+        //     } else {
+        //       // Book order updated successfully
+        //       console.log('Book order updated:', _id);
+        //     }
+        //   }
+        // );
+
+      });
+
+      console.log(booksData);
 
 
-    // Think about this more
-    // Should it be add/remove individual books 
-    // Or update shelves based on all changes front end - less server calls
+    });
 
-    // add book to shelf
-    // remove book from shelf
+
 
     // update shelf
+
+
 
     app.get('/searchBooks/:search', isAuthenticated, async (req, res) => {
 

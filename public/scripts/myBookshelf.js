@@ -432,33 +432,29 @@ const createShelfButtons = (shelfData, index) => {
     console.log(`save book order, shelf index ${index}`);
     // send to backend
 
-    // let sendData = {
-    //   "_id": shelfData._id, // Assuming _id is already available in your 'data' object
-    //   "shelfPosition": data.shelfPosition, // Assuming shelfPosition is available
-    //   "books": [
+    const shelfId = shelfData._id
 
-    //   ]
-    // };
+    let booksData = shelfData.books._id;
 
-    // try {
-    //   const response = await fetch('/saveShelfOrder', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({ sendData }),
-    //   });
-    //   if (response.ok) {
-    //     alert("Book added to your collection. Reload page to view this change.");
-    //     // location.reload();
-    //   } else {
-    //     alert("Error: response?");
-    //     console.error('Failed: ', response.statusText);
-    //   }
-    // } catch (error) {
-    //   alert("Error: cannot post?");
-    //   console.error('Error: ', error);
-    // }
+    try {
+      const response = await fetch('/saveShelfBooksOrder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ shelfId, booksData }),
+      });
+      if (response.ok) {
+        alert("Book added to your collection. Reload page to view this change.");
+        // location.reload();
+      } else {
+        alert("Error: response?");
+        console.error('Failed: ', response.statusText);
+      }
+    } catch (error) {
+      alert("Error: cannot post?");
+      console.error('Error: ', error);
+    }
 
   });
   newShelfButtons.appendChild(shelfSaveOrderBtn);
