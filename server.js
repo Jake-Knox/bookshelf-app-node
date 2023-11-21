@@ -479,42 +479,38 @@ client.connect()
       const { shelfId, booksData } = req.body;
 
       const shelfObjectId = new ObjectId(shelfId);
-      console.log(`shelf _id:${shelfObjectId}`);
-
-      // let newBook = bookData;
-      // let newID = { "_id": ObjectId() };
-      // newBook._id = newID._id;
-
-      // console.log(newBook);
+      console.log(`Save book order on shelf _id:${shelfObjectId}`);
+      // console.log(booksData);
 
       booksData.forEach((updatedBook) => {
-        // update the books within here -> update the db however many times necesarry with updateOne
+        // update the db however many times necesarry with updateOne
+        updatedBook._id = new ObjectId(updatedBook._id); // because the _id is weird
 
-        updatedBook._id = new ObjectId(book.id)
+        // console.log(updatedBook._id);
+        // console.log(updatedBook.newOrder);
 
         // send to database
-        // db.collection('users').updateOne(
-        //   { username: userName, 'shelves._id': shelfObjectId, 'shelves.books._id': _id },
-        //   { $set: { 'shelves.$.books.$.order': order } },
-        //   (err, result) => {
-        //     if (err) {
-        //       console.error('Error updating book order:', err);
-        //       res.sendStatus(500);
-        //     } else if (result.modifiedCount === 0) {
-        //       console.log('Book not found in the shelf');
-        //       res.status(404).json({ message: 'Book not found in the shelf' });
-        //     } else {
-        //       // Book order updated successfully
-        //       console.log('Book order updated:', _id);
-        //     }
-        //   }
-        // );
-
+        db.collection('users').updateOne(
+          { username: userName, 'shelves._id': shelfObjectId, 'shelves.books._id': updatedBook._id },
+          { $set: { 'shelves.$.books.$[book].order': updatedBook.newOrder } },
+          { arrayFilters: [{ 'book._id': updatedBook._id },], },
+          (err, result) => {
+            if (err) {
+              console.error('Error updating book order:', err);
+              res.sendStatus(500);
+            } else if (result.modifiedCount === 0) {
+              console.log('Book not found in the shelf');
+              res.status(404).json({ message: 'Book not found in the shelf' });
+            } else {
+              // Book order updated successfully
+              // console.log('Book order updated:', updatedBook._id);
+            }
+          }
+        );
       });
-
-      console.log(booksData);
-
-
+      // success?
+      res.status(200).json({ message: 'Books order saved' });
+      // console.log(booksData); // testing to show updated objID
     });
 
 

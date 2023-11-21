@@ -28,9 +28,9 @@ const checkSession = async () => {
     });
     return true;
   }
-  else{
-      console.log(response);
-      return false;
+  else {
+    console.log(response);
+    return false;
   }
 }
 
@@ -39,26 +39,27 @@ const checkSession = async () => {
 
 // generating this is common to both types of view
 
-const createShelf = (shelfData) =>{
+const createShelf = (shelfData) => {
   // used to easily create many SHELVES during page load
 
-    // div for the shelf
-    const newShelfDiv = document.createElement("div");
-    newShelfDiv.classList.add("shelf");
+  // div for the shelf
+  const newShelfDiv = document.createElement("div");
+  newShelfDiv.classList.add("shelf");
 
-    const newShelfName = document.createElement("h2");
-    newShelfName.textContent = (`${shelfData.name}`);
-    newShelfDiv.appendChild(newShelfName);
-   
-    return newShelfDiv;
+  const newShelfName = document.createElement("h2");
+  newShelfName.textContent = (`${shelfData.name}`);
+  newShelfDiv.appendChild(newShelfName);
+
+  return newShelfDiv;
 }
 
-const createShelfBook = (bookData) =>{
+const createShelfBook = (bookData) => {
   // used to easily create many BOOKS during page load
 
   // div for the book
   const newBookDiv = document.createElement("div");
   newBookDiv.classList.add("book-div");
+  newBookDiv.setAttribute('book-id', bookData._id);
 
   const newBookCoverImg = document.createElement("img");
   newBookCoverImg.classList.add("cover-img");

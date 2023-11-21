@@ -150,7 +150,7 @@ const setupShelves = (shelvesData) => {
     newShelfBooks.classList.add("shelf-books");
     newShelfBooks.id = (`shelfBooks${i}`);
     newShelfBooks.setAttribute('data-shelf-id', shelvesData[i]._id);
-
+    // 
 
     for (let j = 0; j < shelvesData[i].books.length; j++) {
       // for every book on shelf i 
@@ -277,7 +277,7 @@ const createSearchResult = (data, index) => {
         body: JSON.stringify({ sendData }),
       });
       if (response.ok) {
-        alert("Book added to your collection. Reload page to view this change.");
+        alert(response.message);
         // location.reload();
       } else {
         alert("Error: response?");
@@ -434,7 +434,22 @@ const createShelfButtons = (shelfData, index) => {
 
     const shelfId = shelfData._id
 
-    let booksData = shelfData.books._id;
+    // Get the container element by its ID
+    const thisShelfDiv = document.getElementById(`shelfBooks${index}`);
+    const booksOnShelf = thisShelfDiv.getElementsByClassName('book-div');
+    // Convert HTMLCollection to an array
+    const booksArray = Array.from(booksOnShelf);
+
+    booksData = []
+    booksArray.forEach(book => {
+      const _id = book.getAttribute('book-id');
+
+      booksData.push({
+        "_id": _id,
+        "newOrder": booksArray.indexOf(book),
+      });
+    });
+    console.log(booksData);
 
     try {
       const response = await fetch('/saveShelfBooksOrder', {
@@ -445,7 +460,7 @@ const createShelfButtons = (shelfData, index) => {
         body: JSON.stringify({ shelfId, booksData }),
       });
       if (response.ok) {
-        alert("Book added to your collection. Reload page to view this change.");
+        alert(response.status);
         // location.reload();
       } else {
         alert("Error: response?");
