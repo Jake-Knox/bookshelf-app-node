@@ -313,7 +313,7 @@
 /* 
 for edit shelves section etc 
 */
-.row {
+.edit-shelf-row {
     display: flex;
     align-items: center;
     justify-content: space-between;

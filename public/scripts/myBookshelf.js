@@ -13,6 +13,8 @@ const ResultsBtns = document.getElementById("results-btns");
 const backBtn = document.getElementById("back-btn");
 const addBtn = document.getElementById("add-btn");
 
+const editShelvesContent = document.getElementById("editShelvesContent");
+
 let bookshelfData = [];
 
 // Regex
@@ -165,8 +167,13 @@ const setupShelves = (shelvesData) => {
     const newShelfButtons = createShelfButtons(shelvesData[i], i);
     newShelf.appendChild(newShelfButtons);
 
-
+    // add shelf to page
     shelves.appendChild(newShelf);
+
+    // add row to edit shelves section at bottom
+    const newEditShelfRow = createEditShelfRow(shelvesData[i].name, i);
+    editShelvesContent.appendChild(newEditShelfRow);
+
   }
 
   for (let i = 0; i < shelvesData.length; i++) {
@@ -174,10 +181,13 @@ const setupShelves = (shelvesData) => {
     $(`#shelfBooks${i}`).sortable({
       cursor: "move", // Set cursor to indicate draggable
     });
-
     initAutocomplete(`search${i}`, `add${i}`);
 
+    initRenameShelf(`editShelfName${i}`, `editShelfRename${i}`);
   }
+
+  initReorderShelves();
+
 }
 
 
@@ -496,6 +506,38 @@ const createShelfButtons = (shelfData, index) => {
 }
 
 
+const createEditShelfRow = (shelfName, index) => {
+
+  const newEditShelfRow = document.createElement("div");
+  newEditShelfRow.id = (`editShelf${index}`);
+  newEditShelfRow.classList.add("edit-shelf-row");
+
+  const rowSpan = document.createElement("span");
+  rowSpan.id = (`editShelfName${index}`);
+  rowSpan.classList.add("name");
+  rowSpan.innerText = shelfName;
+  newEditShelfRow.appendChild(rowSpan);
+
+  const rowEditName = document.createElement("button");
+  rowEditName.id = (`editShelfRename${index}`);
+  rowEditName.classList.add("edit-button");
+  newEditShelfRow.appendChild(rowEditName);
+
+  const rowVisibility = document.createElement("button");
+  rowVisibility.id = (`editShelfVis${index}`);
+  rowVisibility.classList.add("visibility-button");
+  newEditShelfRow.appendChild(rowVisibility);
+
+  const rowDelete = document.createElement("button");
+  rowDelete.id = (`editShelfDel${index}`);
+  rowDelete.classList.add("delete-button");
+  newEditShelfRow.appendChild(rowDelete);
+
+
+  return newEditShelfRow;
+}
+
+
 
 $(document).ready(function () {
   // jQuery stuff
@@ -577,14 +619,42 @@ function initAutocomplete(inputId, buttonId) {
 }
 
 // basic jQuery for rename shelf
-function initRenameShelf(inputId, buttonId) {
+function initRenameShelf(nameId, renameBtnId) {
+
   // Example of handling the "Edit Name" button click
-  $('.edit-button').click(function () {
-    var $nameElement = $(this).siblings('.name');
-    var currentName = $nameElement.text();
-    $nameElement.html('<input type="text" class="name-input" value="' + currentName + '">');
+  $("#" + renameBtnId).on("click", function () {
+
+    console.log("rename click");
+
+    var $nameElement = $("#" + nameId);
+    console.log($nameElement);
+    console.log('Number of elements found:', $nameElement.length);
+
+    // Check if the name element is currently an input
+    if ($nameElement.children().is('input')) {
+      console.log("is input");
+
+      // If it's an input, switch to span
+      var newName = $nameElement.children('.name-input').val();
+      $nameElement.html('<span class="name">' + newName + '</span>');
+    } else {
+      console.log("is not input");
+
+      // If it's a span, switch to input
+      var currentName = $nameElement.text();
+      console.log(currentName);
+
+      $nameElement.html('<input type="text" class="name-input" maxlength="50" value="' + currentName + '">');
+    }
   });
 
   // Add more event handlers for other buttons as needed
+
+}
+
+function initReorderShelves() {
+  // similar to the book one
+  console.log("re order shleves not implemented yet");
+
 
 }
