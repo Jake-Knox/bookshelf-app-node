@@ -575,3 +575,16 @@ function initAutocomplete(inputId, buttonId) {
     }
   });
 }
+
+// basic jQuery for rename shelf
+function initRenameShelf(inputId, buttonId) {
+  // Example of handling the "Edit Name" button click
+  $('.edit-button').click(function () {
+    var $nameElement = $(this).siblings('.name');
+    var currentName = $nameElement.text();
+    $nameElement.html('<input type="text" class="name-input" value="' + currentName + '">');
+  });
+
+  // Add more event handlers for other buttons as needed
+
+}
