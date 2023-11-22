@@ -510,6 +510,9 @@ $(document).ready(function () {
     $("#booksDisplay").slideToggle("slow");
   });
 
+  $("#shelvesCount").click(function () {
+    $("#shelvesDisplay").slideToggle("slow");
+  });
 
 });
 

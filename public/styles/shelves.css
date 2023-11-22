@@ -101,7 +101,8 @@
 }
 
 #searchSlideToggle,
-#booksCount {
+#booksCount,
+#shelvesCount {
     cursor: pointer;
 }
 

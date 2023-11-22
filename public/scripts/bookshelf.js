@@ -9,7 +9,7 @@ const followersCount = document.getElementById("followersCount");
 
 const shelvesCount = document.getElementById("shelvesCount");
 
-const shelves = document.getElementById("shelves");
+const shelves = document.getElementById("shelvesDisplay");
 
 
 

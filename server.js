@@ -489,6 +489,10 @@ client.connect()
         // console.log(updatedBook._id);
         // console.log(updatedBook.newOrder);
 
+
+        // https://www.mongodb.com/community/forums/t/updating-nested-array-of-objects/173893
+        // post about using $[x] and array filters
+
         // send to database
         db.collection('users').updateOne(
           { username: userName, 'shelves._id': shelfObjectId, 'shelves.books._id': updatedBook._id },
@@ -515,8 +519,43 @@ client.connect()
 
 
 
-    // update shelf
+    // save shelf orders
+    app.post('/saveShelvesOrder', isAuthenticated, (req, res) => {
+      const userName = req.session.username
+      const { shelvesData } = req.body;
 
+      shelvesData.forEach((updatedShelf) => {
+        // update the db however many times necesarry with updateOne
+        updatedShelf._id = new ObjectId(updatedShelf._id); // because the _id is weird
+
+        // console.log(updatedBook._id);
+        // console.log(updatedBook.newOrder);
+
+        // https://www.mongodb.com/community/forums/t/updating-nested-array-of-objects/173893
+        // post about using $[x] and array filters
+
+        // send to database
+        db.collection('users').updateOne(
+          { username: userName, 'shelves._id': updatedShelf._id },
+          { $set: { 'shelves.$.order': updatedShelf.newOrder } },
+          (err, result) => {
+            if (err) {
+              console.error('Error updating shelf order:', err);
+              res.sendStatus(500);
+            } else if (result.modifiedCount === 0) {
+              console.log('Shelf not found');
+              res.status(404).json({ message: 'Shelf not found' });
+            } else {
+              // Book order updated successfully
+              // console.log('Book order updated:', updatedShelf._id);
+            }
+          }
+        );
+      });
+      // success?
+      res.status(200).json({ message: 'Shelves order saved' });
+      // console.log(booksData); // testing to show updated objID
+    });
 
 
     app.get('/searchBooks/:search', isAuthenticated, async (req, res) => {
