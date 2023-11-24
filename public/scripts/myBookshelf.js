@@ -186,6 +186,7 @@ const setupShelves = (shelvesData) => {
     initRenameShelf(`editShelfName${i}`, `editShelfRename${i}`);
   }
 
+  //
   initReorderShelves();
 
 }
@@ -507,6 +508,7 @@ const createShelfButtons = (shelfData, index) => {
 
 
 const createEditShelfRow = (shelfName, index) => {
+  //
 
   const newEditShelfRow = document.createElement("div");
   newEditShelfRow.id = (`editShelf${index}`);
@@ -620,7 +622,7 @@ function initAutocomplete(inputId, buttonId) {
 
 // basic jQuery for rename shelf
 function initRenameShelf(nameId, renameBtnId) {
-
+  //
   // Example of handling the "Edit Name" button click
   $("#" + renameBtnId).on("click", function () {
 
@@ -649,6 +651,7 @@ function initRenameShelf(nameId, renameBtnId) {
   });
 
   // Add more event handlers for other buttons as needed
+
 
 }
 
