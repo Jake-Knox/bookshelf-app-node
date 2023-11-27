@@ -14,6 +14,8 @@ const backBtn = document.getElementById("back-btn");
 const addBtn = document.getElementById("add-btn");
 
 const editShelvesContent = document.getElementById("editShelvesContent");
+const saveShelvesOrderBtn = document.getElementById("saveShelvesOrderBtn");
+
 
 let bookshelfData = [];
 
@@ -46,6 +48,51 @@ searchBtn.addEventListener("click", () => {
 
 });
 
+saveShelvesOrderBtn.addEventListener("click", async () => {
+
+  console.log("save shlves order");
+
+  // Get the container element by its ID
+  const editShelvesContent = document.getElementById("editShelvesContent");
+  const editShelves = editShelvesContent.getElementsByClassName('edit-shelf-row');
+  // Convert HTMLCollection to an array
+  const shelvesArray = Array.from(editShelves);
+
+  shelvesData = []
+  shelvesArray.forEach(shelf => {
+    const _id = shelf.getAttribute('shelf-id');
+    shelvesData.push({
+      "_id": _id,
+      "newOrder": shelvesArray.indexOf(shelf),
+    });
+  });
+  console.log(shelvesData);
+
+  // try {
+  //   const response = await fetch('/testtesttest', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ shelvesData }),
+  //   });
+  //   if (response.ok) {
+  //     // alert(response.status);
+  //     // location.reload();
+  //     alertReload();
+
+  //   } else {
+  //     alert("Error: response?");
+  //     console.error('Failed: ', response.statusText);
+  //   }
+  // } catch (error) {
+  //   alert("Error: cannot post?");
+  //   console.error('Error: ', error);
+  // }
+
+});
+
+
 const searchAPI = async (searchTerm) => {
   try {
     const response = await fetch(`/searchBooks/${searchTerm}`, {
@@ -56,11 +103,11 @@ const searchAPI = async (searchTerm) => {
     if (response.ok) {
       const searchData = await response.json();
 
-      console.log("await response is 'ok'");
+      // console.log("await response is 'ok'");
 
       // SWAP THIS OUT WITH DISPLAY DATA
       console.log(`Search length: ${searchData.data.length}`)
-      console.log(searchData.data);
+      // console.log(searchData.data);
 
       showSearchResults(searchData.data);
     }
@@ -171,7 +218,7 @@ const setupShelves = (shelvesData) => {
     shelves.appendChild(newShelf);
 
     // add row to edit shelves section at bottom
-    const newEditShelfRow = createEditShelfRow(shelvesData[i].name, i);
+    const newEditShelfRow = createEditShelfRow(shelvesData[i], i);
     editShelvesContent.appendChild(newEditShelfRow);
 
   }
@@ -183,7 +230,7 @@ const setupShelves = (shelvesData) => {
     });
     initAutocomplete(`search${i}`, `add${i}`);
 
-    initRenameShelf(`editShelfName${i}`, `editShelfRename${i}`);
+    initRenameShelf(`editShelfName${i}`, `editShelfRename${i}`, shelvesData[i]._id);
   }
 
   //
@@ -327,6 +374,7 @@ const addShelf = async (shelfName) => {
     });
     if (response.ok) {
       console.log(response);
+      alertReload();
     } else {
       console.error('Failed: ', response.statusText);
     }
@@ -350,6 +398,8 @@ const removeShelf = async (shelfName) => {
     });
     if (response.ok) {
       console.log(response);
+      alertReload();
+
     } else {
       console.error('Failed: ', response.statusText);
     }
@@ -371,6 +421,8 @@ const addBookToShelf = async (shelfId, bookData) => {
     });
     if (response.ok) {
       console.log(response);
+      alertReload();
+
     } else {
       console.error('Failed: ', response.statusText);
     }
@@ -396,6 +448,8 @@ const removeBookFromShelf = async (bookName, shelfName) => {
     });
     if (response.ok) {
       console.log(response);
+      alertReload();
+
     } else {
       console.error('Failed: ', response.statusText);
     }
@@ -471,8 +525,10 @@ const createShelfButtons = (shelfData, index) => {
         body: JSON.stringify({ shelfId, booksData }),
       });
       if (response.ok) {
-        alert(response.status);
+        // alert(response.status);
         // location.reload();
+        alertReload();
+
       } else {
         alert("Error: response?");
         console.error('Failed: ', response.statusText);
@@ -507,11 +563,13 @@ const createShelfButtons = (shelfData, index) => {
 }
 
 
-const createEditShelfRow = (shelfName, index) => {
+const createEditShelfRow = (shelfData, index) => {
   //
+  const shelfName = shelfData.name;
 
   const newEditShelfRow = document.createElement("div");
   newEditShelfRow.id = (`editShelf${index}`);
+  newEditShelfRow.setAttribute('shelf-id', shelfData._id);
   newEditShelfRow.classList.add("edit-shelf-row");
 
   const rowSpan = document.createElement("span");
@@ -528,11 +586,23 @@ const createEditShelfRow = (shelfName, index) => {
   const rowVisibility = document.createElement("button");
   rowVisibility.id = (`editShelfVis${index}`);
   rowVisibility.classList.add("visibility-button");
+  // on click
+  rowVisibility.addEventListener("click", () => {
+    console.log(`visibility click ${shelfData._id}`);
+
+
+  })
   newEditShelfRow.appendChild(rowVisibility);
 
   const rowDelete = document.createElement("button");
   rowDelete.id = (`editShelfDel${index}`);
   rowDelete.classList.add("delete-button");
+  // on click
+  rowDelete.addEventListener("click", () => {
+    console.log(`delete click ${shelfData._id}`);
+
+
+  })
   newEditShelfRow.appendChild(rowDelete);
 
 
@@ -540,10 +610,28 @@ const createEditShelfRow = (shelfName, index) => {
 }
 
 
+const alertReload = () => {
+
+  // alert user - reload to see changes
+  alert("Your change has been saved.\nReload this page to view changes.");
+
+  // send message
+  // alert(`${message}`);
+
+  // reload page?
+  // location.reload();
+}
+
+
+
+
+//
+// jQuery section
+//
 
 $(document).ready(function () {
   // jQuery stuff
-  console.log("jquery load");
+  // console.log("jquery load");
 
   $("#searchSlideToggle").click(function () {
     $("#book-search").slideToggle("slow");
@@ -558,9 +646,13 @@ $(document).ready(function () {
     $("#shelvesDisplay").slideToggle("slow");
   });
 
+  $("#shelvesEdit").click(function () {
+    $("#editShelvesContent").slideToggle("slow");
+    $("#editShelvesButtons").slideToggle("slow");
+  });
+
 });
 
-// jQuery functions for searching
 // Function to initialize autocomplete
 function initAutocomplete(inputId, buttonId) {
   $("#" + inputId).autocomplete({
@@ -620,44 +712,41 @@ function initAutocomplete(inputId, buttonId) {
   });
 }
 
-// basic jQuery for rename shelf
-function initRenameShelf(nameId, renameBtnId) {
+// jQuery for rename shelf
+function initRenameShelf(nameId, renameBtnId, shelfObjId) {
   //
   // Example of handling the "Edit Name" button click
   $("#" + renameBtnId).on("click", function () {
-
-    console.log("rename click");
-
+    console.log(`rename click ${shelfObjId}`);
     var $nameElement = $("#" + nameId);
-    console.log($nameElement);
-    console.log('Number of elements found:', $nameElement.length);
+    // console.log($nameElement);
+    // console.log('Number of elements found:', $nameElement.length);
 
     // Check if the name element is currently an input
     if ($nameElement.children().is('input')) {
-      console.log("is input");
-
+      // console.log("is input");
       // If it's an input, switch to span
       var newName = $nameElement.children('.name-input').val();
       $nameElement.html('<span class="name">' + newName + '</span>');
-    } else {
-      console.log("is not input");
 
+      // send to backend
+
+
+
+    } else {
+      // console.log("is not input");
       // If it's a span, switch to input
       var currentName = $nameElement.text();
-      console.log(currentName);
-
+      // console.log(currentName);
       $nameElement.html('<input type="text" class="name-input" maxlength="50" value="' + currentName + '">');
     }
   });
-
-  // Add more event handlers for other buttons as needed
-
-
 }
 
 function initReorderShelves() {
   // similar to the book one
-  console.log("re order shleves not implemented yet");
-
-
+  $("#editShelvesContent").sortable({
+    cursor: "move", // Set cursor to indicate draggable
+  });
 }
+
