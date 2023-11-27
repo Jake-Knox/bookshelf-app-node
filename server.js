@@ -524,12 +524,14 @@ client.connect()
       const userName = req.session.username
       const { shelvesData } = req.body;
 
+      // console.log(shelvesData);
+
       shelvesData.forEach((updatedShelf) => {
         // update the db however many times necesarry with updateOne
         updatedShelf._id = new ObjectId(updatedShelf._id); // because the _id is weird
 
-        // console.log(updatedBook._id);
-        // console.log(updatedBook.newOrder);
+        // console.log(updatedShelf._id);
+        // console.log(updatedShelf.newOrder);
 
         // https://www.mongodb.com/community/forums/t/updating-nested-array-of-objects/173893
         // post about using $[x] and array filters
@@ -537,7 +539,9 @@ client.connect()
         // send to database
         db.collection('users').updateOne(
           { username: userName, 'shelves._id': updatedShelf._id },
-          { $set: { 'shelves.$.order': updatedShelf.newOrder } },
+          { $set: { 'shelves.$[shelf].order': updatedShelf.newOrder } },
+          { arrayFilters: [{ 'shelf._id': updatedShelf._id },], },
+
           (err, result) => {
             if (err) {
               console.error('Error updating shelf order:', err);

@@ -68,28 +68,27 @@ saveShelvesOrderBtn.addEventListener("click", async () => {
   });
   console.log(shelvesData);
 
-  // try {
-  //   const response = await fetch('/testtesttest', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ shelvesData }),
-  //   });
-  //   if (response.ok) {
-  //     // alert(response.status);
-  //     // location.reload();
-  //     alertReload();
+  try {
+    const response = await fetch('/saveShelvesOrder', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ shelvesData }),
+    });
+    if (response.ok) {
+      // alert(response.status);
+      // location.reload();
+      alertReload();
 
-  //   } else {
-  //     alert("Error: response?");
-  //     console.error('Failed: ', response.statusText);
-  //   }
-  // } catch (error) {
-  //   alert("Error: cannot post?");
-  //   console.error('Error: ', error);
-  // }
-
+    } else {
+      alert("Error: response?");
+      console.error('Failed: ', response.statusText);
+    }
+  } catch (error) {
+    alert("Error: cannot post?");
+    console.error('Error: ', error);
+  }
 });
 
 
