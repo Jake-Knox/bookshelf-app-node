@@ -277,6 +277,23 @@
     background-color: gray;
 }
 
+.contextMenu {
+    position: absolute;
+    background-color: #fff;
+    /* Add a background color for visibility */
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+
+    height: 50px;
+    width: 50px;
+
+    z-index: 1000;
+    /* Adjust the z-index as needed */
+
+}
+
+
 /* Style for Autocomplete suggestions container */
 .ui-autocomplete {
     max-height: 200px;

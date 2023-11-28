@@ -803,3 +803,50 @@ function initReorderShelves() {
   });
 }
 
+// jQuery Context menu
+document.addEventListener('DOMContentLoaded', function () {
+
+  let contextMenu; // Declare contextMenu in the outer scope
+
+  document.body.addEventListener('dblclick', function (event) {
+    const target = event.target;
+    const imageContainer = target.closest('.book-div');
+
+    // Check if the right-click occurred on an image within an image container
+    if (target.classList.contains('cover-img')) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      console.log("Load context menu");
+
+      // Create a context menu div
+      contextMenu = document.createElement('div');
+      contextMenu.className += 'contextMenu';
+      contextMenu.innerText = 'Context Menu Content'; // Customize the content
+
+      // Position the context menu next to the clicked image
+      const mouseX = event.clientX;
+      const mouseY = event.clientY;
+
+      const scrollX = window.scrollX || document.documentElement.scrollLeft;
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+
+      contextMenu.style.position = 'absolute';
+      contextMenu.style.top = mouseY + scrollY + 'px';
+      contextMenu.style.left = mouseX + scrollX + 'px';
+
+      // document.body.appendChild(contextMenu);
+      imageContainer.appendChild(contextMenu);
+      // Remove the context menu when clicked outside
+      document.addEventListener("click", clickHandler);
+    }
+  });
+
+  function clickHandler(event) {
+    if (!contextMenu.contains(event.target)) {
+      contextMenu.remove();
+      console.log("Remove context menu");
+      document.removeEventListener('click', clickHandler);
+    }
+  }
+});
