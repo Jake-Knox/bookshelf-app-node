@@ -93,8 +93,6 @@ client.connect()
       });
     });
 
-
-
     // login using username and password eg. admin/password123
     app.post('/login', (req, res) => {
       const { username, password } = req.body;
@@ -275,7 +273,6 @@ client.connect()
       });
     });
 
-
     // add a book to user collecion
     app.post('/addBookToUserBooks', isAuthenticated, (req, res) => {
       // used to edit db of whoeever is logged in
@@ -318,50 +315,36 @@ client.connect()
       );
     });
 
-
-    // remove a book from user collection
-
-
-    // add a user shelf
-
-
     // remove a user's shelf
-    app.post('/removeShelf', isAuthenticated, async (req, res) => {
-      const userName = req.session.username
-      const { removeShelfName } = req.body;
-      console.log(`un:${userName}`);
-      console.log(`remove shelf: ${removeShelfName}`);
+    // app.post('/removeShelf', isAuthenticated, async (req, res) => {
+    //   const userName = req.session.username
+    //   const { removeShelfName } = req.body;
+    //   console.log(`un:${userName}`);
+    //   console.log(`remove shelf: ${removeShelfName}`);
 
-      // const shelfName = "Test shelf name";
+    //   // const shelfName = "Test shelf name";
 
-      //https://www.mongodb.com/docs/manual/reference/operator/update/unset/#mongodb-update-up.-unset
-      db.collection('users').updateOne(
-        { username: userName },
-        { $pull: { shelves: { name: removeShelfName } } }, //remove bookshelf by name
-        (err, user) => {
-          if (err) {
-            console.error('Error deleting shelf:', err);
-            res.sendStatus(500);
-          } else if (!user) {
-            console.log("user not found");
-            res.status(401).json({ message: 'User not found' });
-          } else {
-            // success
+    //   //https://www.mongodb.com/docs/manual/reference/operator/update/unset/#mongodb-update-up.-unset
+    //   db.collection('users').updateOne(
+    //     { username: userName },
+    //     { $pull: { shelves: { name: removeShelfName } } }, //remove bookshelf by name
+    //     (err, user) => {
+    //       if (err) {
+    //         console.error('Error deleting shelf:', err);
+    //         res.sendStatus(500);
+    //       } else if (!user) {
+    //         console.log("user not found");
+    //         res.status(401).json({ message: 'User not found' });
+    //       } else {
+    //         // success
 
-            console.log("Shelf deleted")
+    //         console.log("Shelf deleted")
 
-            res.status(200).json({ message: 'remove successful' });
-          }
-        }
-      );
-    });
-
-    // Think about this more
-    // Should it be add/remove individual books 
-    // Or update shelves based on all changes front end - less server calls
-    // add book to shelf
-    // remove book from shelf
-
+    //         res.status(200).json({ message: 'remove successful' });
+    //       }
+    //     }
+    //   );
+    // });
 
     // add book to shelf
     app.post('/addBookToShelf', isAuthenticated, (req, res) => {
@@ -398,6 +381,12 @@ client.connect()
         }
       );
     });
+
+
+    // remove a book from user collection
+
+
+    // add a user shelf
 
 
     // remove book from shelf
@@ -508,11 +497,37 @@ client.connect()
             res.status(404).json({ message: 'Shelf not found' });
           } else {
             // Success
+            res.status(200).json({ message: 'Shelves order saved' });
           }
         }
       );
-      res.status(200).json({ message: 'Shelves order saved' });
     });
+
+    // save shelf orders
+    app.post('/shelfDelete', isAuthenticated, (req, res) => {
+      const userName = req.session.username
+      const { shelfObjId } = req.body;
+      const updatedId = new ObjectId(shelfObjId); // fix _id
+
+      // send to database
+      db.collection('users').updateOne(
+        { username: userName },
+        { $pull: { shelves: { _id: updatedId } } },
+        (err, result) => {
+          if (err) {
+            console.error('Error Deleting shelf:', err);
+            res.sendStatus(500);
+          } else if (result.modifiedCount === 0) {
+            console.log('Shelf not found');
+            res.status(404).json({ message: 'Shelf not found' });
+          } else {
+            // Success
+            res.status(200).json({ message: 'Shelves order saved' });
+          }
+        }
+      );
+    });
+
 
     // save shelf orders
     app.post('/shelfChangePrivacy', isAuthenticated, (req, res) => {

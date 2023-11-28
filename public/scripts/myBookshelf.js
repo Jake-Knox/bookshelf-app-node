@@ -598,8 +598,7 @@ const createEditShelfRow = (shelfData, index) => {
   // on click
   rowDelete.addEventListener("click", () => {
     console.log(`delete click ${shelfData._id}`);
-
-
+    deleteShelf(shelfData._id);
   })
   newEditShelfRow.appendChild(rowDelete);
 
@@ -651,6 +650,31 @@ const changeShelfVisibilty = async (shelfObjId, currentPrivacy) => {
     console.error('Error: ', error);
   }
 }
+
+// privacy change shelves
+const deleteShelf = async (shelfObjId,) => {
+  try {
+    const response = await fetch('/shelfDelete', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ shelfObjId }),
+    });
+    if (response.ok) {
+      alertReload();
+    } else {
+      alert("Error: response?");
+      console.error('Failed: ', response.statusText);
+    }
+  } catch (error) {
+    alert("Error: cannot post?");
+    console.error('Error: ', error);
+  }
+}
+
+
+
 const alertReload = () => {
 
   // alert user - reload to see changes
