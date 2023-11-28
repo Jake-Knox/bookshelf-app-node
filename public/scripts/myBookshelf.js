@@ -608,6 +608,28 @@ const createEditShelfRow = (shelfData, index) => {
   return newEditShelfRow;
 }
 
+// renaming shelves
+const renameShelf = async (shelfObjId, newName) => {
+  try {
+    const response = await fetch('/shelfRename', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ shelfObjId, newName }),
+    });
+    if (response.ok) {
+      alertReload();
+    } else {
+      alert("Error: response?");
+      console.error('Failed: ', response.statusText);
+    }
+  } catch (error) {
+    alert("Error: cannot post?");
+    console.error('Error: ', error);
+  }
+}
+
 
 const alertReload = () => {
 
@@ -729,8 +751,7 @@ function initRenameShelf(nameId, renameBtnId, shelfObjId) {
       $nameElement.html('<span class="name">' + newName + '</span>');
 
       // send to backend
-
-
+      renameShelf(shelfObjId, newName);
 
     } else {
       // console.log("is not input");

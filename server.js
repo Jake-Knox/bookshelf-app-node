@@ -276,75 +276,6 @@ client.connect()
     });
 
 
-
-
-    // Using during developement
-    // TO BE DELETED WHEN NOT NEEDED
-    app.post('/editDatabase123', isAuthenticated, (req, res) => {
-
-      // used to edit db of whoeever is logged in
-      const userName = req.session.username
-      const { test, test2 } = req.body;
-      console.log(`un:${userName}`);
-      console.log(`test: ${test}, ${test2}`);
-
-      // prep some book data
-      const newBook = {
-        isbn: "9780141439686",
-        title: "Persuasion",
-        author: "Jane Austen",
-        facing: "front",
-        publicationDate: "2003",
-        pageCount: "288",
-        thumbnail: "https://cdn.penguin.co.uk/dam-assets/books/9780141439686/9780141439686-jacket-large.jpg",
-      }
-
-      const newBook2 = {
-        isbn: "9780141182674",
-        title: "On the Road",
-        author: "Jack Kerouac",
-        facing: "front",
-        publicationDate: "2000",
-        pageCount: "320",
-        thumbnail: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1605112490i/2552.jpg",
-      }
-
-      const newShelf = {
-        position: "0",
-        visibilty: "visible",
-        name: "Reading",
-        books: [newBook, newBook2]
-      }
-
-      // currecly makes a shelf with two books - adds it to users db record
-
-      // https://www.w3schools.com/nodejs/nodejs_mongodb_update.asp
-      db.collection('users').updateOne(
-        { username: userName },
-        { $push: { shelves: newShelf } },
-        (err, user) => {
-          if (err) {
-            console.error('Error finding user:', err);
-            res.sendStatus(500);
-          } else if (!user) {
-            console.log("user not found");
-            res.status(401).json({ message: 'User not found' });
-          } else {
-            // success?
-
-            console.log("book added to user books array")
-
-            console.log(user);
-
-            res.status(200).json({ message: 'add successful' });
-          }
-        }
-      );
-
-    });
-
-
-
     // add a book to user collecion
     app.post('/addBookToUserBooks', isAuthenticated, (req, res) => {
       // used to edit db of whoeever is logged in
@@ -523,15 +454,11 @@ client.connect()
     app.post('/saveShelvesOrder', isAuthenticated, (req, res) => {
       const userName = req.session.username
       const { shelvesData } = req.body;
-
       // console.log(shelvesData);
 
       shelvesData.forEach((updatedShelf) => {
         // update the db however many times necesarry with updateOne
         updatedShelf._id = new ObjectId(updatedShelf._id); // because the _id is weird
-
-        // console.log(updatedShelf._id);
-        // console.log(updatedShelf.newOrder);
 
         // https://www.mongodb.com/community/forums/t/updating-nested-array-of-objects/173893
         // post about using $[x] and array filters
@@ -550,16 +477,43 @@ client.connect()
               console.log('Shelf not found');
               res.status(404).json({ message: 'Shelf not found' });
             } else {
-              // Book order updated successfully
+              // Success
               // console.log('Book order updated:', updatedShelf._id);
             }
           }
         );
       });
-      // success?
       res.status(200).json({ message: 'Shelves order saved' });
       // console.log(booksData); // testing to show updated objID
     });
+
+
+    // save shelf orders
+    app.post('/shelfRename', isAuthenticated, (req, res) => {
+      const userName = req.session.username
+      const { shelfObjId, newName } = req.body;
+
+      const updatedId = new ObjectId(shelfObjId); // fix _id
+      // send to database
+      db.collection('users').updateOne(
+        { username: userName, 'shelves._id': updatedId },
+        { $set: { 'shelves.$[shelf].name': newName } },
+        { arrayFilters: [{ 'shelf._id': updatedId },], },
+        (err, result) => {
+          if (err) {
+            console.error('Error updating shelf order:', err);
+            res.sendStatus(500);
+          } else if (result.modifiedCount === 0) {
+            console.log('Shelf not found');
+            res.status(404).json({ message: 'Shelf not found' });
+          } else {
+            // Success
+          }
+        }
+      );
+      res.status(200).json({ message: 'Shelves order saved' });
+    });
+
 
 
     app.get('/searchBooks/:search', isAuthenticated, async (req, res) => {
