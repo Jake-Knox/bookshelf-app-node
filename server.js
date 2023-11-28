@@ -514,6 +514,35 @@ client.connect()
       res.status(200).json({ message: 'Shelves order saved' });
     });
 
+    // save shelf orders
+    app.post('/shelfChangePrivacy', isAuthenticated, (req, res) => {
+      const userName = req.session.username
+      let { shelfObjId, newPrivacy } = req.body;
+      // privacy : "public" / "private"
+
+      const updatedId = new ObjectId(shelfObjId); // fix _id
+      newPrivacy = (newPrivacy == "public" || newPrivacy == "private") ? newPrivacy : "private"; // default to "private" here if front end sends something weird
+
+      // send to database
+      db.collection('users').updateOne(
+        { username: userName, 'shelves._id': updatedId },
+        { $set: { 'shelves.$[shelf].privacy': newPrivacy } },
+        { arrayFilters: [{ 'shelf._id': updatedId },], },
+        (err, result) => {
+          if (err) {
+            console.error('Error updating shelf order:', err);
+            res.sendStatus(500);
+          } else if (result.modifiedCount === 0) {
+            console.log('Shelf not found');
+            res.status(404).json({ message: 'Shelf not found' });
+          } else {
+            // Success
+          }
+        }
+      );
+      res.status(200).json({ message: 'Shelves order saved' });
+    });
+
 
 
     app.get('/searchBooks/:search', isAuthenticated, async (req, res) => {

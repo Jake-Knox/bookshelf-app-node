@@ -588,8 +588,7 @@ const createEditShelfRow = (shelfData, index) => {
   // on click
   rowVisibility.addEventListener("click", () => {
     console.log(`visibility click ${shelfData._id}`);
-
-
+    changeShelfVisibilty(shelfData._id, shelfData.privacy);
   })
   newEditShelfRow.appendChild(rowVisibility);
 
@@ -630,7 +629,28 @@ const renameShelf = async (shelfObjId, newName) => {
   }
 }
 
-
+// privacy change shelves
+const changeShelfVisibilty = async (shelfObjId, currentPrivacy) => {
+  const newPrivacy = (currentPrivacy == "public") ? "private" : "public";
+  try {
+    const response = await fetch('/shelfChangePrivacy', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ shelfObjId, newPrivacy }),
+    });
+    if (response.ok) {
+      alertReload();
+    } else {
+      alert("Error: response?");
+      console.error('Failed: ', response.statusText);
+    }
+  } catch (error) {
+    alert("Error: cannot post?");
+    console.error('Error: ', error);
+  }
+}
 const alertReload = () => {
 
   // alert user - reload to see changes
