@@ -273,6 +273,10 @@
     /* Change cursor on hover */
 }
 
+.btn-private {
+    background-color: gray;
+}
+
 /* Style for Autocomplete suggestions container */
 .ui-autocomplete {
     max-height: 200px;

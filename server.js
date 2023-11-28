@@ -315,37 +315,6 @@ client.connect()
       );
     });
 
-    // remove a user's shelf
-    // app.post('/removeShelf', isAuthenticated, async (req, res) => {
-    //   const userName = req.session.username
-    //   const { removeShelfName } = req.body;
-    //   console.log(`un:${userName}`);
-    //   console.log(`remove shelf: ${removeShelfName}`);
-
-    //   // const shelfName = "Test shelf name";
-
-    //   //https://www.mongodb.com/docs/manual/reference/operator/update/unset/#mongodb-update-up.-unset
-    //   db.collection('users').updateOne(
-    //     { username: userName },
-    //     { $pull: { shelves: { name: removeShelfName } } }, //remove bookshelf by name
-    //     (err, user) => {
-    //       if (err) {
-    //         console.error('Error deleting shelf:', err);
-    //         res.sendStatus(500);
-    //       } else if (!user) {
-    //         console.log("user not found");
-    //         res.status(401).json({ message: 'User not found' });
-    //       } else {
-    //         // success
-
-    //         console.log("Shelf deleted")
-
-    //         res.status(200).json({ message: 'remove successful' });
-    //       }
-    //     }
-    //   );
-    // });
-
     // add book to shelf
     app.post('/addBookToShelf', isAuthenticated, (req, res) => {
       const userName = req.session.username
@@ -383,13 +352,22 @@ client.connect()
     });
 
 
+
+
     // remove a book from user collection
 
 
-    // add a user shelf
+
+
+
+
+
 
 
     // remove book from shelf
+
+
+
 
 
 
@@ -557,6 +535,60 @@ client.connect()
       );
       res.status(200).json({ message: 'Shelves order saved' });
     });
+
+    app.post('/addShelf', isAuthenticated, async (req, res) => {
+      const userName = req.session.username
+      let { shelfName, privacy } = req.body;
+
+      // get the right order num
+      let order = await findAvailableShelfPos(userName); // needs to change
+
+      // setup
+      const newShelf = {
+        "_id": ObjectId(),
+        "order": order,
+        "name": shelfName,
+        "privacy": privacy,
+        "books": [],
+      }
+      // console.log(newShelf);
+
+      // send to database
+      db.collection('users').updateOne(
+        { username: userName },
+        { $push: { shelves: newShelf } },
+        (err, user) => {
+          if (err) {
+            console.error('Error finding user:', err);
+            res.sendStatus(500);
+          } else if (!user) {
+            console.log("user not found");
+            res.status(401).json({ message: 'User not found' });
+          } else {
+            // success
+            console.log("Shelf added to user shelves")
+            res.status(200).json({ message: 'add successful' });
+          }
+        }
+      );
+    });
+
+    async function findAvailableShelfPos(userName) {
+      // Fetch the user document
+      const user = await db.collection('users').findOne({ username: userName });
+      // If user or shelves array not found, return or handle accordingly
+      if (!user || !user.shelves) {
+        return;
+      }
+      // Extract all existing positions
+      const existingPositions = user.shelves.map(shelf => shelf.order);
+      // Find the first unused integer
+      let firstUnusedInteger = 0;
+      while (existingPositions.includes(firstUnusedInteger)) {
+        firstUnusedInteger++;
+      }
+      return firstUnusedInteger;
+    }
 
 
 

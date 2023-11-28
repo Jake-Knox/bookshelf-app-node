@@ -14,8 +14,12 @@ const backBtn = document.getElementById("back-btn");
 const addBtn = document.getElementById("add-btn");
 
 const editShelvesContent = document.getElementById("editShelvesContent");
+const newShelfNameInput = document.getElementById("newShelfNameInput");
+const newShelfPrivacyBtn = document.getElementById("newShelfPrivacyBtn");
+const newShelfCreateBtn = document.getElementById("newShelfCreateBtn");
 const saveShelvesOrderBtn = document.getElementById("saveShelvesOrderBtn");
 
+let newShelfPrivacy = "public";
 
 let bookshelfData = [];
 
@@ -89,6 +93,24 @@ saveShelvesOrderBtn.addEventListener("click", async () => {
     alert("Error: cannot post?");
     console.error('Error: ', error);
   }
+});
+
+// change privacy/visibility event
+newShelfPrivacyBtn.addEventListener("click", () => {
+  newShelfPrivacyBtn.classList.toggle("btn-private");
+});
+
+// add new shelf event
+newShelfCreateBtn.addEventListener("click", async () => {
+
+  // get data
+  const newName = newShelfNameInput.value;
+  const newPrivacy = (newShelfPrivacyBtn.classList.contains("btn-private")) ? "private" : "public";
+
+  // console.log(newName);
+  // console.log(newPrivacy);
+
+  addShelf(newName, newPrivacy);
 });
 
 
@@ -356,58 +378,6 @@ const createSearchResult = (data, index) => {
   return newResultDiv;
 }
 
-// Using these methods going forward
-
-// add shelf
-const addShelf = async (shelfName) => {
-
-  const addShelfName = shelfName;
-
-  try {
-    const response = await fetch('/addShelf', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ addShelfName }),
-    });
-    if (response.ok) {
-      console.log(response);
-      alertReload();
-    } else {
-      console.error('Failed: ', response.statusText);
-    }
-  } catch (error) {
-    console.error('Error: ', error);
-  }
-}
-
-// remove shelf
-const removeShelf = async (shelfName) => {
-
-  const removeShelfName = shelfName;
-
-  try {
-    const response = await fetch('/removeShelf', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ removeShelfName }),
-    });
-    if (response.ok) {
-      console.log(response);
-      alertReload();
-
-    } else {
-      console.error('Failed: ', response.statusText);
-    }
-  } catch (error) {
-    console.error('Error: ', error);
-  }
-}
-
-
 // add book to shelf
 const addBookToShelf = async (shelfId, bookData) => {
   try {
@@ -651,7 +621,7 @@ const changeShelfVisibilty = async (shelfObjId, currentPrivacy) => {
   }
 }
 
-// privacy change shelves
+// delete shelf
 const deleteShelf = async (shelfObjId,) => {
   try {
     const response = await fetch('/shelfDelete', {
@@ -673,7 +643,26 @@ const deleteShelf = async (shelfObjId,) => {
   }
 }
 
-
+// add shelf
+const addShelf = async (shelfName, privacy) => {
+  try {
+    const response = await fetch('/addShelf', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ shelfName, privacy }),
+    });
+    if (response.ok) {
+      console.log(response);
+      alertReload();
+    } else {
+      console.error('Failed: ', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error: ', error);
+  }
+}
 
 const alertReload = () => {
 
