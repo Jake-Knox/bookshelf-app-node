@@ -275,9 +275,8 @@ client.connect()
 
     // add a book to user collecion
     app.post('/addBookToUserBooks', isAuthenticated, (req, res) => {
-      // used to edit db of whoeever is logged in
       const userName = req.session.username
-      console.log(`un:${userName}`);
+      console.log(`Add book to books, user:${userName}`);
 
       // fontend = sendData // backend = sentData
       // console.log(req.body);
@@ -316,17 +315,20 @@ client.connect()
     });
 
     // add book to shelf
-    app.post('/addBookToShelf', isAuthenticated, (req, res) => {
+    app.post('/addBookToShelf', isAuthenticated, async (req, res) => {
       const userName = req.session.username
       const { shelfId, bookData } = req.body;
-      // console.log(`shelf _id:${shelfId}`);
+      console.log(`add book to shelf _id:${shelfId}`);
       const shelfObjectId = new ObjectId(shelfId);
 
       let newBook = bookData;
       let newID = { "_id": ObjectId() };
       newBook._id = newID._id;
 
-      console.log(newBook);
+      // get the right order num
+      newBook.order = await findAvailableBookPos(userName); // needs to change
+
+      // console.log(newBook);
 
       // send to database
       //find the right user, find the right shelf from _id, push the new book
@@ -351,8 +353,29 @@ client.connect()
       );
     });
 
+    const findAvailableBookPos = async (userName, shelfID) => {
+      const shelfObjectId = new ObjectId(shelfID);
+      // Fetch the user document
+      const user = await db.collection('users').findOne({ username: userName });
+      if (!user || !user.shelves) {
+        return;
+      }
 
+      // Find the shelf with the given ID
+      const shelf = user.shelves.find(shelf => shelf._id.equals(shelfObjectId));
+      if (!shelf) {
+        return;
+      }
 
+      // Extract all existing positions on the specified shelf
+      const existingPositions = shelf.books.map(book => book.order);
+      let firstUnusedInteger = 0;
+      while (existingPositions.includes(firstUnusedInteger)) {
+        firstUnusedInteger++;
+      }
+
+      return firstUnusedInteger;
+    }
 
     // remove a book from user collection
 
@@ -368,6 +391,9 @@ client.connect()
     app.post('/removeBookFromShelf', isAuthenticated, (req, res) => {
       const userName = req.session.username
       const { shelfId, bookId } = req.body;
+
+      console.log(`remove book ${bookId} from shelf _id:${shelfId}`);
+
 
       const shelfObjId = new ObjectId(shelfId); // fix _id
       const bookObjId = new ObjectId(bookId); // fix _id
@@ -446,6 +472,8 @@ client.connect()
       const userName = req.session.username
       const { shelvesData } = req.body;
       // console.log(shelvesData);
+      console.log(`Save shelves order, user ${userName}`);
+
 
       shelvesData.forEach((updatedShelf) => {
         // update the db however many times necesarry with updateOne
@@ -484,6 +512,8 @@ client.connect()
       const userName = req.session.username
       const { shelfObjId, newName } = req.body;
 
+      console.log(`Rename shelf:${shelfObjId}`);
+
       const updatedId = new ObjectId(shelfObjId); // fix _id
       // send to database
       db.collection('users').updateOne(
@@ -509,8 +539,9 @@ client.connect()
     app.post('/shelfDelete', isAuthenticated, (req, res) => {
       const userName = req.session.username
       const { shelfObjId } = req.body;
-      const updatedId = new ObjectId(shelfObjId); // fix _id
+      console.log(`Delete shelf:${shelfObjId}`);
 
+      const updatedId = new ObjectId(shelfObjId); // fix _id
       // send to database
       db.collection('users').updateOne(
         { username: userName },
@@ -535,8 +566,8 @@ client.connect()
     app.post('/shelfChangePrivacy', isAuthenticated, (req, res) => {
       const userName = req.session.username
       let { shelfObjId, newPrivacy } = req.body;
+      console.log(`Chaneg privacy shelf:${shelfObjId}`);
       // privacy : "public" / "private"
-
       const updatedId = new ObjectId(shelfObjId); // fix _id
       newPrivacy = (newPrivacy == "public" || newPrivacy == "private") ? newPrivacy : "private"; // default to "private" here if front end sends something weird
 
@@ -564,9 +595,9 @@ client.connect()
       const userName = req.session.username
       let { shelfName, privacy } = req.body;
 
+      console.log(`Add new shelf:${shelfName}`);
       // get the right order num
       let order = await findAvailableShelfPos(userName); // needs to change
-
       // setup
       const newShelf = {
         "_id": ObjectId(),
@@ -575,7 +606,6 @@ client.connect()
         "privacy": privacy,
         "books": [],
       }
-      // console.log(newShelf);
 
       // send to database
       db.collection('users').updateOne(
@@ -614,30 +644,26 @@ client.connect()
       return firstUnusedInteger;
     }
 
-
-
+    //
     app.get('/searchBooks/:search', isAuthenticated, async (req, res) => {
-
       const searchTerm = req.params.search;
-      // console.log(`search term :${searchTerm}`);
+      console.log(`search term :${searchTerm}`);
 
       let searchData = [];
 
       if ((searchTerm.length == 13 || searchTerm.length == 10) && isNumeric(searchTerm)) {
-        console.log(`ISBN search for :${searchTerm}`);
+        // console.log(`ISBN search for :${searchTerm}`);
         // enough tests to treat as an ISBN-13
         // conduct isbn search
         searchData = await googleBooksSearchISBN(searchTerm);
       }
       else {
-        console.log(`Title search for :${searchTerm}`);
+        // console.log(`Title search for :${searchTerm}`);
         // treat as a book name search
         searchData = await googleBooksSearchTitle(searchTerm);
       }
-
-      console.log("search data below -");
+      // console.log("search data below -");
       // console.log(searchData);
-
 
       // send data back to user
       if (searchData.length != 0) {
@@ -653,9 +679,9 @@ client.connect()
     });
 
 
-
     app.get('/users/:username', isAuthenticated, (req, res) => {
       const username = req.params.username;
+      console.log(`get user:${username}`);
 
       // Find the user based on the provided username
       db.collection('users').findOne({ username }, (err, user) => {
@@ -770,13 +796,11 @@ app.get('/bookshelf/:username', async (req, res) => {
 
   const urlUsername = req.params.username;
   const loggedInUsername = req.session.username;
-
   let userData = "error";
 
   if (urlUsername === loggedInUsername) {
     // User is viewing their own bookshelf
     userData = "My bookshelf"
-
 
     // send them editable page
     res.render('myBookshelf', { username: urlUsername, data: userData });
@@ -784,12 +808,9 @@ app.get('/bookshelf/:username', async (req, res) => {
     // User is viewing someone else's bookshelf
     userData = "Someone elses bookshelf"
 
-
     // send them read-only page
     res.render('otherBookshelf', { username: urlUsername, data: userData });
   }
-
-  // remove this when different pages are made
   // res.render('user', { username: urlUsername, data: userData });
 });
 
@@ -805,7 +826,6 @@ app.post('/checkSession', (req, res) => {
 
 
 // Google Books API searches
-
 const searchBooksObjects = (books, resultsLimit) => {
 
   let returnData = [];
@@ -813,11 +833,6 @@ const searchBooksObjects = (books, resultsLimit) => {
   const limitedResults = books.slice(0, resultsLimit);
   // Loop through the limited results with index
   limitedResults.forEach((book, index) => {
-
-    // console.log(`Result ${index + 1}:`);
-    // console.log(book.volumeInfo.title || 'Unknown');
-    // console.log(book.volumeInfo.industryIdentifiers);
-    // console.log(book.volumeInfo.imageLinks);
 
     const bIsbn = (
       book.volumeInfo.industryIdentifiers?.find((identifier) => identifier.type === 'ISBN_13')?.identifier ||
