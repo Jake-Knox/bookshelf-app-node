@@ -365,10 +365,34 @@ client.connect()
 
 
     // remove book from shelf
+    app.post('/removeBookFromShelf', isAuthenticated, (req, res) => {
+      const userName = req.session.username
+      const { shelfId, bookId } = req.body;
 
+      const shelfObjId = new ObjectId(shelfId); // fix _id
+      const bookObjId = new ObjectId(bookId); // fix _id
 
+      // console.log(shelfObjId);
+      // console.log(bookObjId);
 
-
+      // send to database
+      db.collection('users').updateOne(
+        { username: userName, 'shelves._id': shelfObjId },
+        { $pull: { 'shelves.$.books': { _id: bookObjId } } },
+        (err, result) => {
+          if (err) {
+            console.error('Error Deleting shelf:', err);
+            res.sendStatus(500);
+          } else if (result.modifiedCount === 0) {
+            console.log('Shelf not found');
+            res.status(404).json({ message: 'Shelf not found' });
+          } else {
+            // Success
+            res.status(200).json({ message: 'Shelves order saved' });
+          }
+        }
+      );
+    });
 
 
     // save book positions of shelf

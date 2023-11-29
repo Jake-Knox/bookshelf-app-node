@@ -224,7 +224,7 @@ const setupShelves = (shelvesData) => {
 
     for (let j = 0; j < shelvesData[i].books.length; j++) {
       // for every book on shelf i 
-      const newBook = createShelfBook(shelvesData[i].books[j]);
+      const newBook = createIDShelfBook(shelvesData[i].books[j], shelvesData[i]._id);
       // add the new book the the shelf
       newShelfBooks.appendChild(newBook);
     }
@@ -400,35 +400,51 @@ const addBookToShelf = async (shelfId, bookData) => {
   }
 }
 
-
-// remove book from shelf
-const removeBookFromShelf = async (bookName, shelfName) => {
-
-  const removeBookName = bookName;
-  const removeShelfName = shelfName;
-
+// delete shelf
+const removeBookFromShelf = async (shelfId, bookId) => {
   try {
     const response = await fetch('/removeBookFromShelf', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ removeBookName, removeShelfName }),
+      body: JSON.stringify({ shelfId, bookId }),
     });
     if (response.ok) {
-      console.log(response);
       alertReload();
-
     } else {
+      alert("Error: response?");
       console.error('Failed: ', response.statusText);
     }
   } catch (error) {
+    alert("Error: cannot post?");
     console.error('Error: ', error);
   }
 }
 
+
 // element creation
 
+// overload
+const createIDShelfBook = (bookData, shelfObjId) => {
+  // used to easily create many BOOKS during page load
+
+  // div for the book
+  const newBookDiv = document.createElement("div");
+  newBookDiv.classList.add("book-div");
+  newBookDiv.setAttribute('book-id', bookData._id);
+
+  const newBookCoverImg = document.createElement("img");
+  newBookCoverImg.classList.add("cover-img");
+  newBookCoverImg.src = bookData.thumbnail;
+  newBookCoverImg.alt = (`Author: ${bookData.author} - Title: ${bookData.title}`);
+  newBookCoverImg.setAttribute("book-id", bookData._id);
+  newBookCoverImg.setAttribute("shelf-id", shelfObjId);
+
+  //assemble elements
+  newBookDiv.appendChild(newBookCoverImg);
+  return newBookDiv;
+}
 
 // each book in a user's collection
 const createUserBook = (data, index) => {
@@ -622,7 +638,7 @@ const changeShelfVisibilty = async (shelfObjId, currentPrivacy) => {
 }
 
 // delete shelf
-const deleteShelf = async (shelfObjId,) => {
+const deleteShelf = async (shelfObjId) => {
   try {
     const response = await fetch('/shelfDelete', {
       method: 'POST',
@@ -816,27 +832,41 @@ document.addEventListener('DOMContentLoaded', function () {
     if (target.classList.contains('cover-img')) {
       event.preventDefault();
       event.stopPropagation();
+      // console.log("Load context menu");
+      const shelfObjID = target.getAttribute("shelf-id");
+      const bookObjID = target.getAttribute("book-id")
 
-      console.log("Load context menu");
-
-      // Create a context menu div
-      contextMenu = document.createElement('div');
+      contextMenu = document.createElement('ul');
       contextMenu.className += 'contextMenu';
-      contextMenu.innerText = 'Context Menu Content'; // Customize the content
+
+      const listItem = document.createElement('li');
+      listItem.innerText = "Remove Book";
+      listItem.onclick = function () {
+        console.log(`On shelf:${shelfObjID}, remove book:${bookObjID}`);
+
+        // send to back end
+        removeBookFromShelf(shelfObjID, bookObjID);
+
+        // cleanup
+        contextMenu.remove();
+        console.log("Remove context menu after click");
+        document.removeEventListener('click', clickHandler);
+      };
+
+      // Append the li's  to the ul
+      contextMenu.appendChild(listItem);
 
       // Position the context menu next to the clicked image
       const mouseX = event.clientX;
       const mouseY = event.clientY;
-
       const scrollX = window.scrollX || document.documentElement.scrollLeft;
       const scrollY = window.scrollY || document.documentElement.scrollTop;
-
       contextMenu.style.position = 'absolute';
       contextMenu.style.top = mouseY + scrollY + 'px';
       contextMenu.style.left = mouseX + scrollX + 'px';
 
-      // document.body.appendChild(contextMenu);
       imageContainer.appendChild(contextMenu);
+
       // Remove the context menu when clicked outside
       document.addEventListener("click", clickHandler);
     }

@@ -279,20 +279,32 @@
 
 .contextMenu {
     position: absolute;
-    background-color: #fff;
-    /* Add a background color for visibility */
-    border: 1px solid #ccc;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 8px;
-
-    height: 50px;
-    width: 50px;
-
     z-index: 1000;
-    /* Adjust the z-index as needed */
 
+    background-color: #333;
+    /* Dark grey background */
+    color: #f8f8f8;
+    /* Off-white text */
+    border-radius: 8px;
+    /* Rounded edges */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    /* Add padding for a cleaner look */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Optional: Add a subtle box shadow */
 }
 
+.contextMenu li {
+    padding: 10px;
+    /* border-bottom: 1px solid #ccc; */
+    cursor: pointer;
+}
+
+.contextMenu li:hover {
+    /* background-color: #444; */
+    /* Slightly lighter color on hover */
+}
 
 /* Style for Autocomplete suggestions container */
 .ui-autocomplete {
