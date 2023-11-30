@@ -329,5 +329,66 @@ a {
 .content {
   height: 40vh;
   border-bottom: 1px solid var(--secondary-brand-color);
+}
 
+.follow-container {
+  overflow-x: hidden;
+  /* This will hide any content overflowing from the content div */
+}
+
+.follow-switch-container {
+  overflow: hidden;
+}
+
+.follow-switch-header {
+  display: flex;
+  background-color: #333;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.active-tab {
+  background-color: #222;
+  /* Add a background color to highlight the active tab */
+}
+
+.inactive-tab {
+  background-color: #444;
+  /* Style for the inactive tab */
+}
+
+.follow-switch-content {
+  display: flex;
+  width: 200%;
+  transition: margin-left 0.5s ease;
+  /* Apply transition to the margin-left property */
+}
+
+.active-tab-content {
+  display: block;
+  /* Show the active content */
+  transform: translateX(0%);
+  /* Use transform to control the horizontal position */
+
+}
+
+.inactive-tab-content {
+  display: none;
+  /* Move off-screen to the left */
+  transform: translateX(100%);
+  /* Hide the inactive content */
+}
+
+.following-list,
+.followers-list {
+  width: 50%;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: transform 0.5s ease;
+  /* Apply transition to the transform property */
 }

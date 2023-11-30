@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/styles.css">
+    <title>Bookends | Following</title>
+    <link rel="icon" href="/images/logos/bookends-logo-icon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <div class="nav nav-container">
+        <div class="nav-left">
+            <a href="/"><img src="/images/logos/bookends-logo-tr.png" class="nav-logo"></a>
+            <a href="/">BOOKENDS</a>
+        </div>
+        <div class="nav-right">
+            <a href="/community">COMMUNITY</a>
+            <a href="/bookshelf">MY BOOKSHELF</a>
+            <a href="/profile">PROFILE</a>
+        </div>
+    </div>
+    <div class="container">
+
+        <input type="hidden" id="bookshelfOwner" name="<%= username %>" value="<%= username %>">
+        <!-- <h1><%= username %></h1> -->
+        <!-- <h2><%= data %></h2> -->
+
+        <div class="bookshelf-section ">
+            <h1 id="usernameTitle">test</h1>
+        </div>
+
+        <div class="follow-container">
+            <div class="follow-switch-header">
+                <button id="btnFollowing" class="active-tab">Following</button>
+                <button id="btnFollowers" class="inactive-tab">Followers</button>
+            </div>
+
+            <div class="follow-switch-content">
+                <div class="following-list active-tab-content">
+                    <!-- Following list content -->
+                    <p>This is the Following List</p>
+                </div>
+
+                <div class="followers-list inactive-tab-content">
+                    <!-- Followers list content -->
+                    <p>This is the Followers List</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="/scripts/following.js"></script>
+</body>
+
+</html>

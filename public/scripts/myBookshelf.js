@@ -1,6 +1,7 @@
 console.log("my bookshelf");
 
 // js for added editing features for a user on thier own bookshelf
+const bookshelfOwner = document.getElementById("bookshelfOwner");
 
 const searchInput = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-btn");
@@ -18,6 +19,9 @@ const newShelfNameInput = document.getElementById("newShelfNameInput");
 const newShelfPrivacyBtn = document.getElementById("newShelfPrivacyBtn");
 const newShelfCreateBtn = document.getElementById("newShelfCreateBtn");
 const saveShelvesOrderBtn = document.getElementById("saveShelvesOrderBtn");
+
+const bookshelfOwnerName = bookshelfOwner.value;
+
 
 let newShelfPrivacy = "public";
 
@@ -185,8 +189,8 @@ const getMyBookshelf = async () => {
 }
 
 const setupFollowers = (followingData, followersData) => {
-  followingCount.textContent = (`Following: ${followingData.length}`);
-  followersCount.textContent = (`Following: ${followersData.length}`);
+  followingCount.innerHTML = (`<a href="/following/${bookshelfOwnerName}" ><p class="light"><b>${bookshelfData.following.length}</b> Following</p></a>`);
+  followersCount.innerHTML = (`<a href="/following/${bookshelfOwnerName}" ><p class="light"><b>${bookshelfData.followers.length}</b> Followers</p></a>`);
 }
 
 const setupUserBooks = (booksData) => {

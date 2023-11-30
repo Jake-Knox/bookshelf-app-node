@@ -4,10 +4,14 @@ const containerDiv = document.getElementById("containerDiv");
 const noUserContainerDiv = document.getElementById("noUserContainerDiv");
 const bookshelfOwner = document.getElementById("bookshelfOwner");
 const privacyNotice = document.getElementById("privacyNotice");
+const btnFollow = document.getElementById("btnFollow");
 
 const bookshelfOwnerName = bookshelfOwner.value;
 
 let bookshelfData = [];
+
+// bool
+let followingUser;
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -53,15 +57,34 @@ const setupUserElements = (bookshelfData) => {
   if (bookshelfData.privacy == "private") {
     // console.log("Bookshelf is private - limited content to render");
     privacyNotice.textContent = ("This Bookshelf is Private");
+    followingCount.innerHTML = (`<p class="light"><b>${bookshelfData.following.length}</b> Following</p>`);
+    followersCount.innerHTML = (`<p class="light"><b>${bookshelfData.followers.length}</b> Followers</p>`);
 
+    btnFollow.textContent = "Follow";
+    btnFollow.classList.add("follow");
   }
   else {
     // console.log("Bookshelf is public - more content to render");
 
-    followingCount.textContent = (`Following: ${bookshelfData.following.length}`);
-    followersCount.textContent = (`Following: ${bookshelfData.followers.length}`);
+    // send to rigth route
+    followingCount.innerHTML = (`<a href="/following/${bookshelfOwnerName}" ><p class="light"><b>${bookshelfData.following.length}</b> Following</p></a>`);
+    followersCount.innerHTML = (`<a href="/following/${bookshelfOwnerName}" ><p class="light"><b>${bookshelfData.followers.length}</b> Followers</p></a>`);
 
-    // render content that is limited by array length
+    // check for following them
+    if (false) {
+      // Already following
+
+      btnFollow.textContent = "Unollow";
+      btnFollow.classList.add("unfollow");
+    }
+    else {
+      // not following
+
+      btnFollow.textContent = "Follow";
+      btnFollow.classList.add("follow");
+    }
+
+
 
     //shelves setup
     shelvesData = bookshelfData.shelves;
@@ -106,3 +129,17 @@ const toggleNoUserFound = () => {
   containerDiv.style.display = "none";
   noUserContainerDiv.style.display = "block";
 }
+
+btnFollow.addEventListener("click", () => {
+  btnFollow.classList.toggle("follow");
+  btnFollow.classList.toggle("unfollow");
+
+  if (btnFollow.classList.contains("follow")) {
+    // send follow to backend
+
+  }
+  else if (btnFollow.classList.contains("unfollow")) {
+    // send unfollow to backend
+
+  }
+});

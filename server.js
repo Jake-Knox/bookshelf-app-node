@@ -788,9 +788,6 @@ app.get('/myFollowers', isAuthenticated, async (req, res) => {
   res.sendFile(path.join(__dirname, 'public/templates/myFollowers.html'));
 });
 
-
-
-
 // test for user generic pages
 app.get('/bookshelf/:username', async (req, res) => {
 
@@ -812,6 +809,14 @@ app.get('/bookshelf/:username', async (req, res) => {
     res.render('otherBookshelf', { username: urlUsername, data: userData });
   }
   // res.render('user', { username: urlUsername, data: userData });
+});
+
+app.get('/following/:username', async (req, res) => {
+
+  const urlUsername = req.params.username;
+  const userData = "Test data";
+
+  res.render('following', { username: urlUsername, data: userData });
 });
 
 

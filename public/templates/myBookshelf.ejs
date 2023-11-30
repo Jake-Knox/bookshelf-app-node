@@ -26,22 +26,16 @@
     </div>
     <div class="container">
 
-        <!-- <h1><%= username %>'s profile</h1> -->
+        <input type="hidden" id="bookshelfOwner" name="<%= username %>" value="<%= username %>">
+        <!-- <h1><%= username %></h1> -->
         <!-- <h2><%= data %></h2> -->
 
-        <div class="bookshelf-section flex-row-between">
-
-
+        <div class="bookshelf-section ">
             <h1 id="usernameTitle"></h1>
-            <div class="flex-column-centre">
-                <a href="/myFollowing">
-                    <h3 id="followingCount"></h3>
-                </a>
-                <a href="/myFollowers">
-                    <h3 id="followersCount"></h3>
-                </a>
+            <div class="follow-section">
+                <p id="followingCount"></p>
+                <p id="followersCount"></p>
             </div>
-
         </div>
 
         <div id="add-new" class="bookshelf-section">
