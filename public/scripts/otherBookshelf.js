@@ -2,22 +2,46 @@ console.log("other bookshelf");
 
 const containerDiv = document.getElementById("containerDiv");
 const noUserContainerDiv = document.getElementById("noUserContainerDiv");
+
 const bookshelfOwner = document.getElementById("bookshelfOwner");
+const ejsData = document.getElementById("ejsData");
+const bookshelfOwnerName = bookshelfOwner.value;
+const ejsDataVal = ejsData.value;
+
 const privacyNotice = document.getElementById("privacyNotice");
 const btnFollow = document.getElementById("btnFollow");
 
-const bookshelfOwnerName = bookshelfOwner.value;
-
+let followingPage = false;
 let bookshelfData = [];
 
 // bool
 let followingUser;
 
 document.addEventListener('DOMContentLoaded', () => {
+  setupFollowButton(bookshelfOwnerName);
 
   getUserBookshelf(bookshelfOwnerName);
-
 });
+
+const setupFollowButton = async (ownerName) => {
+  try {
+    const response = await fetch(`/userAFollowingB/${ownerName}`, {
+      method: 'GET'
+    });
+    // response from server
+    if (response.ok) {
+      const data = await response.json();
+      followingPage = data.data;
+    }
+    else {
+      console.error('Error in try user A following B:', response.statusText);
+    }
+  }
+  catch (error) {
+    console.error('Error in try user A following B:', error);
+  }
+  console.log("Following:", followingPage);
+}
 
 const getUserBookshelf = async (ownerName) => {
 
@@ -25,16 +49,12 @@ const getUserBookshelf = async (ownerName) => {
     const response = await fetch(`/getUserBookshelf/${ownerName}`, {
       method: 'GET'
     });
-
     // response from server
     if (response.ok) {
-
       const userData = await response.json();
       console.log("retirved data");
-
       bookshelfData = userData.data; // used to set up elements and fill shelves    
       setupUserElements(bookshelfData); // comment to stop trying to use db data
-
     }
     else {
       console.error('Error in response getting user bookshelf:', response.statusText);
@@ -70,21 +90,16 @@ const setupUserElements = (bookshelfData) => {
     followingCount.innerHTML = (`<a href="/following/${bookshelfOwnerName}" ><p class="light"><b>${bookshelfData.following.length}</b> Following</p></a>`);
     followersCount.innerHTML = (`<a href="/following/${bookshelfOwnerName}" ><p class="light"><b>${bookshelfData.followers.length}</b> Followers</p></a>`);
 
-    // check for following them
-    if (false) {
+    if (followingPage) {
       // Already following
-
-      btnFollow.textContent = "Unollow";
+      btnFollow.textContent = "Unfollow";
       btnFollow.classList.add("unfollow");
     }
     else {
       // not following
-
       btnFollow.textContent = "Follow";
       btnFollow.classList.add("follow");
     }
-
-
 
     //shelves setup
     shelvesData = bookshelfData.shelves;
@@ -100,7 +115,7 @@ const setupUserElements = (bookshelfData) => {
     shelvesCount.textContent = (`Shelves: ${shelvesData.length}`);
     for (let i = 0; i < shelvesData.length; i++) {
       // for every shelf
-      console.log(`shelf:${i}`);
+      // console.log(`shelf:${i}`);
 
       const newShelf = createShelf(shelvesData[i]);
 
@@ -109,7 +124,7 @@ const setupUserElements = (bookshelfData) => {
 
       for (let j = 0; j < shelvesData[i].books.length; j++) {
         // for every book on shelf i 
-        console.log(`shelf:${i}, book:${j} `);
+        // console.log(`shelf:${i}, book:${j} `);
 
         const newBook = createShelfBook(shelvesData[i].books[j]);
 
@@ -131,15 +146,28 @@ const toggleNoUserFound = () => {
 }
 
 btnFollow.addEventListener("click", () => {
-  btnFollow.classList.toggle("follow");
-  btnFollow.classList.toggle("unfollow");
-
   if (btnFollow.classList.contains("follow")) {
+    btnFollow.textContent = "Unfollow";
     // send follow to backend
-
+    followShelf();
   }
   else if (btnFollow.classList.contains("unfollow")) {
+    btnFollow.textContent = "Follow";
     // send unfollow to backend
-
+    unfollowShelf();
   }
+
+  btnFollow.classList.toggle("follow");
+  btnFollow.classList.toggle("unfollow");
 });
+
+const followShelf = () => {
+  console.log("follow click");
+
+}
+
+const unfollowShelf = () => {
+  console.log("unfollow click");
+
+
+}

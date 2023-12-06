@@ -273,6 +273,81 @@ client.connect()
       });
     });
 
+    app.get('/userAFollowingB/:username', (req, res) => {
+      const userA = req.session.username;
+      const userB = req.params.username
+
+      let isAFollowingB = false;
+      if (userA) {
+        isAFollowingB = userAFollowingB(userA, userB);
+      }
+      else {
+        // not logged in
+      }
+      res.status(200).json({ data: isAFollowingB });
+    });
+
+    const userAFollowingB = async (userA, userB) => {
+      let contains = false;
+      // Fetch the user document
+      const user = await db.collection('users').findOne({ username: userA });
+      if (!user) {
+        console.log("user not found");
+        return contains;
+      }
+      else {
+        console.log("user found");
+        if (user.following.includes(userB)) {
+          console.log("follow found");
+          contains = true;
+        }
+        else {
+          console.log("follow not found");
+        }
+      }
+      return contains;
+    }
+
+
+    app.get('/getFollows/:username', (req, res) => {
+      // username on page - get their following/followers
+      const username = req.params.username;
+
+      db.collection('users').findOne({ username }, (err, user) => {
+        if (err) {
+          console.error('Error finding user:', err);
+          res.sendStatus(500);
+        } else if (!user) {
+          console.log("user not found");
+          res.status(401).json({ message: 'User not found' });
+        } else {
+          // User found, send data
+          let userData = {
+            username: user.username,
+            privacy: user.privacy,
+            following: [],
+            followers: [],
+          }
+          if (user.privacy == "public") {
+            // console.log("profile is public");
+            userData.following = user.following;
+            userData.followers = user.followers;
+
+            for (let i = 0; i < user.shelves.length; i++) {
+              if (user.shelves[i].privacy == "public") {
+                userData.shelves.push(user.shelves[i]);
+              }
+            }
+          }
+          else {
+            // private
+          }
+          res.status(200).json({ data: userData });
+        }
+      });
+    });
+
+
     // add a book to user collecion
     app.post('/addBookToUserBooks', isAuthenticated, (req, res) => {
       const userName = req.session.username
@@ -376,14 +451,6 @@ client.connect()
 
       return firstUnusedInteger;
     }
-
-    // remove a book from user collection
-
-
-
-
-
-
 
 
 
@@ -808,7 +875,6 @@ app.get('/bookshelf/:username', async (req, res) => {
     // send them read-only page
     res.render('otherBookshelf', { username: urlUsername, data: userData });
   }
-  // res.render('user', { username: urlUsername, data: userData });
 });
 
 app.get('/following/:username', async (req, res) => {
@@ -828,6 +894,8 @@ app.post('/checkSession', (req, res) => {
     res.status(200).json({ message: 'not logged in' });
   }
 });
+
+
 
 
 // Google Books API searches
