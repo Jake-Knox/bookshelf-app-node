@@ -392,3 +392,22 @@ button {
   transition: transform 0.5s ease;
   /* Apply transition to the transform property */
 }
+
+.logout-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  float: right;
+  /* Float the button to the right */
+  /* Push the button to the right */
+
+}
+
+.logout-button:hover {
+  background-color: #2980b9;
+}

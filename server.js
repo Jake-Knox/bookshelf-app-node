@@ -126,6 +126,17 @@ client.connect()
       });
     });
 
+    // logout
+    app.post('/logout', (req, res) => {
+      const username = req.session.username
+      console.log(`${username} logging out`);
+
+      req.session.isLoggedIn = false;
+      req.session.username = undefined;
+      res.status(200).json({ message: 'Logout successful' });
+
+    });
+
     // register new user - using UN + PW + boiler plate data
     app.post('/register', (req, res) => {
       const { username, password } = req.body;
