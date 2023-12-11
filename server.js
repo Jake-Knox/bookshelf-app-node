@@ -299,28 +299,27 @@ client.connect()
       res.status(200).json({ data: isAFollowingB });
     });
 
+
     const userAFollowingB = async (userA, userB) => {
       let contains = false;
       // Fetch the user document
       const user = await db.collection('users').findOne({ username: userA });
       if (!user) {
-        console.log("user not found");
+        // console.log("user not found");
         return contains;
       }
       else {
-        console.log("user found");
+        // console.log("user found");
         if (user.following.includes(userB)) {
-          console.log("follow found");
+          // console.log("follow found");
           contains = true;
         }
         else {
-          console.log("follow not found");
+          // console.log("follow not found");
         }
       }
       return contains;
     }
-
-
 
     app.get('/getFollows/:username', (req, res) => {
       // username on page - get their following/followers
@@ -382,7 +381,7 @@ client.connect()
             res.status(401).json({ message: 'User not found' });
           } else {
             // success
-            console.log("other-user added to user following")
+            // console.log("other-user added to user following");
             // res.status(200).json({ message: 'add successful' });
           }
         }
@@ -401,12 +400,63 @@ client.connect()
             res.status(401).json({ message: 'User not found' });
           } else {
             // success
-            console.log("user added to other-user followers")
+            // console.log("user added to other-user followers");
             // res.status(200).json({ message: 'add successful' });
           }
         }
       );
-      console.log("following and follower added");
+      // console.log("following and follower added");
+      res.status(200).json({ message: 'add successful' });
+    });
+
+
+    app.post('/unfollowShelf', isAuthenticated, (req, res) => {
+      const userName = req.session.username;
+      const unfollowName = req.body.unfollowUser;
+
+      // 2 parts
+      // remove username to followName's followers
+      // remove followName to username's following
+      console.log(`user ${userName} will now unfollow ${unfollowName}`);
+
+      // remove username to followName's followers list
+      db.collection('users').updateOne(
+        { username: userName },
+        { $pull: { following: unfollowName } },
+        (err, user) => {
+          if (err) {
+            console.error('Error finding user:', err);
+            res.sendStatus(500);
+          } else if (!user) {
+            console.log("user not found");
+            res.status(401).json({ message: 'User not found' });
+          } else {
+            // success
+            // console.log("other-user removed from user following");
+            // res.status(200).json({ message: 'remove successful' });
+          }
+        }
+      );
+
+      // remove username to followName's followers list
+      db.collection('users').updateOne(
+        { username: unfollowName },
+        { $pull: { followers: userName } },
+        (err, user) => {
+          if (err) {
+            console.error('Error finding user:', err);
+            res.sendStatus(500);
+          } else if (!user) {
+            console.log("user not found");
+            res.status(401).json({ message: 'User not found' });
+          } else {
+            // success
+            // console.log("user removed from other-user followers");
+            // res.status(200).json({ message: 'remove successful' });
+          }
+        }
+      );
+      // console.log("following and follower removed");
       res.status(200).json({ message: 'add successful' });
     });
 

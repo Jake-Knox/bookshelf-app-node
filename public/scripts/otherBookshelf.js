@@ -176,11 +176,7 @@ const toggleFollowBtn = () => {
 
 const followShelf = async () => {
   console.log("follow click");
-
   const followUser = bookshelfOwnerName;
-
-  console.log(followUser);
-
 
   // send to backend
   try {
@@ -192,11 +188,11 @@ const followShelf = async () => {
       body: JSON.stringify({ followUser }),
     });
     if (response.ok) {
-
       // alertReload();
-      alert(response.status);
+      const data = await response.json();
+      const message = data.message;
+      alert(message);
       toggleFollowBtn();
-
     } else {
       alert("Error: response not ok");
       console.error('Failed: ', response.statusText);
@@ -205,14 +201,34 @@ const followShelf = async () => {
     alert("Error: cannot follow user?");
     console.error('Error: ', error);
   }
-
 }
 
 const unfollowShelf = async () => {
   console.log("unfollow click");
+  const unfollowUser = bookshelfOwnerName;
 
-
-
-
+  // send to backend
+  try {
+    const response = await fetch('/unfollowShelf', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ unfollowUser }),
+    });
+    if (response.ok) {
+      // alertReload();
+      const data = await response.json();
+      const message = data.message;
+      alert(message);
+      toggleFollowBtn();
+    } else {
+      alert("Error: response not ok");
+      console.error('Failed: ', response.statusText);
+    }
+  } catch (error) {
+    alert("Error: cannot unfollow user?");
+    console.error('Error: ', error);
+  }
 }
 
