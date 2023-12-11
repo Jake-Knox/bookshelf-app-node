@@ -284,13 +284,14 @@ client.connect()
       });
     });
 
-    app.get('/userAFollowingB/:username', (req, res) => {
+
+    app.get('/userAFollowingB/:username', async (req, res) => {
       const userA = req.session.username;
       const userB = req.params.username
 
       let isAFollowingB = false;
       if (userA) {
-        isAFollowingB = userAFollowingB(userA, userB);
+        isAFollowingB = await userAFollowingB(userA, userB);
       }
       else {
         // not logged in
@@ -318,6 +319,7 @@ client.connect()
       }
       return contains;
     }
+
 
 
     app.get('/getFollows/:username', (req, res) => {
@@ -357,6 +359,57 @@ client.connect()
         }
       });
     });
+
+    app.post('/followShelf', isAuthenticated, (req, res) => {
+      const userName = req.session.username;
+      const followName = req.body.followUser;
+
+      // 2 parts
+      // add username to followName's followers
+      // add followName to username's following
+      console.log(`user ${userName} will now follow ${followName}`);
+
+      // add username to followName's followers list
+      db.collection('users').updateOne(
+        { username: userName },
+        { $push: { following: followName } },
+        (err, user) => {
+          if (err) {
+            console.error('Error finding user:', err);
+            res.sendStatus(500);
+          } else if (!user) {
+            console.log("user not found");
+            res.status(401).json({ message: 'User not found' });
+          } else {
+            // success
+            console.log("other-user added to user following")
+            // res.status(200).json({ message: 'add successful' });
+          }
+        }
+      );
+
+      // add username to followName's followers list
+      db.collection('users').updateOne(
+        { username: followName },
+        { $push: { followers: userName } },
+        (err, user) => {
+          if (err) {
+            console.error('Error finding user:', err);
+            res.sendStatus(500);
+          } else if (!user) {
+            console.log("user not found");
+            res.status(401).json({ message: 'User not found' });
+          } else {
+            // success
+            console.log("user added to other-user followers")
+            // res.status(200).json({ message: 'add successful' });
+          }
+        }
+      );
+      console.log("following and follower added");
+      res.status(200).json({ message: 'add successful' });
+    });
+
 
 
     // add a book to user collecion

@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
   getUserBookshelf(bookshelfOwnerName);
 });
 
+
+
 const setupFollowButton = async (ownerName) => {
   try {
     const response = await fetch(`/userAFollowingB/${ownerName}`, {
@@ -32,6 +34,7 @@ const setupFollowButton = async (ownerName) => {
     if (response.ok) {
       const data = await response.json();
       followingPage = data.data;
+      console.log("following this page:", followingPage);
     }
     else {
       console.error('Error in try user A following B:', response.statusText);
@@ -40,8 +43,21 @@ const setupFollowButton = async (ownerName) => {
   catch (error) {
     console.error('Error in try user A following B:', error);
   }
+
   console.log("Following:", followingPage);
+
+  if (followingPage) {
+    // Already following
+    btnFollow.textContent = "Unfollow";
+    btnFollow.classList.toggle("unfollow");
+  }
+  else {
+    // not following
+    btnFollow.textContent = "Follow";
+    btnFollow.classList.toggle("follow");
+  }
 }
+
 
 const getUserBookshelf = async (ownerName) => {
 
@@ -66,6 +82,8 @@ const getUserBookshelf = async (ownerName) => {
   }
 }
 
+
+
 const setupUserElements = (bookshelfData) => {
   console.log(bookshelfData);
 
@@ -89,17 +107,6 @@ const setupUserElements = (bookshelfData) => {
     // send to rigth route
     followingCount.innerHTML = (`<a href="/following/${bookshelfOwnerName}" ><p class="light"><b>${bookshelfData.following.length}</b> Following</p></a>`);
     followersCount.innerHTML = (`<a href="/following/${bookshelfOwnerName}" ><p class="light"><b>${bookshelfData.followers.length}</b> Followers</p></a>`);
-
-    if (followingPage) {
-      // Already following
-      btnFollow.textContent = "Unfollow";
-      btnFollow.classList.add("unfollow");
-    }
-    else {
-      // not following
-      btnFollow.textContent = "Follow";
-      btnFollow.classList.add("follow");
-    }
 
     //shelves setup
     shelvesData = bookshelfData.shelves;
@@ -145,6 +152,7 @@ const toggleNoUserFound = () => {
   noUserContainerDiv.style.display = "block";
 }
 
+
 btnFollow.addEventListener("click", () => {
   if (btnFollow.classList.contains("follow")) {
     btnFollow.textContent = "Unfollow";
@@ -161,13 +169,50 @@ btnFollow.addEventListener("click", () => {
   btnFollow.classList.toggle("unfollow");
 });
 
-const followShelf = () => {
-  console.log("follow click");
+const toggleFollowBtn = () => {
 
 }
 
-const unfollowShelf = () => {
+
+const followShelf = async () => {
+  console.log("follow click");
+
+  const followUser = bookshelfOwnerName;
+
+  console.log(followUser);
+
+
+  // send to backend
+  try {
+    const response = await fetch('/followShelf', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ followUser }),
+    });
+    if (response.ok) {
+
+      // alertReload();
+      alert(response.status);
+      toggleFollowBtn();
+
+    } else {
+      alert("Error: response not ok");
+      console.error('Failed: ', response.statusText);
+    }
+  } catch (error) {
+    alert("Error: cannot follow user?");
+    console.error('Error: ', error);
+  }
+
+}
+
+const unfollowShelf = async () => {
   console.log("unfollow click");
 
 
+
+
 }
+
