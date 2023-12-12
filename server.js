@@ -321,9 +321,12 @@ client.connect()
       return contains;
     }
 
+
+
     app.get('/getFollows/:username', (req, res) => {
       // username on page - get their following/followers
       const username = req.params.username;
+      // console.log("get follows:", username);
 
       db.collection('users').findOne({ username }, (err, user) => {
         if (err) {
@@ -344,12 +347,6 @@ client.connect()
             // console.log("profile is public");
             userData.following = user.following;
             userData.followers = user.followers;
-
-            for (let i = 0; i < user.shelves.length; i++) {
-              if (user.shelves[i].privacy == "public") {
-                userData.shelves.push(user.shelves[i]);
-              }
-            }
           }
           else {
             // private
@@ -358,6 +355,7 @@ client.connect()
         }
       });
     });
+
 
     app.post('/followShelf', isAuthenticated, (req, res) => {
       const userName = req.session.username;

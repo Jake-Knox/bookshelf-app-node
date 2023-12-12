@@ -174,6 +174,7 @@ const toggleFollowBtn = () => {
 }
 
 
+
 const followShelf = async () => {
   console.log("follow click");
   const followUser = bookshelfOwnerName;
@@ -203,6 +204,7 @@ const followShelf = async () => {
   }
 }
 
+
 const unfollowShelf = async () => {
   console.log("unfollow click");
   const unfollowUser = bookshelfOwnerName;
@@ -231,4 +233,5 @@ const unfollowShelf = async () => {
     console.error('Error: ', error);
   }
 }
+
 

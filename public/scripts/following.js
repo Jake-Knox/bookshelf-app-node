@@ -5,7 +5,7 @@ const bookshelfOwnerName = bookshelfOwner.value;
 
 const usernameTitle = document.getElementById("usernameTitle");
 
-const follows = {
+let follows = {
     following: [],
     followers: [],
 }
@@ -16,31 +16,30 @@ document.addEventListener('DOMContentLoaded', () => {
     usernameTitle.textContent = bookshelfOwnerName;
 
     //
-    getFollows();
+    getFollows(bookshelfOwnerName);
 
 });
 
 
-const getFollows = async () => {
+const getFollows = async (bookshelfOwnerName) => {
     try {
-        const response = await fetch(`/getFollows/${ownerName}`, {
+        const response = await fetch(`/getFollows/${bookshelfOwnerName}`, {
             method: 'GET'
         });
         // response from server
         if (response.ok) {
             const userData = await response.json();
-            // console.log(userData);
 
-            follows.following = userData.following;
-            follows.followers = userData.followers;
+            console.log(userData.data);
+            // console.log(userData.data.following);
+            // console.log(userData.data.followers);
 
+            follows.following += userData.data.following;
+            follows.followers += userData.data.followers;
             console.log(follows.following);
             console.log(follows.followers);
 
 
-
-            // bookshelfData = userData.data; // used to set up elements and fill shelves    
-            // setupUserElements(bookshelfData); // comment to stop trying to use db data
 
         }
         else {
