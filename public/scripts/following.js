@@ -2,8 +2,11 @@ console.log("following/followers");
 
 const bookshelfOwner = document.getElementById("bookshelfOwner");
 const bookshelfOwnerName = bookshelfOwner.value;
-
 const usernameTitle = document.getElementById("usernameTitle");
+
+const followingList = document.getElementById("followingList");
+const followersList = document.getElementById("followersList");
+
 
 let follows = {
     following: [],
@@ -34,13 +37,12 @@ const getFollows = async (bookshelfOwnerName) => {
             // console.log(userData.data.following);
             // console.log(userData.data.followers);
 
-            follows.following += userData.data.following;
-            follows.followers += userData.data.followers;
-            console.log(follows.following);
-            console.log(follows.followers);
+            follows.following = userData.data.following;
+            follows.followers = userData.data.followers;
+            // console.log(follows.following);
+            // console.log(follows.followers);
 
-
-
+            generateFollowLists();
         }
         else {
             console.error('Error in response getting user bookshelf:', response.statusText);
@@ -52,9 +54,38 @@ const getFollows = async (bookshelfOwnerName) => {
     }
 }
 
+const generateFollowLists = () => {
+    // console.log(follows.following.length);
+    // console.log(follows.followers.length);
+
+    follows.following.forEach(following => {
+        // console.log(following);
+
+        const newFollowing = createFollow(following);
+        followingList.appendChild(newFollowing);
+
+    });
+
+    follows.followers.forEach(follower => {
+        // console.log(follower);
+
+        const newFollower = createFollow(follower);
+        followersList.appendChild(newFollower);
+    });
+};
+
+const createFollow = (followName) => {
+
+    const followItem = document.createElement("li");
 
 
+    const followLink = document.createElement("a");
+    followLink.textContent = (followName);
 
+    followItem.append(followLink);
+
+    return followItem;
+}
 
 
 
