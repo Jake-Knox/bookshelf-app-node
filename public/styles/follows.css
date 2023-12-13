@@ -11,23 +11,30 @@
 
 .follow-switch-header {
     display: flex;
-    background-color: #333;
+    justify-content: space-around;
+    background-color: #efefef;
+    border-top: 1px solid #999999;
+    margin-bottom: 5px;
 }
 
-button {
+.btn-flw {
     padding: 10px 20px;
     border: none;
-    color: white;
+    color: black;
     cursor: pointer;
+    width: 50%;
+
+    font-size: medium;
+
 }
 
 .active-tab {
-    background-color: #222;
+    background-color: #dddddd;
     /* Add a background color to highlight the active tab */
 }
 
 .inactive-tab {
-    background-color: #444;
+    background-color: #efefef;
     /* Style for the inactive tab */
 }
 
@@ -70,7 +77,6 @@ button {
 
 .follow-item {
     padding: 10px;
-    margin: 5px;
     border-radius: 5px;
 }
 

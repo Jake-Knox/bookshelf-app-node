@@ -4,6 +4,9 @@ const bookshelfOwner = document.getElementById("bookshelfOwner");
 const bookshelfOwnerName = bookshelfOwner.value;
 const usernameTitle = document.getElementById("usernameTitle");
 
+const btnFollowing = document.getElementById("btnFollowing");
+const btnFollowers = document.getElementById("btnFollowers");
+
 const followingList = document.getElementById("followingList");
 const followersList = document.getElementById("followersList");
 
@@ -57,6 +60,8 @@ const getFollows = async (bookshelfOwnerName) => {
 const generateFollowLists = () => {
     // console.log(follows.following.length);
     // console.log(follows.followers.length);
+    btnFollowing.innerText = (`${follows.following.length} Following`);
+    btnFollowers.innerText = (`${follows.followers.length} Followers`);
 
     follows.following.forEach(following => {
         // console.log(following);
