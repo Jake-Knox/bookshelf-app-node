@@ -77,9 +77,10 @@ const generateFollowLists = () => {
 const createFollow = (followName) => {
 
     const followItem = document.createElement("li");
-
+    followItem.classList.add("follow-item");
 
     const followLink = document.createElement("a");
+    followLink.href = (`/bookshelf/${followName}`);
     followLink.textContent = (followName);
 
     followItem.append(followLink);
